@@ -17,7 +17,8 @@ list(
   ),
   tar_target(
     water_volume_logpile_csv,
-    prep_logpile_data(abbott_data, file_out = 'out/water_volume_logpile.csv')
+    prep_logpile_data(abbott_data, file_out = 'out/water_volume_logpile.csv'),
+    format = "file"
   ),
   tar_target(
     water_volume_logpile_log,
