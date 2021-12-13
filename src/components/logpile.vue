@@ -62,7 +62,7 @@ export default {
 
             // read in data
             let promises = [
-                self.d3.csv("https://labs.waterdata.usgs.gov/visualizations/data/abbott_pools_and_fluxes.csv", this.d3.autoType),
+                self.d3.csv("https://labs.waterdata.usgs.gov/visualizations/data/water_volume_logpile.csv", this.d3.autoType),
             ];
             Promise.all(promises).then(self.callback);
         },

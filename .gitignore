@@ -74,5 +74,5 @@ public/*.csv
 
 # Data files
 *xlsx
-out/
+out/water_volume_logpile_log.csv
 _targets/
