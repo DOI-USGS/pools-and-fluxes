@@ -2,13 +2,21 @@
   <section>
     <div id="logpile-container" />
     <div class="chart-container js-chart-container">
-    <form class="controls">
+      <form class="controls">
         Scale:
-        <label><input type="radio" name="x-scale" value="linear">Linear</label> 
-        <label><input type="radio" name="x-scale" value="log10">Log10</label>
-    </form>
-    <svg class="chart js-chart"></svg>
-</div>
+        <label><input
+          type="radio"
+          name="x-scale"
+          value="linear"
+        >Linear</label> 
+        <label><input
+          type="radio"
+          name="x-scale"
+          value="log10"
+        >Log10</label>
+      </form>
+      <svg class="chart js-chart" />
+    </div>
   </section>
 </template>
 <script>
@@ -70,13 +78,17 @@ export default {
           const self = this;
 
           // pools and fluxes of water
+          // long-form data with columns Type, Category, Feature_group, Feature, 
+          // Vol_1000km3,Vol_km3, Vol_m3, Vol_km3_log10, Vol_row, Vol_prefix, row_start, row_end
+          // 'row_' variables provide the numeric bounds for each row in logpile
+          // Vol_row and Vol_prefix are for positioning (y-axis) and labelling volumes
           this.volume = data[0];
-          //console.log(this.volume)
 
           this.addlogpile(this.volume)
         },
         addlogpile(data){
-          // draw logpile 
+          // TODO: draw logpile 
+          // currently single axis chart
           this.drawChart(data, {
             x: d => d.Vol_km3,
             type: this.d3.scaleLog,
@@ -86,12 +98,12 @@ export default {
           })
         },
         resize(){
-            // make chart responsive
+            // TODO: make chart responsive
         },
         drawChart(data, {
           value = d => d, // convenience alias for x
           x = value, // given d in data, returns value
-          type = this.d3.scaleLinear,
+          type = this.d3.scaleLinear, // takes any scale 
           x_min,
           y_pos,
           y_height = 50,
@@ -122,6 +134,8 @@ export default {
             .append("g")
             .classed(var_class, true)
 
+          // TODO: change shape and appearance of volumes on chart
+          // currently barcode
           svg_add
             .selectAll(".bar")
             .data(data, function(d) { return d.Type })
@@ -134,7 +148,7 @@ export default {
             .attr("width", 2)
             .attr("height", y_height)
             .attr("opacity", 0.85)
-            .attr("fill", "pink")    
+            .attr("fill", "pink")    // TODO: color based on type
 
         }
 
