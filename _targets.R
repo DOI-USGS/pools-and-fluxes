@@ -21,7 +21,7 @@ list(
     format = "file"
   ),
   tar_target(
-    water_volume_logpile_log,
+    water_volume_logpile_log_csv,
     s3_upload(filepath_s3 = "visualizations/data/abbott_pools_and_fluxes.csv",
               on_exists = "replace",
               filepath_local = water_volume_logpile_csv,
