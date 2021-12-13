@@ -74,5 +74,5 @@ public/*.csv
 
 # Data files
 *xlsx
-
+out/
 _targets/
