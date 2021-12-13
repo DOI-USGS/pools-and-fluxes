@@ -28,7 +28,7 @@ pipeline {
                           extensions: [],
                           gitTool: 'Default',
                           submoduleCfg: [],
-                          userRemoteConfigs: [[url: 'https://github.com/usgs-vizlab/gw-conditions.git']]
+                          userRemoteConfigs: [[url: 'https://github.com/usgs-vizlab/pools-and-fluxes.git']]
                         ])
                 }
         }
@@ -37,9 +37,9 @@ pipeline {
             steps {
 
                 sh """
-                    docker build . --tag="gw-conditions-docker" --build-arg BUILDTARGET=${params.BUILD_DEST} --build-arg VUE_BUILD_MODE=${params.VUE_BUILD_MODE}
-                    docker run gw-conditions-docker
-                    pathtemplate=":tmp/gw-conditions/dist"
+                    docker build . --tag="pools-and-fluxes-docker" --build-arg BUILDTARGET=${params.BUILD_DEST} --build-arg VUE_BUILD_MODE=${params.VUE_BUILD_MODE}
+                    docker run pools-and-fluxes-docker
+                    pathtemplate=":tmp/pools-and-fluxes/dist"
                     dockerinstanceid=\$( docker ps -l -q )
                     docker cp  "\${dockerinstanceid}\${pathtemplate}" "$WORKSPACE"
                     docker rm "\${dockerinstanceid}"
@@ -52,13 +52,13 @@ pipeline {
             steps {
                 script {
                     if ("${params.BUILD_DEST}" == "prod") {
-                        targetDomain = "s3://water-visualizations-prod-website/visualizations/gw-conditions"
+                        targetDomain = "s3://water-visualizations-prod-website/visualizations/pools-and-fluxes"
                     }
                     else if ("${params.BUILD_DEST}" == "beta") {
-                        targetDomain = "s3://water-visualizations-beta-website/visualizations/gw-conditions"
+                        targetDomain = "s3://water-visualizations-beta-website/visualizations/pools-and-fluxes"
                     }
                     else {
-                        targetDomain = "s3://water-visualizations-test-website/visualizations/gw-conditions"
+                        targetDomain = "s3://water-visualizations-test-website/visualizations/pools-and-fluxes"
                     }
                 }
                 sh """
@@ -71,22 +71,22 @@ pipeline {
 
     post {
         success {
-            mail to: 'cnell@usgs.gov, lplatt@usgs.gov',
+            mail to: 'cnell@usgs.gov',
             subject: "Success: ${currentBuild.fullDisplayName}",
             body: "Pipeline finished successfully ${env.BUILD_URL}"
         }
         unstable {
-            mail to: 'cnell@usgs.gov, lplatt@usgs.gov',
+            mail to: 'cnell@usgs.gov',
             subject: "Unstable: ${currentBuild.fullDisplayName}",
             body: "Pipeline is unstable ${env.BUILD_URL}"
         }
         failure {
-            mail to: 'cnell@usgs.gov, lplatt@usgs.gov',
+            mail to: 'cnell@usgs.gov',
             subject: "Failure: ${currentBuild.fullDisplayName}",
             body: "Pipeline failed ${env.BUILD_URL}"
         }
         changed {
-            mail to: 'cnell@usgs.gov, ebechtel@contractor.usgs.gov, lplatt@usgs.gov',
+            mail to: 'cnell@usgs.gov',
             subject: "Changes: ${currentBuild.fullDisplayName}",
             body: "Pipeline detected changes ${env.BUILD_URL}"
         }
