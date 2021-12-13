@@ -16,13 +16,15 @@ list(
              col_names = c('Type','Category','Feature_group','Feature','Vol_1000km3','Vol_km3', "Vol_m3"))
   ),
   tar_target(
-    water_volume,
+    water_volume_logpile_csv,
     prep_logpile_data(abbott_data, file_out = 'out/water_volume_logpile.csv')
   ),
   tar_target(
-    water_volume_log,
+    water_volume_logpile_log,
     s3_upload(filepath_s3 = "visualizations/data/abbott_pools_and_fluxes.csv",
               on_exists = "replace",
-              filepath_local = water_volume)
+              filepath_local = water_volume_logpile_csv,
+              filepath_log = 'out/water_volume_logpile_log.csv'),
+    format = "file"
   )
 )
