@@ -30,7 +30,11 @@ s3_upload <- function(filepath_s3,
     local_filepath = filepath_local,
     s3_filepath = filepath_s3,
     timestamp = Sys.time()
+<<<<<<< HEAD
+    ) %>%
+=======
   ) %>%
+>>>>>>> 6eef74085fdeaadbf819f918caf870b40fb4b824
     write_csv(filepath_log)
 
   return(filepath_log)
