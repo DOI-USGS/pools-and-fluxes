@@ -57,15 +57,18 @@ export default {
     // define div for tooltip
     this.tooltip = this.logpile_container
       .append("div")
+      .style("position", "absolute")
+      //.style("visibility", "hidden")
       .attr("class", "tooltip")
       .style("opacity", 0)
-      .attr("fill", "royalblue")
+      .style("background-color", "blue")
+      .style("border", "solid")
+      .style("border-width", "1px")
+      .style("border-radius", "5px")
+      .style("padding", "10px")
+
 
     this.loadData();
-
-    // resize chart when window changes 
-    //window.addEventListener("resize", this.drawChart)
-
     },
     methods:{
         loadData(){
@@ -88,8 +91,8 @@ export default {
           // Vol_row and Vol_prefix are for positioning (y-axis) and labelling volumes
           this.volume = data[0];
           this.image_paths = data[1];
-          console.log(this.image_paths)
 
+          // draw chart
           this.addlogpile(this.volume)
 
         },
@@ -103,9 +106,6 @@ export default {
             x_min: 1, // necessary for log
             var_class: 'pool'
           })
-        },
-        resize(){
-            // TODO: make chart responsive
         },
         drawChart(data, {
           value = d => d, // convenience alias for x
@@ -156,13 +156,15 @@ export default {
             .attr("width", 2)
             .attr("height", y_height)
             .attr("fill", "royalblue")
+
+          svg_add
+            .selectAll(".bar")
             .on("mouseover", function(d) {		
                 self.tooltip.transition()		
-                    .duration(100)
-                    .style("opacity", .9)			
+                    .style("opacity", .9)		
                 self.tooltip
                     .style("left", (self.d3.event.pageX) + "px")		
-                    .style("top", (self.d3.event.pageY - 28) + "px");	
+                    .style("top", (self.d3.event.pageY) + "px");	
                 })					
             .on("mouseout", function(d) {		
                 self.tooltip.transition()		
@@ -183,7 +185,6 @@ export default {
   margin: 5vw;
 }
 .tooltip {	
-    position: absolute;			
     text-align: center;			
     width: 60px;					
     height: 28px;					
@@ -192,6 +193,6 @@ export default {
     background: lightsteelblue;	
     border: 0px;		
     border-radius: 8px;			
-    pointer-events: none;			
+    z-index: 100;	
 }
 </style>
