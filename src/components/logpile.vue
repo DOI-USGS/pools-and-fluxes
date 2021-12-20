@@ -36,6 +36,7 @@ export default {
       margin: { top: 50, right: 50, bottom: 50, left: 50 },
       svg_chart: null,
       logpile_container: null,
+      tooltip: null,
       }
   },
   mounted(){      
@@ -47,11 +48,18 @@ export default {
     this.h = document.getElementById("logpile-container").offsetHeight;
     
     // create svg that will hold chart
-    this.svg_logpile = this.d3.select("#logpile-container")
+    this.svg_logpile = this.logpile_container
       .append("svg")
       .classed("logpile-chart", true)
       .attr("viewBox", "0 0 " + this.w + " " + this.h)
       .attr("preserveAspectRatio", "xMidYMid meet")
+
+    // define div for tooltip
+    this.tooltip = this.logpile_container
+      .append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0)
+      .attr("fill", "royalblue")
 
     this.loadData();
 
@@ -66,6 +74,7 @@ export default {
             // read in data
             let promises = [
                 self.d3.csv("https://labs.waterdata.usgs.gov/visualizations/data/water_volume_logpile.csv", this.d3.autoType),
+                self.d3.csv(self.publicPath + 'water_volume_logpile.csv', this.d3.autotype)
             ];
             Promise.all(promises).then(self.callback);
         },
@@ -78,8 +87,11 @@ export default {
           // 'row_' variables provide the numeric bounds for each row in logpile
           // Vol_row and Vol_prefix are for positioning (y-axis) and labelling volumes
           this.volume = data[0];
+          this.image_paths = data[1];
+          console.log(this.image_paths)
 
           this.addlogpile(this.volume)
+
         },
         addlogpile(data){
           // TODO: draw logpile 
@@ -106,6 +118,7 @@ export default {
         } = {}) {
 
           const x_margin = 20;
+          const self = this;
 
           // x axis scale
           var xScale = type()
@@ -134,7 +147,7 @@ export default {
           svg_add
             .selectAll(".bar")
             .data(data, function(d) { return d.Type })
-            .enter()
+          .enter()
             .append("rect")
             .classed("bar", true)
             .attr("class", d => { return "bar " + d.Type }) // to grab in interaction
@@ -143,6 +156,19 @@ export default {
             .attr("width", 2)
             .attr("height", y_height)
             .attr("fill", "royalblue")
+            .on("mouseover", function(d) {		
+                self.tooltip.transition()		
+                    .duration(100)
+                    .style("opacity", .9)			
+                self.tooltip
+                    .style("left", (self.d3.event.pageX) + "px")		
+                    .style("top", (self.d3.event.pageY - 28) + "px");	
+                })					
+            .on("mouseout", function(d) {		
+                self.tooltip.transition()		
+                    .duration(500)		
+                    .style("opacity", 0);	
+        });
 
         }
 
@@ -155,5 +181,17 @@ export default {
   height: 50vh;
   width: 90vw;
   margin: 5vw;
+}
+.tooltip {	
+    position: absolute;			
+    text-align: center;			
+    width: 60px;					
+    height: 28px;					
+    padding: 2px;				
+    font: 12px sans-serif;		
+    background: lightsteelblue;	
+    border: 0px;		
+    border-radius: 8px;			
+    pointer-events: none;			
 }
 </style>
