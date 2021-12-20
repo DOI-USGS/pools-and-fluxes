@@ -1,5 +1,5 @@
 s3_upload <- function(filepath_s3,
-                      filepath_local = filepath_s3,
+                      filepath_local,
                       filepath_log,
                       on_exists = c("replace", "stop"),
                       verbose = FALSE,
