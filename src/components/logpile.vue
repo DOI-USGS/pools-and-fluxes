@@ -77,7 +77,6 @@ export default {
             // read in data
             let promises = [
                 self.d3.csv("https://labs.waterdata.usgs.gov/visualizations/data/water_volume_logpile.csv", this.d3.autoType),
-                self.d3.csv(self.publicPath + 'water_volume_logpile.csv', this.d3.autotype)
             ];
             Promise.all(promises).then(self.callback);
         },
@@ -90,7 +89,6 @@ export default {
           // 'row_' variables provide the numeric bounds for each row in logpile
           // Vol_row and Vol_prefix are for positioning (y-axis) and labelling volumes
           this.volume = data[0];
-          this.image_paths = data[1];
 
           // draw chart
           this.addlogpile(this.volume)
