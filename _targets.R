@@ -10,14 +10,24 @@ source("data-src/prep_logpile_data.R")
 list(
   tar_target(
     abbott_data,
+    # magnitude of pools and fluxes
     read_csv('in/abbott-pools-and-fluxes.csv',
              skip = 1,
              col_types = c('ccccnnn'),
              col_names = c('Type','Category','Feature_group','Feature','Vol_1000km3','Vol_km3', "Vol_m3"))
   ),
   tar_target(
+    image_data,
+    # contains image file names that correspond to pools and fluxes.
+    # derived from sheet Bekah is working on, so keeping separate from main data
+    read_csv('in/abbott-pools-and-fluxes_images.csv',
+             skip = 1,
+             col_types = c('cccccc'),
+             col_names = c('Type','Category','Feature_group','Feature',"image_file", "image_credit"))
+  ),
+  tar_target(
     water_volume_logpile_csv,
-    prep_logpile_data(abbott_data, file_out = 'out/water_volume_logpile.csv'),
+    prep_logpile_data(abbott_data, image_data, file_out = 'out/water_volume_logpile.csv'),
     format = "file"
   ),
   tar_target(
