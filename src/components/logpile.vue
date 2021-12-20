@@ -61,7 +61,7 @@ export default {
       //.style("visibility", "hidden")
       .attr("class", "tooltip")
       .style("opacity", 0)
-      .style("background-color", "blue")
+      .style("background-color", "royalblue")
       .style("border", "solid")
       .style("border-width", "1px")
       .style("border-radius", "5px")
@@ -160,7 +160,10 @@ export default {
             .on("mouseover", function(d) {		
                 self.tooltip.transition()		
                     .style("opacity", .9)		
+              // TODO: change image to match feature
+              // can use image_file variable added to this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
                 self.tooltip
+                .html("<img src='http://upload.wikimedia.org/wikipedia/commons/b/b3/Mali_Tombouctou.png'>")
                     .style("left", (self.d3.event.pageX) + "px")		
                     .style("top", (self.d3.event.pageY) + "px");	
                 })					
