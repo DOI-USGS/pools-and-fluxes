@@ -1,5 +1,4 @@
 library(targets)
-library(tarchetypes)
 library(dssecrets)
 library(tidyverse)
 
@@ -32,13 +31,11 @@ list(
     format = "file"
   ),
   tar_target(
-    water_volume_logpile_log_csv,
+    water_volume_logpile_log,
     s3_upload(filepath_s3 = "visualizations/data/abbott_pools_and_fluxes.csv",
               on_exists = "replace",
-              filepath_local = water_volume_logpile_csv,
-              filepath_log = 'out/water_volume_logpile_log.csv'),
-    format = "file"
-  ),
+              filepath_local = water_volume_logpile_csv
+  )),
   tar_target(
     # images to upload to s3
     water_images,
@@ -52,13 +49,20 @@ list(
       file_s3 <- sprintf('visualizations/images/%s', file_name)
       file_local <- sprintf('Images/%s', file_name)
       file_parse <- gsub('.', '_', file_name, fixed = TRUE)
-      file_log <- sprintf("out/image_%s_log.csv", file_parse)
       s3_upload(filepath_s3 = file_s3,
                 on_exists = "replace",
-                filepath_local = file_local,
-                filepath_log = file_log)
+                filepath_local = file_local
+      )
       },
-    format = "file",
     pattern = map(water_images)
+  ),
+  tar_target(
+    upload_log,{
+      file_out <- 'out/upload_log.csv'
+    bind_rows(water_volume_logpile_log, image_upload_log) %>%
+      write_csv(file_out)
+      return(file_out)
+    },
+    format = "file"
   )
 )

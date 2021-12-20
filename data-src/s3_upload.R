@@ -1,6 +1,5 @@
 s3_upload <- function(filepath_s3,
                       filepath_local,
-                      filepath_log,
                       on_exists = c("replace", "stop"),
                       verbose = FALSE,
                       config_file = "lib/cfg/s3_config.yml") {
@@ -30,8 +29,5 @@ s3_upload <- function(filepath_s3,
     local_filepath = filepath_local,
     s3_filepath = filepath_s3,
     timestamp = Sys.time()
-    ) %>%
-    write_csv(filepath_log)
-
-  return(filepath_log)
+    )
 }
