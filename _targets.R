@@ -57,7 +57,7 @@ list(
     pattern = map(water_images)
   ),
   tar_target(
-    upload_log,{
+    upload_log_csv,{
       file_out <- 'out/upload_log.csv'
     bind_rows(water_volume_logpile_log, image_upload_log) %>%
       write_csv(file_out)
