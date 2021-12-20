@@ -36,12 +36,7 @@ export default {
       margin: { top: 50, right: 50, bottom: 50, left: 50 },
       svg_chart: null,
       logpile_container: null,
-      scales: {
-        linear: d3.scaleLinear(),
-        log10:  d3.scaleLog().base(10)
-    },
-
-    }
+      }
   },
   mounted(){      
       this.d3 = Object.assign(d3Base);
@@ -124,7 +119,7 @@ export default {
             .attr("transform", "translate(" + 0 + ", " + y_pos + ")")
             .attr("class", "x-axis")
             .call(xAxis)
-            .call(g => g.select(".domain")
+            .call(g => g.select(".domain") // style axis and ticks
                 .attr("stroke-opacity", 0.5))
             .call(g => g.selectAll(".tick line")
                 .attr("stroke-opacity", 0.5))
@@ -147,8 +142,7 @@ export default {
             .attr("y", y_height)
             .attr("width", 2)
             .attr("height", y_height)
-            .attr("opacity", 0.85)
-            .attr("fill", "pink")    // TODO: color based on type
+            .attr("fill", "royalblue")
 
         }
 
@@ -162,5 +156,4 @@ export default {
   width: 90vw;
   margin: 5vw;
 }
-
 </style>
