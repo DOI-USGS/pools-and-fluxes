@@ -155,26 +155,8 @@ export default {
             .attr("width", 10)
             .attr("height", y_height)
             .attr("fill", "royalblue")
-
-            var file = 'salineLake.jpg';
-
-          svg_add
-            .selectAll(".bar")
             .on("mouseover", function(d) {		
-                self.tooltip.transition()		
-                    .style("opacity", .9)		
-                 var img_file = self.imagePath(d.image_file)
-              // uses image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
-                self.tooltip
-                .html("<img src='" + img_file + "' >")
-                    .attr("pupUp", "class")
-                    .style("width", "220px")
-                    .style("height", "220px")
-                    .style("left", (self.d3.event.pageX) + "px")		
-                    .style("top", (self.d3.event.pageY) + "px");	
-                  self.tooltip.select('img')
-                  .style("width", "200px")
-                    .style("height", "200px")
+                self.populateTooltip(d)
                 })					
             .on("mouseout", function(d) {		
                 self.tooltip.transition()		
@@ -186,6 +168,29 @@ export default {
         imagePath(file){
           const image_src = 'https://labs.waterdata.usgs.gov/visualizations/images/' + file
           return image_src
+
+        },
+        populateTooltip(d){
+          const self = this;
+
+          self.tooltip
+            .transition()		
+            .style("opacity", .9)		
+
+          // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
+         var img_file = self.imagePath(d.image_file)
+        
+          self.tooltip
+          .html("<img src='" + img_file + "' >")
+              .attr("pupUp", "class")
+              .style("width", "220px")
+              .style("height", "220px")
+              .style("left", (self.d3.event.pageX) + "px")		
+              .style("top", (self.d3.event.pageY) + "px");	
+
+          self.tooltip.select('img')
+            .style("width", "200px")
+              .style("height", "200px")
 
         }
 
