@@ -36,12 +36,8 @@ export default {
       margin: { top: 50, right: 50, bottom: 50, left: 50 },
       svg_chart: null,
       logpile_container: null,
-      scales: {
-        linear: d3.scaleLinear(),
-        log10:  d3.scaleLog().base(10)
-    },
-
-    }
+      tooltip: null,
+      }
   },
   mounted(){      
       this.d3 = Object.assign(d3Base);
@@ -52,17 +48,27 @@ export default {
     this.h = document.getElementById("logpile-container").offsetHeight;
     
     // create svg that will hold chart
-    this.svg_logpile = this.d3.select("#logpile-container")
+    this.svg_logpile = this.logpile_container
       .append("svg")
       .classed("logpile-chart", true)
       .attr("viewBox", "0 0 " + this.w + " " + this.h)
       .attr("preserveAspectRatio", "xMidYMid meet")
 
+    // define div for tooltip
+    this.tooltip = this.logpile_container
+      .append("div")
+      .style("position", "absolute")
+      //.style("visibility", "hidden")
+      .attr("class", "tooltip")
+      .style("opacity", 0)
+      .style("background-color", "royalblue")
+      .style("border", "solid")
+      .style("border-width", "1px")
+      .style("border-radius", "5px")
+      .style("padding", "10px")
+
+
     this.loadData();
-
-    // resize chart when window changes 
-    //window.addEventListener("resize", this.drawChart)
-
     },
     methods:{
         loadData(){
@@ -70,7 +76,7 @@ export default {
 
             // read in data
             let promises = [
-                self.d3.csv("https://labs.waterdata.usgs.gov/visualizations/data/water_volume_logpile.csv", this.d3.autoType),
+                self.d3.csv("https://labs.waterdata.usgs.gov/visualizations/data/abbott_pools_and_fluxes_images.csv", this.d3.autoType),
             ];
             Promise.all(promises).then(self.callback);
         },
@@ -83,8 +89,11 @@ export default {
           // 'row_' variables provide the numeric bounds for each row in logpile
           // Vol_row and Vol_prefix are for positioning (y-axis) and labelling volumes
           this.volume = data[0];
+          console.log(this.volume)
 
+          // draw chart
           this.addlogpile(this.volume)
+
         },
         addlogpile(data){
           // TODO: draw logpile 
@@ -97,9 +106,6 @@ export default {
             var_class: 'pool'
           })
         },
-        resize(){
-            // TODO: make chart responsive
-        },
         drawChart(data, {
           value = d => d, // convenience alias for x
           x = value, // given d in data, returns value
@@ -111,6 +117,7 @@ export default {
         } = {}) {
 
           const x_margin = 20;
+          const self = this;
 
           // x axis scale
           var xScale = type()
@@ -124,7 +131,7 @@ export default {
             .attr("transform", "translate(" + 0 + ", " + y_pos + ")")
             .attr("class", "x-axis")
             .call(xAxis)
-            .call(g => g.select(".domain")
+            .call(g => g.select(".domain") // style axis and ticks
                 .attr("stroke-opacity", 0.5))
             .call(g => g.selectAll(".tick line")
                 .attr("stroke-opacity", 0.5))
@@ -139,16 +146,47 @@ export default {
           svg_add
             .selectAll(".bar")
             .data(data, function(d) { return d.Type })
-            .enter()
+          .enter()
             .append("rect")
             .classed("bar", true)
             .attr("class", d => { return "bar " + d.Type }) // to grab in interaction
             .attr("x", d => xScale(x(d)))
             .attr("y", y_height)
-            .attr("width", 2)
+            .attr("width", 10)
             .attr("height", y_height)
-            .attr("opacity", 0.85)
-            .attr("fill", "pink")    // TODO: color based on type
+            .attr("fill", "royalblue")
+            .on("mouseover", d => self.populateTooltip(d))					
+            .on("mouseout", d => self.fadeEl(self.tooltip, 0, 50))
+
+        },
+        imagePath(file){
+          const image_src = 'https://labs.waterdata.usgs.gov/visualizations/images/' + file
+          return image_src
+
+        },
+        populateTooltip(d){
+          const self = this;
+
+          self.fadeEl(self.tooltip, 0.9)
+
+          // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
+          var img_file = self.imagePath(d.image_file)
+        
+          self.tooltip
+            .html("<img src='" + img_file + "' >")
+              .attr("pupUp", "class")
+              .style("width", "220px")
+              .style("height", "220px")
+              .style("left", (self.d3.event.pageX) + "px")		
+              .style("top", (self.d3.event.pageY) + "px");	
+
+          self.tooltip.select('img')
+            .style("width", "200px")
+            .style("height", "200px")
+
+        },
+        fadeEl(el, alpha, time_duration = 0){
+          el.transition().duration(time_duration).style("opacity", alpha)
 
         }
 
@@ -162,5 +200,18 @@ export default {
   width: 90vw;
   margin: 5vw;
 }
+.tooltip {	
+    text-align: center;			
+    width: 60px;				
+    max-width: 100px;	
+    height: 28px;					
+    padding: 2px;				
+    border-radius: 8px;			
+    z-index: 100;	
 
+    img {
+      max-width: 100px;
+      max-height:100px;
+    }
+}
 </style>
