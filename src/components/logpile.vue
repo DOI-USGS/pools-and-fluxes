@@ -155,14 +155,8 @@ export default {
             .attr("width", 10)
             .attr("height", y_height)
             .attr("fill", "royalblue")
-            .on("mouseover", function(d) {		
-                self.populateTooltip(d)
-                })					
-            .on("mouseout", function(d) {		
-                self.tooltip.transition()		
-                    .duration(500)		
-                    .style("opacity", 0);	
-        });
+            .on("mouseover", d => self.populateTooltip(d))					
+            .on("mouseout", d => self.fadeEl(self.tooltip, 0, 50))
 
         },
         imagePath(file){
@@ -173,15 +167,13 @@ export default {
         populateTooltip(d){
           const self = this;
 
-          self.tooltip
-            .transition()		
-            .style("opacity", .9)		
+          self.fadeEl(self.tooltip, 0.9)
 
           // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
-         var img_file = self.imagePath(d.image_file)
+          var img_file = self.imagePath(d.image_file)
         
           self.tooltip
-          .html("<img src='" + img_file + "' >")
+            .html("<img src='" + img_file + "' >")
               .attr("pupUp", "class")
               .style("width", "220px")
               .style("height", "220px")
@@ -190,7 +182,11 @@ export default {
 
           self.tooltip.select('img')
             .style("width", "200px")
-              .style("height", "200px")
+            .style("height", "200px")
+
+        },
+        fadeEl(el, alpha, time_duration = 0){
+          el.transition().duration(time_duration).style("opacity", alpha)
 
         }
 
