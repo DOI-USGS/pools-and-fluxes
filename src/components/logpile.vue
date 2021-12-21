@@ -76,7 +76,7 @@ export default {
 
             // read in data
             let promises = [
-                self.d3.csv("https://labs.waterdata.usgs.gov/visualizations/data/water_volume_logpile.csv", this.d3.autoType),
+                self.d3.csv("https://labs.waterdata.usgs.gov/visualizations/data/abbott_pools_and_fluxes_images.csv", this.d3.autoType),
             ];
             Promise.all(promises).then(self.callback);
         },
@@ -89,6 +89,7 @@ export default {
           // 'row_' variables provide the numeric bounds for each row in logpile
           // Vol_row and Vol_prefix are for positioning (y-axis) and labelling volumes
           this.volume = data[0];
+          console.log(this.volume)
 
           // draw chart
           this.addlogpile(this.volume)
@@ -151,27 +152,40 @@ export default {
             .attr("class", d => { return "bar " + d.Type }) // to grab in interaction
             .attr("x", d => xScale(x(d)))
             .attr("y", y_height)
-            .attr("width", 2)
+            .attr("width", 10)
             .attr("height", y_height)
             .attr("fill", "royalblue")
+
+            var file = 'salineLake.jpg';
 
           svg_add
             .selectAll(".bar")
             .on("mouseover", function(d) {		
                 self.tooltip.transition()		
                     .style("opacity", .9)		
-              // TODO: change image to match feature
-              // can use image_file variable added to this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
+                 var img_file = self.imagePath(d.image_file)
+              // uses image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
                 self.tooltip
-                .html("<img src='http://upload.wikimedia.org/wikipedia/commons/b/b3/Mali_Tombouctou.png'>")
+                .html("<img src='" + img_file + "' >")
+                    .attr("pupUp", "class")
+                    .style("width", "220px")
+                    .style("height", "220px")
                     .style("left", (self.d3.event.pageX) + "px")		
                     .style("top", (self.d3.event.pageY) + "px");	
+                  self.tooltip.select('img')
+                  .style("width", "200px")
+                    .style("height", "200px")
                 })					
             .on("mouseout", function(d) {		
                 self.tooltip.transition()		
                     .duration(500)		
                     .style("opacity", 0);	
         });
+
+        },
+        imagePath(file){
+          const image_src = 'https://labs.waterdata.usgs.gov/visualizations/images/' + file
+          return image_src
 
         }
 
@@ -187,13 +201,16 @@ export default {
 }
 .tooltip {	
     text-align: center;			
-    width: 60px;					
+    width: 60px;				
+    max-width: 100px;	
     height: 28px;					
     padding: 2px;				
-    font: 12px sans-serif;		
-    background: lightsteelblue;	
-    border: 0px;		
     border-radius: 8px;			
     z-index: 100;	
+
+    img {
+      max-width: 100px;
+      max-height:100px;
+    }
 }
 </style>
