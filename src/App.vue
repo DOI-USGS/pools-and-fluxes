@@ -75,7 +75,7 @@ body {
       padding: 0;
       line-height: 1.2;
       font-size: 16px;
-      font-weight: 600;
+      font-weight: 400;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       width: 100%;

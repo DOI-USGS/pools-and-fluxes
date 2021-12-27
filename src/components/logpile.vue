@@ -1,22 +1,6 @@
 <template>
   <section>
     <div id="logpile-container" />
-    <div class="chart-container js-chart-container">
-      <form class="controls">
-        Scale:
-        <label><input
-          type="radio"
-          name="x-scale"
-          value="linear"
-        >Linear</label> 
-        <label><input
-          type="radio"
-          name="x-scale"
-          value="log10"
-        >Log10</label>
-      </form>
-      <svg class="chart js-chart" />
-    </div>
   </section>
 </template>
 <script>
@@ -189,7 +173,6 @@ export default {
           el.transition().duration(time_duration).style("opacity", alpha)
 
         }
-
     }
 }
 </script>
