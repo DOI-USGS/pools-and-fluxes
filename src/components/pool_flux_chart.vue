@@ -1,12 +1,12 @@
 <template>
   <section>
-    <div id="logpile-container" />
+    <div id="chart-container" />
   </section>
 </template>
 <script>
 import * as d3Base from 'd3';
 export default {
-  name: "LogpileChart",
+  name: "PoolFluxChart",
     components: {
     },
     data() {
@@ -17,11 +17,11 @@ export default {
       // dimensions
       w: null,
       h: null,
-      margin: { top: 50, right: 50, bottom: 50, left: 50 },
+      margin: { top: 10, right: 10, bottom: 20, left: 200 },
       chart_width: null,
       chart_height: null,
       svg_chart: null,
-      logpile_container: null,
+      chart_container: null,
       tooltip: null,
       }
   },
@@ -29,30 +29,27 @@ export default {
       this.d3 = Object.assign(d3Base);
 
     // chart elements
-    this.w = document.getElementById("logpile-container").offsetWidth;
-    this.h = document.getElementById("logpile-container").offsetHeight;
+    this.w = document.getElementById("chart-container").offsetWidth;
+    this.h = document.getElementById("chart-container").offsetHeight;
     this.chart_width = this.w - this.margin.left - this.margin.right;
-    this.chart_height = (this.h*0.3) - this.margin.top - this.margin.bottom;
-    this.logpile_container = this.d3.select("#logpile-container")
+    this.chart_height = this.h - this.margin.top - this.margin.bottom;
+    this.chart_container = this.d3.select("#chart-container")
     
     
     // define div for tooltip
-    this.tooltip = this.logpile_container
-      .append("div")
-      .attr("class", "tooltip")
+    // this.tooltip = this.chart_container
+    //   .append("div")
+    //   .attr("class", "tooltip")
 
 
     // create svg that will hold chart
-    this.svg_logpile = this.logpile_container
+    this.svg_chart = this.chart_container
       .append("svg")
-        .classed("logpile-chart", true)
+        .classed("chart", true)
         .attr("viewBox", "0 0 " + (this.chart_width + this.margin.left + this.margin.right) + " " + (this.chart_height + this.margin.top + this.margin.bottom))
         .attr("preserveAspectRatio", "xMidYMid meet")
       .append("g")
         .attr("transform","translate(" + this.margin.left + "," + this.margin.top + ")");
-
-
-
 
     this.loadData();
     },
@@ -62,7 +59,8 @@ export default {
 
             // read in data
             let promises = [
-                self.d3.csv("https://labs.waterdata.usgs.gov/visualizations/data/abbott_pools_and_fluxes_images.csv", this.d3.autoType),
+                self.d3.csv(self.publicPath + "data/pools-fluxes-examples-limited.csv", this.d3.autoType), //self.d3.csv("https://labs.waterdata.usgs.gov/visualizations/data/abbott_pools_and_fluxes_images.csv", this.d3.autoType)
+                self.d3.csv("https://labs.waterdata.usgs.gov/visualizations/data/abbott_pools_and_fluxes_images.csv", this.d3.autoType)
             ];
             Promise.all(promises).then(self.callback);
         },
@@ -78,14 +76,12 @@ export default {
           console.log(this.volume)
 
           // draw chart
-          this.addlogpile(this.volume)
+          this.addChart(this.volume)
 
         },
-        addlogpile(data){
-          // TODO: draw logpile 
-          // currently single axis chart
+        addChart(data){
           this.drawChart(data, {
-            x: d => d.Vol_km3,
+            x: d => d.value_km_3,
             type: this.d3.scaleLog,
             y_pos: 100,
             x_min: 1, // necessary for log
@@ -106,21 +102,62 @@ export default {
           const self = this;
 
           // x axis scale
-          let xScale = type()
+          const xScale = type()
             .domain([x_min, this.d3.max(data, x)])
             .range([0, this.chart_width])
 
-          this.svg_logpile.append("g")
+          this.svg_chart.append("g")
             .attr("transform", "translate(0," + this.chart_height + ")")
             .call(this.d3.axisBottom(xScale))
 
           // let xAxis = this.d3.axisBottom(xScale)
 
-          // let y = this.d3.scaleBand
+          const yScale = this.d3.scaleBand()
+            .range([0, this.chart_height])
+            .domain(data.map(function(d) { return d.feature }))
+            .padding(1);
 
+          console.log(yScale.domain)
+
+          this.svg_chart.append("g")
+            .call(this.d3.axisLeft(yScale))
+
+          // add lolipop lines
+          this.svg_chart.selectAll("chartLines")
+            .data(data)
+            .enter()
+            .append("line")
+              .attr("x1", function(d) { return xScale(x(d)); })
+              .attr("x2", x(0))
+              .attr("y1", function(d) { return yScale(d.feature); })
+              .attr("y2", function(d) { return yScale(d.feature); })
+              .style("stroke", "grey")
+
+          // Add lolipop circles
+          this.svg_chart.selectAll("chartCircles")
+            .data(data)
+            .enter()
+            .append("circle")
+              .attr("cx", function(d) { return xScale(x(d)); })
+              .attr("cy", function(d) { return yScale(d.feature); })
+              .attr("r", "3")
+              .style("fill", function(d) {
+                switch (d.type) {
+                  case 'Pool':
+                    return "red";
+                    break;
+                  case 'Flux':
+                    return "blue";
+                    break;
+                  case 'Example':
+                    return "grey";
+                    break;
+                }
+              })
+              .attr("stroke", "white")
 
           // add pools and fluxes
-          // this.svg_logpile.append("g")
+          // this.svg_chart.append("g")
           //   .attr("transform", "translate(" + 0 + ", " + y_pos + ")")
           //   .attr("class", "x-axis")
           //   .call(xAxis)
@@ -129,28 +166,28 @@ export default {
           //   .call(g => g.selectAll(".tick line")
           //       .attr("stroke-opacity", 0.5))
 
-          // draw logpile points
-          let svg_add = this.svg_logpile
-            .append("g")
-            .classed(let_class, true)
+          // // draw data elements
+          // let svg_add = this.svg_chart
+          //   .append("g")
+          //   .classed(let_class, true)
 
-          // TODO: change shape and appearance of volumes on chart
-          // currently barcode
-          svg_add
-            .selectAll(".bar")
-            .data(data, function(d) { return d.Type })
-          .enter()
-            .append("rect")
-            .classed("bar", true)
-            .attr("class", d => { return "bar " + d.Type }) // to grab in interaction
-            .attr("x", d => xScale(x(d)))
-            .attr("y", this.chart_height-y_height)
-            .attr("width", 5)
-            .attr("height", y_height)
-            .attr("fill", "royalblue")
-            .attr("stroke", "white")
-            .on("mouseover", d => self.populateTooltip(d))					
-            .on("mouseout", d => self.fadeEl(self.tooltip, 0, 50))
+          // // TODO: change shape and appearance of volumes on chart
+          // // currently barcode
+          // svg_add
+          //   .selectAll(".bar")
+          //   .data(data, function(d) { return d.feature })
+          // .enter()
+          //   .append("rect")
+          //   .classed("bar", true)
+          //   .attr("class", d => { return "bar " + d.feature }) // to grab in interaction
+          //   .attr("x", d => xScale(x(d)))
+          //   .attr("y", this.chart_height-y_height)
+          //   .attr("width", 5)
+          //   .attr("height", y_height)
+          //   .attr("fill", "royalblue")
+          //   .attr("stroke", "white")
+          //   // .on("mouseover", d => self.populateTooltip(d))					
+          //   // .on("mouseout", d => self.fadeEl(self.tooltip, 0, 50))
 
         },
         imagePath(file){
@@ -188,10 +225,10 @@ export default {
 </script>
 <style scoped lang="scss">
 
-#logpile-container {
-  height: 50vh;
+#chart-container {
+  height: 70vh;
   width: 90vw;
-  margin: 5vw;
+  margin: 1vw;
 }
 .tooltip {	
     position: fixed;

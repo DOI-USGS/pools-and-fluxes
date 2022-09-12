@@ -1,9 +1,9 @@
 <template>
   <div id="visualization">
     <h2>Pools and Fluxes in the Water Cycle</h2>
-    <Logpile />
+    <PoolFluxChart />
     <p>
-      This visualization was inspired by the <a href="https://www.duncangeere.com/carbonincontext/" target="_blank">Carbon in Context</a> logpile chart by Duncan Geere. Data are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019) Human domination of the global water cycle absent from depictions and perceptions.</a>  
+      Data are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019) Human domination of the global water cycle absent from depictions and perceptions.</a>  
     </p>
   </div>
 </template>
@@ -13,7 +13,7 @@
 export default {
     name: 'Visualization',
     components: {
-      Logpile: () => import( /* webpackPreload: true */ /*webpackChunkName: "section"*/ "./../components/logpile")
+      PoolFluxChart: () => import( /* webpackPreload: true */ /*webpackChunkName: "section"*/ "./../components/pool_flux_chart")
     },
     computed: {
     },

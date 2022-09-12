@@ -1,0 +1,38 @@
+﻿type,feature,value_km_3
+Pool,Rivers,1900
+Pool,Snowpack,2900
+Pool,Atmospheric moisture - over land,3000
+Pool,Atmospheric moisture - over ocean,10000
+Pool,Reservoirs,10800
+Pool,Wetlands,14100
+Pool,Soil moisture,54100
+Pool,Lakes - saline,94700
+Pool,Lakes - fresh,108000
+Pool,Permafrost,207000
+Pool,Groundwater,22630000
+Pool,Ice sheets and glaciers,25800000
+Pool,Ocean - mixed zone,134000000
+Pool,Ocean - deep water zone,1206000000
+Flux,Streamflow to closed basins,800
+Flux,snowmelt,3100
+Flux,Groundwater discharge to ocean,4500
+Flux,Groundwater recharge,13000
+Flux,human water use,24400
+Flux,Streamflow to ocean,36000
+Flux,Transport of moisture from ocean to land,46000
+Flux,Evapotranspiration,68900
+Flux,Precipitation over land ,111000
+Flux,Precipitation over ocean,380500
+Flux,Ocean evaporation,420500
+Flux,Ocean circulation,7100000
+Example,Great Salt Lake,18.9
+Example,Dead Sea,147
+Example,Lake Winnepeg,284
+Example,Lake Erie,480
+Example,Lake Titicaca,893
+Example,Lake Victoria,2700
+Example,Grand canyon,4166.8
+Example,Lake Vostok,5400
+Example,Lake Superior,11600
+Example,Lake Baikal,23600
+Example,Caspian Sea,78200
