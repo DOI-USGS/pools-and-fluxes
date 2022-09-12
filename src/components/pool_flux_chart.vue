@@ -18,10 +18,10 @@ export default {
       w: null,
       h: null,
       margin: { top: 10, right: 25, bottom: 20, left: 200 },
-      chart_width: null,
-      chart_height: null,
-      svg_chart: null,
-      chart_container: null,
+      chartWidth: null,
+      chartHeight: null,
+      svgChart: null,
+      chartContainer: null,
       tooltip: null,
       }
   },
@@ -31,20 +31,20 @@ export default {
     // chart elements
     this.w = document.getElementById("chart-container").offsetWidth;
     this.h = document.getElementById("chart-container").offsetHeight;
-    this.chart_width = this.w - this.margin.left - this.margin.right;
-    this.chart_height = this.h - this.margin.top - this.margin.bottom;
-    this.chart_container = this.d3.select("#chart-container")
+    this.chartWidth = this.w - this.margin.left - this.margin.right;
+    this.chartHeight = this.h - this.margin.top - this.margin.bottom;
+    this.chartContainer = this.d3.select("#chart-container")
     
     // define div for tooltip
-    // this.tooltip = this.chart_container
+    // this.tooltip = this.chartContainer
     //   .append("div")
     //   .attr("class", "tooltip")
 
     // create svg that will hold chart
-    this.svg_chart = this.chart_container
+    this.svgChart = this.chartContainer
       .append("svg")
         .classed("chart", true)
-        .attr("viewBox", "0 0 " + (this.chart_width + this.margin.left + this.margin.right) + " " + (this.chart_height + this.margin.top + this.margin.bottom))
+        .attr("viewBox", "0 0 " + (this.chartWidth + this.margin.left + this.margin.right) + " " + (this.chartHeight + this.margin.top + this.margin.bottom))
         .attr("preserveAspectRatio", "xMidYMid meet")
       .append("g")
         .attr("transform","translate(" + this.margin.left + "," + this.margin.top + ")");
@@ -96,23 +96,23 @@ export default {
           // x axis scale
           const xScale = type()
             .domain([x_min, this.d3.max(data, x)])
-            .range([0, this.chart_width])
+            .range([0, this.chartWidth])
 
-          this.svg_chart.append("g")
-            .attr("transform", "translate(0," + this.chart_height + ")")
+          this.svgChart.append("g")
+            .attr("transform", "translate(0," + this.chartHeight + ")")
             .call(this.d3.axisBottom(xScale))
 
           // y axis scale for lolipop chart
           const yScale = this.d3.scaleBand()
-            .range([0, this.chart_height])
+            .range([0, this.chartHeight])
             .domain(data.map(function(d) { return d.feature }))
             .padding(1);
 
-          this.svg_chart.append("g")
+          this.svgChart.append("g")
             .call(this.d3.axisLeft(yScale))
 
           // add lolipop lines
-          this.svg_chart.selectAll("chartLines")
+          this.svgChart.selectAll("chartLines")
             .data(data)
             .enter()
             .append("line")
@@ -125,7 +125,7 @@ export default {
               // .on("mouseout", d => self.fadeEl(self.tooltip, 0, 50))
 
           // Add lolipop circles
-          this.svg_chart.selectAll("chartCircles")
+          this.svgChart.selectAll("chartCircles")
             .data(data)
             .enter()
             .append("circle")
