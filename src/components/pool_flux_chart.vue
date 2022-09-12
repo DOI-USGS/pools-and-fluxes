@@ -17,7 +17,7 @@ export default {
       // dimensions
       w: null,
       h: null,
-      margin: { top: 10, right: 10, bottom: 20, left: 200 },
+      margin: { top: 10, right: 25, bottom: 20, left: 200 },
       chart_width: null,
       chart_height: null,
       svg_chart: null,
@@ -35,12 +35,10 @@ export default {
     this.chart_height = this.h - this.margin.top - this.margin.bottom;
     this.chart_container = this.d3.select("#chart-container")
     
-    
     // define div for tooltip
     // this.tooltip = this.chart_container
     //   .append("div")
     //   .attr("class", "tooltip")
-
 
     // create svg that will hold chart
     this.svg_chart = this.chart_container
@@ -59,8 +57,7 @@ export default {
 
             // read in data
             let promises = [
-                self.d3.csv(self.publicPath + "data/pools-fluxes-examples-limited.csv", this.d3.autoType), //self.d3.csv("https://labs.waterdata.usgs.gov/visualizations/data/abbott_pools_and_fluxes_images.csv", this.d3.autoType)
-                self.d3.csv("https://labs.waterdata.usgs.gov/visualizations/data/abbott_pools_and_fluxes_images.csv", this.d3.autoType)
+                self.d3.csv(self.publicPath + "data/pools-fluxes-examples-limited.csv", this.d3.autoType) //self.d3.csv("https://labs.waterdata.usgs.gov/visualizations/data/abbott_pools_and_fluxes_images.csv", this.d3.autoType)
             ];
             Promise.all(promises).then(self.callback);
         },
@@ -68,10 +65,6 @@ export default {
           const self = this;
 
           // pools and fluxes of water
-          // long-form data with columns Type, Category, Feature_group, Feature, 
-          // Vol_1000km3,Vol_km3, Vol_m3, Vol_km3_log10, Vol_row, Vol_prefix, row_start, row_end
-          // 'row_' variables provide the numeric bounds for each row in logpile
-          // Vol_row and Vol_prefix are for positioning (y-axis) and labelling volumes
           this.volume = data[0];
           console.log(this.volume)
 
@@ -98,7 +91,6 @@ export default {
           let_class
         } = {}) {
 
-          // const x_margin = 20;
           const self = this;
 
           // x axis scale
@@ -110,14 +102,11 @@ export default {
             .attr("transform", "translate(0," + this.chart_height + ")")
             .call(this.d3.axisBottom(xScale))
 
-          // let xAxis = this.d3.axisBottom(xScale)
-
+          // y axis scale for lolipop chart
           const yScale = this.d3.scaleBand()
             .range([0, this.chart_height])
             .domain(data.map(function(d) { return d.feature }))
             .padding(1);
-
-          console.log(yScale.domain)
 
           this.svg_chart.append("g")
             .call(this.d3.axisLeft(yScale))
@@ -132,6 +121,8 @@ export default {
               .attr("y1", function(d) { return yScale(d.feature); })
               .attr("y2", function(d) { return yScale(d.feature); })
               .style("stroke", "grey")
+              // .on("mouseover", d => self.populateTooltip(d))					
+              // .on("mouseout", d => self.fadeEl(self.tooltip, 0, 50))
 
           // Add lolipop circles
           this.svg_chart.selectAll("chartCircles")
@@ -155,39 +146,8 @@ export default {
                 }
               })
               .attr("stroke", "white")
-
-          // add pools and fluxes
-          // this.svg_chart.append("g")
-          //   .attr("transform", "translate(" + 0 + ", " + y_pos + ")")
-          //   .attr("class", "x-axis")
-          //   .call(xAxis)
-          //   .call(g => g.select(".domain") // style axis and ticks
-          //       .attr("stroke-opacity", 0.5))
-          //   .call(g => g.selectAll(".tick line")
-          //       .attr("stroke-opacity", 0.5))
-
-          // // draw data elements
-          // let svg_add = this.svg_chart
-          //   .append("g")
-          //   .classed(let_class, true)
-
-          // // TODO: change shape and appearance of volumes on chart
-          // // currently barcode
-          // svg_add
-          //   .selectAll(".bar")
-          //   .data(data, function(d) { return d.feature })
-          // .enter()
-          //   .append("rect")
-          //   .classed("bar", true)
-          //   .attr("class", d => { return "bar " + d.feature }) // to grab in interaction
-          //   .attr("x", d => xScale(x(d)))
-          //   .attr("y", this.chart_height-y_height)
-          //   .attr("width", 5)
-          //   .attr("height", y_height)
-          //   .attr("fill", "royalblue")
-          //   .attr("stroke", "white")
-          //   // .on("mouseover", d => self.populateTooltip(d))					
-          //   // .on("mouseout", d => self.fadeEl(self.tooltip, 0, 50))
+              // .on("mouseover", d => self.populateTooltip(d))					
+              // .on("mouseout", d => self.fadeEl(self.tooltip, 0, 50))
 
         },
         imagePath(file){
@@ -206,10 +166,6 @@ export default {
           self.tooltip
             .html("<img src='" + img_file + "' >")
               .attr("class", "popUp")
-              // .style("width", "220px")
-              // .style("height", "220px")
-              // .style("left", (self.d3.event.pageX) + "px")		
-              // .style("top", (self.d3.event.pageY) + "px");	
 
           self.tooltip.select('img')
             .style("width", "200px")
