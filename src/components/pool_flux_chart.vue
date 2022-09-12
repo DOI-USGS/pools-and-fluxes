@@ -102,7 +102,7 @@ export default {
             .attr("transform", "translate(0," + this.chartHeight + ")")
             .call(this.d3.axisBottom(xScale))
 
-          // y axis scale for lolipop chart
+          // y axis scale for lollipop chart
           const yScale = this.d3.scaleBand()
             .range([0, this.chartHeight])
             .domain(data.map(function(d) { return d.feature }))
@@ -111,7 +111,7 @@ export default {
           this.svgChart.append("g")
             .call(this.d3.axisLeft(yScale))
 
-          // add lolipop lines
+          // add lollipop lines
           this.svgChart.selectAll("chartLines")
             .data(data)
             .enter()
@@ -124,7 +124,7 @@ export default {
               // .on("mouseover", d => self.populateTooltip(d))					
               // .on("mouseout", d => self.fadeEl(self.tooltip, 0, 50))
 
-          // Add lolipop circles
+          // Add lollipop circles
           this.svgChart.selectAll("chartCircles")
             .data(data)
             .enter()
