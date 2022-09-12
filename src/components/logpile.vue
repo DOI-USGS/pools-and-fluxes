@@ -18,6 +18,8 @@ export default {
       w: null,
       h: null,
       margin: { top: 50, right: 50, bottom: 50, left: 50 },
+      chart_width: null,
+      chart_height: null,
       svg_chart: null,
       logpile_container: null,
       tooltip: null,
@@ -27,29 +29,29 @@ export default {
       this.d3 = Object.assign(d3Base);
 
     // chart elements
-    this.logpile_container = this.d3.select("#logpile-container")
     this.w = document.getElementById("logpile-container").offsetWidth;
     this.h = document.getElementById("logpile-container").offsetHeight;
+    this.chart_width = this.w - this.margin.left - this.margin.right;
+    this.chart_height = (this.h*0.3) - this.margin.top - this.margin.bottom;
+    this.logpile_container = this.d3.select("#logpile-container")
     
-    // create svg that will hold chart
-    this.svg_logpile = this.logpile_container
-      .append("svg")
-      .classed("logpile-chart", true)
-      .attr("viewBox", "0 0 " + this.w + " " + this.h)
-      .attr("preserveAspectRatio", "xMidYMid meet")
-
+    
     // define div for tooltip
     this.tooltip = this.logpile_container
       .append("div")
-      .style("position", "absolute")
-      //.style("visibility", "hidden")
       .attr("class", "tooltip")
-      .style("opacity", 0)
-      .style("background-color", "royalblue")
-      .style("border", "solid")
-      .style("border-width", "1px")
-      .style("border-radius", "5px")
-      .style("padding", "10px")
+
+
+    // create svg that will hold chart
+    this.svg_logpile = this.logpile_container
+      .append("svg")
+        .classed("logpile-chart", true)
+        .attr("viewBox", "0 0 " + (this.chart_width + this.margin.left + this.margin.right) + " " + (this.chart_height + this.margin.top + this.margin.bottom))
+        .attr("preserveAspectRatio", "xMidYMid meet")
+      .append("g")
+        .attr("transform","translate(" + this.margin.left + "," + this.margin.top + ")");
+
+
 
 
     this.loadData();
@@ -87,7 +89,7 @@ export default {
             type: this.d3.scaleLog,
             y_pos: 100,
             x_min: 1, // necessary for log
-            var_class: 'pool'
+            let_class: 'pool'
           })
         },
         drawChart(data, {
@@ -97,33 +99,40 @@ export default {
           x_min,
           y_pos,
           y_height = 50,
-          var_class
+          let_class
         } = {}) {
 
-          const x_margin = 20;
+          // const x_margin = 20;
           const self = this;
 
           // x axis scale
-          var xScale = type()
+          let xScale = type()
             .domain([x_min, this.d3.max(data, x)])
-            .range([30, this.w-30])
+            .range([0, this.chart_width])
 
-          var xAxis = this.d3.axisBottom(xScale)
+          this.svg_logpile.append("g")
+            .attr("transform", "translate(0," + this.chart_height + ")")
+            .call(this.d3.axisBottom(xScale))
+
+          // let xAxis = this.d3.axisBottom(xScale)
+
+          // let y = this.d3.scaleBand
+
 
           // add pools and fluxes
-          this.svg_logpile.append("g")
-            .attr("transform", "translate(" + 0 + ", " + y_pos + ")")
-            .attr("class", "x-axis")
-            .call(xAxis)
-            .call(g => g.select(".domain") // style axis and ticks
-                .attr("stroke-opacity", 0.5))
-            .call(g => g.selectAll(".tick line")
-                .attr("stroke-opacity", 0.5))
+          // this.svg_logpile.append("g")
+          //   .attr("transform", "translate(" + 0 + ", " + y_pos + ")")
+          //   .attr("class", "x-axis")
+          //   .call(xAxis)
+          //   .call(g => g.select(".domain") // style axis and ticks
+          //       .attr("stroke-opacity", 0.5))
+          //   .call(g => g.selectAll(".tick line")
+          //       .attr("stroke-opacity", 0.5))
 
           // draw logpile points
-          var svg_add = this.svg_logpile
+          let svg_add = this.svg_logpile
             .append("g")
-            .classed(var_class, true)
+            .classed(let_class, true)
 
           // TODO: change shape and appearance of volumes on chart
           // currently barcode
@@ -135,10 +144,11 @@ export default {
             .classed("bar", true)
             .attr("class", d => { return "bar " + d.Type }) // to grab in interaction
             .attr("x", d => xScale(x(d)))
-            .attr("y", y_height)
-            .attr("width", 10)
+            .attr("y", this.chart_height-y_height)
+            .attr("width", 5)
             .attr("height", y_height)
             .attr("fill", "royalblue")
+            .attr("stroke", "white")
             .on("mouseover", d => self.populateTooltip(d))					
             .on("mouseout", d => self.fadeEl(self.tooltip, 0, 50))
 
@@ -154,15 +164,15 @@ export default {
           self.fadeEl(self.tooltip, 0.9)
 
           // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
-          var img_file = self.imagePath(d.image_file)
+          let img_file = self.imagePath(d.image_file)
         
           self.tooltip
             .html("<img src='" + img_file + "' >")
-              .attr("pupUp", "class")
-              .style("width", "220px")
-              .style("height", "220px")
-              .style("left", (self.d3.event.pageX) + "px")		
-              .style("top", (self.d3.event.pageY) + "px");	
+              .attr("class", "popUp")
+              // .style("width", "220px")
+              // .style("height", "220px")
+              // .style("left", (self.d3.event.pageX) + "px")		
+              // .style("top", (self.d3.event.pageY) + "px");	
 
           self.tooltip.select('img')
             .style("width", "200px")
@@ -184,13 +194,20 @@ export default {
   margin: 5vw;
 }
 .tooltip {	
+    position: fixed;
     text-align: center;			
-    width: 60px;				
+    width: 220px;				
     max-width: 100px;	
-    height: 28px;					
+    height: 220px;					
     padding: 2px;				
     border-radius: 8px;			
     z-index: 100;	
+    opacity: 0;
+    // color: "royalblue";
+    // border: "solid";
+    // border-width: 1px;
+    // border-radius: 5px;
+    // padding: 10px;
 
     img {
       max-width: 100px;
