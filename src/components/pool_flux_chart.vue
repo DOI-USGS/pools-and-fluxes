@@ -2,7 +2,13 @@
   <section>
     <div id="page-content">
       <dialogCard :show="showDialog" :title="cardTitle" :type="cardType" :source="cardImageSource" :size="cardFeatureSize" :definition="cardFeatureDefinition" :close="close"/>
-      <div id="chart-container" />
+      <div id="chart-container" class="chart-area">
+        <form class="controls">
+          Scale:
+          <label><input type="radio" name="x-scale" value="log" checked> log </label>
+          <label><input type="radio" name="x-scale" value="linear"> linear </label>          
+        </form>
+      </div>
     </div>
   </section>
 </template>
@@ -27,6 +33,10 @@ export default {
       svg: null,
       svgChart: null,
       chartContainer: null,
+      scales: null,
+      xScale: null,
+      xAxis: null,
+      domXAxis: null,
       tooltip: null,
       showDialog: false,
       cardTitle: null,
@@ -37,7 +47,7 @@ export default {
       }
   },
   mounted(){      
-      this.d3 = Object.assign(d3Base);
+    this.d3 = Object.assign(d3Base);
 
     // chart elements
     this.w = document.getElementById("chart-container").offsetWidth;
@@ -45,6 +55,12 @@ export default {
     this.chartWidth = this.w - this.margin.left - this.margin.right;
     this.chartHeight = this.h - this.margin.top - this.margin.bottom;
     this.chartContainer = this.d3.select("#chart-container")
+    
+    //define scale options
+    this.scales = {
+      log:  this.d3.scaleLog().base(10),
+      linear: this.d3.scaleLinear()            
+    },
 
     // create svg that will hold chart
     this.svg = this.chartContainer
@@ -77,84 +93,76 @@ export default {
 
           // pools and fluxes of water
           this.volume = data[0];
-          console.log(this.volume)
+          // console.log(this.volume)
 
+          // customize each x scale
+          this.adaptScales(this.volume, 1);
+
+          // set starting x scale
+          this.setXScale();
+          
           // draw chart
-          this.addChart(this.volume)
+          this.drawChart(this.volume, 1)
 
+          // set up radio button interaction
+          this.chartContainer.selectAll("input").on("click", this.changeXScale.bind(this));
+          
         },
-        addChart(data){
-          this.drawChart(data, {
-            x: d => d.value_km_3,
-            type: this.d3.scaleLog,
-            y_pos: 100,
-            x_min: 1, // necessary for log
-            let_class: 'pool'
-          })
+        adaptScales(data, xMin) {
+          Object.keys(this.scales).forEach(function (scaleType) {
+              this.scales[scaleType]
+                  .domain([xMin, this.d3.max(data, d => d.value_km_3)])
+                  .range([0, this.chartWidth]);
+          }, this);
         },
-        drawChart(data, {
-          value = d => d, // convenience alias for x
-          x = value, // given d in data, returns value
-          type = this.d3.scaleLinear, // takes any scale 
-          x_min,
-          y_pos,
-          y_height = 50,
-          let_class
-        } = {}) {
+        setXScale() {
+          let scaleType;
+          
+          scaleType = this.d3.select('input[name="x-scale"]:checked').node().value;
+          this.xScale = this.scales[scaleType];
+        },
+        drawChart(data, xMin) {
 
           const self = this;
 
-          // x axis scale
-          const xScale = type()
-            .domain([x_min, this.d3.max(data, x)])
-            .range([0, this.chartWidth])
+          this.xAxis = this.d3.axisBottom()
+            .scale(self.xScale)
 
-          this.svgChart.append("g")
+          this.domXAxis = this.svgChart.append("g")
             .attr("transform", "translate(0," + this.chartHeight + ")")
-            .call(this.d3.axisBottom(xScale))
+            .call(this.xAxis)
 
           // y axis scale for lollipop chart
           const yScale = this.d3.scaleBand()
             .range([0, this.chartHeight])
-            .domain(data.map(function(d) { return d.feature }))
+            .domain(data.map(d => d.feature_label))
             .padding(1);
 
           this.svgChart.append("g")
             .call(this.d3.axisLeft(yScale))
 
           // add lollipop lines
-          this.svgChart.selectAll("chartLines")
+          this.svgChart.selectAll("chartLine")
             .data(data)
             .enter()
             .append("line")
-              .attr("x1", function(d) { return xScale(x(d)); })
-              .attr("x2", x(0))
-              .attr("y1", function(d) { return yScale(d.feature); })
-              .attr("y2", function(d) { return yScale(d.feature); })
-              .style("stroke", "grey")
+              .attr("x1",  d => self.xScale(d.value_km_3))
+              .attr("x2", self.xScale(xMin))
+              .attr("y1", d => yScale(d.feature_label))
+              .attr("y2", d => yScale(d.feature_label))
+              .attr("class", d => "chartLine " + d.type)
+              .attr("id", d => d.feature_class)
 
           // Add lollipop circles
-          this.svgChart.selectAll("chartCircles")
+          this.svgChart.selectAll("chartCircle")
             .data(data)
             .enter()
             .append("circle")
-              .attr("cx", function(d) { return xScale(x(d)); })
-              .attr("cy", function(d) { return yScale(d.feature); })
+              .attr("cx", d => self.xScale(d.value_km_3))
+              .attr("cy", d => yScale(d.feature_label))
               .attr("r", "3")
-              .style("fill", function(d) {
-                switch (d.type) {
-                  case 'Pool':
-                    return "red";
-                    break;
-                  case 'Flux':
-                    return "blue";
-                    break;
-                  case 'Example':
-                    return "grey";
-                    break;
-                }
-              })
-              .attr("stroke", "white")
+              .attr("class", d => "chartCircle " + d.type)
+              .attr("id", d => d.feature_class)
           
           // Append rectangle that are the width of the chart that we can use to trigger interaction
           let svgInteractionGroup = this.svg.append("g")
@@ -164,9 +172,9 @@ export default {
             .data(data)
             .enter()
             .append("rect")
-            .attr("class", d => "interactionRectangle " + d.feature)
+            .attr("class", d => "interactionRectangle " + d.feature_class)
             .attr("x", 0)
-            .attr("y", d => yScale(d.feature))
+            .attr("y", d => yScale(d.feature_label))
             .attr("width", this.chartWidth + this.margin.left + this.margin.right)
             .attr("height", this.chartHeight/data.length) //yScale.bandwidth() should work but returns 0
             .style("fill", "white")
@@ -183,7 +191,7 @@ export default {
           const self = this;
 
           // Populate card with information
-          this.cardTitle = d.feature;
+          this.cardTitle = d.feature_label;
           this.cardType = d.type;
           this.cardFeatureSize = this.d3.format(',')(d.value_km_3) + ' ' +  d.units
           // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
@@ -191,17 +199,59 @@ export default {
           this.cardFeatureDefinition = d.definition
           this.showDialog = true;
 
-        }
+        },
+        changeXScale() {
+          this.setXScale();
+          this.redraw();
+        },
+        redraw() {
+          const self = this;
+          
+          const animationDuration = 400;
+
+          this.domXAxis.transition()
+              .duration(animationDuration)
+              .call(self.xAxis.scale(this.xScale));
+          this.svgChart.selectAll(".chartCircle")
+            .transition()
+            .duration(animationDuration)
+            .attr("cx", d => self.xScale(d.value_km_3))
+          this.svgChart.selectAll(".chartLine")
+            .transition()
+            .duration(animationDuration)
+            .attr("x1", d => self.xScale(d.value_km_3))
+    },
     }
 }
 </script>
 <style scoped lang="scss">
-#page-content {
-  display: block;
-}
-#chart-container {
-  height: 70vh;
-  width: 90vw;
-  margin-bottom: 5vw;
-}
+  #page-content {
+    display: block;
+  }
+  #chart-container {
+    height: 70vh;
+    width: 90vw;
+    margin-top: 1vh;
+    margin-bottom: 2vh;
+  }
+</style>
+<style lang="scss">
+  $poolColor: #bf8508;
+  $fluxColor: #0aa687;
+  $neutralGrey: #919191;
+  .chartLine {
+    stroke-width: 1px;
+  }
+  .pool {
+    fill: $poolColor;
+    stroke: $poolColor;
+  }
+  .flux {
+    fill: $fluxColor;
+    stroke: $fluxColor;
+  }
+  .example {
+    fill: $neutralGrey;
+    stroke: $neutralGrey;
+  }
 </style>
