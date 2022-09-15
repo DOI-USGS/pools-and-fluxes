@@ -2,7 +2,9 @@
   <section>
     <div id="page-content">
       <dialogCard :show="showDialog" :title="cardTitle" :type="cardType" :source="cardImageSource" :size="cardFeatureSize" :definition="cardFeatureDefinition" :close="close"/>
+      <h3>Click on any row of the chart to pull up more information</h3>
       <div id="chart-container" class="chart-area">
+        <svg class="chart" />
         <form class="controls">
           Scale:
           <label><input type="radio" name="x-scale" value="log" checked> log </label>
@@ -63,9 +65,7 @@ export default {
     },
 
     // create svg that will hold chart
-    this.svg = this.chartContainer
-      .append("svg")
-        .classed("chart", true)
+    this.svg = this.chartContainer.select('.chart')
         .attr("viewBox", "0 0 " + (this.chartWidth + this.margin.left + this.margin.right) + " " + (this.chartHeight + this.margin.top + this.margin.bottom))
         .attr("preserveAspectRatio", "xMidYMid meet")
     this.svgChart = this.svg.append("g")
@@ -178,7 +178,7 @@ export default {
             .attr("width", this.chartWidth + this.margin.left + this.margin.right)
             .attr("height", this.chartHeight/data.length) //yScale.bandwidth() should work but returns 0
             .style("fill", "white")
-            .style("opacity",0)
+            .style("opacity", 0)
             .on("click", d => self.populateCard(d))
 
         },
