@@ -106,17 +106,29 @@ h2{
   }
 }
 h3{
-  font-size: 1.5em;
+  font-size: 1.3em;
   padding-top: .5em;
   font-family: $Assistant;
   font-weight: 300;
   @media screen and (max-width: 600px) {
-      font-size: 1.4em;
+      font-size: 1.1em;
   }  
 }
-p, text {
+p {
+  font-size: 0.8em;
   padding: 1em 0 0 0; 
   font-family: $Assistant;
+  @media screen and (max-width: 600px) {
+      font-size: 0.7em;
+  }
+}
+text {
+  font-size: 1.2em;
+  padding: 1em 0 0 0; 
+  font-family: $Assistant;
+  @media screen and (max-width: 600px) {
+      font-size: 1m;
+  }
 }
 form {
   padding: 0.1em 0 0 0; 
