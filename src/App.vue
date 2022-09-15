@@ -118,5 +118,12 @@ p, text {
   padding: 1em 0 0 0; 
   font-family: $Assistant;
 }
-
+form {
+  padding: 0.1em 0 0 0; 
+  font-family: $Assistant;
+}
+label {
+  padding: 0.1em 0 0 0; 
+  font-family: $Assistant;
+}
 </style>

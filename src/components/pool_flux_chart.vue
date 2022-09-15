@@ -1,6 +1,12 @@
 <template>
   <section>
-    <div id="chart-container" />
+    <div id="chart-container" class="chart-area">
+      <form class="controls">
+        Scale:
+        <label><input type="radio" name="x-scale" value="log" checked> log </label>
+        <label><input type="radio" name="x-scale" value="linear"> linear </label>          
+      </form>
+    </div>
   </section>
 </template>
 <script>
@@ -22,11 +28,15 @@ export default {
       chartHeight: null,
       svgChart: null,
       chartContainer: null,
+      scales: null,
+      xScale: null,
+      xAxis: null,
+      domXAxis: null,
       tooltip: null,
       }
   },
   mounted(){      
-      this.d3 = Object.assign(d3Base);
+    this.d3 = Object.assign(d3Base);
 
     // chart elements
     this.w = document.getElementById("chart-container").offsetWidth;
@@ -35,6 +45,12 @@ export default {
     this.chartHeight = this.h - this.margin.top - this.margin.bottom;
     this.chartContainer = this.d3.select("#chart-container")
     
+    //define scale options
+    this.scales = {
+      log:  this.d3.scaleLog().base(10),
+      linear: this.d3.scaleLinear()            
+    },
+
     // define div for tooltip
     // this.tooltip = this.chartContainer
     //   .append("div")
@@ -66,86 +82,78 @@ export default {
 
           // pools and fluxes of water
           this.volume = data[0];
-          console.log(this.volume)
+          // console.log(this.volume)
 
+          // customize each x scale
+          this.adaptScales(this.volume, 1);
+
+          // set starting x scale
+          this.setXScale();
+          
           // draw chart
-          this.addChart(this.volume)
+          this.drawChart(this.volume, 1)
 
+          // set up radio button interaction
+          this.chartContainer.selectAll("input").on("click", this.changeXScale.bind(this));
+          
         },
-        addChart(data){
-          this.drawChart(data, {
-            x: d => d.value_km_3,
-            type: this.d3.scaleLog,
-            y_pos: 100,
-            x_min: 1, // necessary for log
-            let_class: 'pool'
-          })
+        adaptScales(data, xMin) {
+          Object.keys(this.scales).forEach(function (scaleType) {
+              this.scales[scaleType]
+                  .domain([xMin, this.d3.max(data, d => d.value_km_3)])
+                  .range([0, this.chartWidth]);
+          }, this);
         },
-        drawChart(data, {
-          value = d => d, // convenience alias for x
-          x = value, // given d in data, returns value
-          type = this.d3.scaleLinear, // takes any scale 
-          x_min,
-          y_pos,
-          y_height = 50,
-          let_class
-        } = {}) {
+        setXScale() {
+          let scaleType;
+          
+          scaleType = this.d3.select('input[name="x-scale"]:checked').node().value;
+          this.xScale = this.scales[scaleType];
+        },
+        drawChart(data, xMin) {
 
           const self = this;
 
-          // x axis scale
-          const xScale = type()
-            .domain([x_min, this.d3.max(data, x)])
-            .range([0, this.chartWidth])
+          this.xAxis = this.d3.axisBottom()
+            .scale(self.xScale)
 
-          this.svgChart.append("g")
+          this.domXAxis = this.svgChart.append("g")
             .attr("transform", "translate(0," + this.chartHeight + ")")
-            .call(this.d3.axisBottom(xScale))
+            .call(this.xAxis)
 
           // y axis scale for lollipop chart
           const yScale = this.d3.scaleBand()
             .range([0, this.chartHeight])
-            .domain(data.map(function(d) { return d.feature }))
+            .domain(data.map(d => d.feature_label))
             .padding(1);
 
           this.svgChart.append("g")
             .call(this.d3.axisLeft(yScale))
 
           // add lollipop lines
-          this.svgChart.selectAll("chartLines")
+          this.svgChart.selectAll("chartLine")
             .data(data)
             .enter()
             .append("line")
-              .attr("x1", function(d) { return xScale(x(d)); })
-              .attr("x2", x(0))
-              .attr("y1", function(d) { return yScale(d.feature); })
-              .attr("y2", function(d) { return yScale(d.feature); })
-              .style("stroke", "grey")
+              .attr("x1",  d => self.xScale(d.value_km_3))
+              .attr("x2", self.xScale(xMin))
+              .attr("y1", d => yScale(d.feature_label))
+              .attr("y2", d => yScale(d.feature_label))
+              .attr("class", d => "chartLine " + d.type)
+              .attr("id", d => d.feature_class)
               // .on("mouseover", d => self.populateTooltip(d))					
               // .on("mouseout", d => self.fadeEl(self.tooltip, 0, 50))
 
           // Add lollipop circles
-          this.svgChart.selectAll("chartCircles")
+          this.svgChart.selectAll("chartCircle")
             .data(data)
             .enter()
             .append("circle")
-              .attr("cx", function(d) { return xScale(x(d)); })
-              .attr("cy", function(d) { return yScale(d.feature); })
+              .attr("cx", d => self.xScale(d.value_km_3))
+              .attr("cy", d => yScale(d.feature_label))
               .attr("r", "3")
-              .style("fill", function(d) {
-                switch (d.type) {
-                  case 'Pool':
-                    return "red";
-                    break;
-                  case 'Flux':
-                    return "blue";
-                    break;
-                  case 'Example':
-                    return "grey";
-                    break;
-                }
-              })
-              .attr("stroke", "white")
+              .attr("class", d => "chartCircle " + d.type)
+              .attr("id", d => d.feature_class)
               // .on("mouseover", d => self.populateTooltip(d))					
               // .on("mouseout", d => self.fadeEl(self.tooltip, 0, 50))
 
@@ -165,17 +173,34 @@ export default {
         
           self.tooltip
             .html("<img src='" + img_file + "' >")
-              .attr("class", "popUp")
+            .attr("class", "popUp")
 
           self.tooltip.select('img')
             .style("width", "200px")
             .style("height", "200px")
 
         },
-        fadeEl(el, alpha, time_duration = 0){
-          el.transition().duration(time_duration).style("opacity", alpha)
+        changeXScale() {
+          this.setXScale();
+          this.redraw();
+        },
+        redraw() {
+          const self = this;
+          
+          const animationDuration = 400;
 
-        }
+          this.domXAxis.transition()
+              .duration(animationDuration)
+              .call(self.xAxis.scale(this.xScale));
+          this.svgChart.selectAll(".chartCircle")
+            .transition()
+            .duration(animationDuration)
+            .attr("cx", d => self.xScale(d.value_km_3))
+          this.svgChart.selectAll(".chartLine")
+            .transition()
+            .duration(animationDuration)
+            .attr("x1", d => self.xScale(d.value_km_3))
+    },
     }
 }
 </script>
@@ -184,7 +209,8 @@ export default {
 #chart-container {
   height: 70vh;
   width: 90vw;
-  margin: 1vw;
+  margin-top: 1vh;
+  margin-bottom: 2vh;
 }
 .tooltip {	
     position: fixed;
@@ -206,5 +232,25 @@ export default {
       max-width: 100px;
       max-height:100px;
     }
+}
+</style>
+<style lang="scss">
+$poolColor: #bf8508;
+$fluxColor: #0aa687;
+$neutralGrey: #919191;
+.chartLine {
+  stroke-width: 1px;
+}
+.pool {
+  fill: $poolColor;
+  stroke: $poolColor;
+}
+.flux {
+  fill: $fluxColor;
+  stroke: $fluxColor;
+}
+.example {
+  fill: $neutralGrey;
+  stroke: $neutralGrey;
 }
 </style>
