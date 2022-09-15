@@ -179,7 +179,7 @@ export default {
             .attr("height", this.chartHeight/data.length) //yScale.bandwidth() should work but returns 0
             .style("fill", "white")
             .style("opacity",0)
-            .on("click", d => self.populateTooltip(d))
+            .on("click", d => self.populateCard(d))
 
         },
         imagePath(file){
@@ -187,7 +187,7 @@ export default {
           return image_src
 
         },
-        populateTooltip(d){
+        populateCard(d){
           const self = this;
 
           // Populate card with information
