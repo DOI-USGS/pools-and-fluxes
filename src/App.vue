@@ -102,7 +102,7 @@ h2{
   margin-top: 5px;
   line-height: 1.2;
   @media screen and (max-width: 600px) {
-    font-size: 2em;
+    font-size: 1.3em;
   }
 }
 h3{

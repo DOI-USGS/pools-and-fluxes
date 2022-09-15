@@ -1,11 +1,14 @@
 <template>
   <section>
-    <div id="chart-container" class="chart-area">
-      <form class="controls">
-        Scale:
-        <label><input type="radio" name="x-scale" value="log" checked> log </label>
-        <label><input type="radio" name="x-scale" value="linear"> linear </label>          
-      </form>
+    <div id="page-content">
+      <dialogCard :show="showDialog" :title="cardTitle" :type="cardType" :source="cardImageSource" :size="cardFeatureSize" :definition="cardFeatureDefinition" :close="close"/>
+      <div id="chart-container" class="chart-area">
+        <form class="controls">
+          Scale:
+          <label><input type="radio" name="x-scale" value="log" checked> log </label>
+          <label><input type="radio" name="x-scale" value="linear"> linear </label>          
+        </form>
+      </div>
     </div>
   </section>
 </template>
@@ -14,6 +17,7 @@ import * as d3Base from 'd3';
 export default {
   name: "PoolFluxChart",
     components: {
+      dialogCard: () => import( /* webpackPreload: true */ /*webpackChunkName: "section"*/ "./../components/dialog")
     },
     data() {
     return {
@@ -26,6 +30,7 @@ export default {
       margin: { top: 10, right: 25, bottom: 20, left: 200 },
       chartWidth: null,
       chartHeight: null,
+      svg: null,
       svgChart: null,
       chartContainer: null,
       scales: null,
@@ -33,6 +38,12 @@ export default {
       xAxis: null,
       domXAxis: null,
       tooltip: null,
+      showDialog: false,
+      cardTitle: null,
+      cardFeatureSize: null,
+      cardImageSource: null,
+      cardFeatureDefinition: null,
+      cardType: null
       }
   },
   mounted(){      
@@ -51,23 +62,23 @@ export default {
       linear: this.d3.scaleLinear()            
     },
 
-    // define div for tooltip
-    // this.tooltip = this.chartContainer
-    //   .append("div")
-    //   .attr("class", "tooltip")
-
     // create svg that will hold chart
-    this.svgChart = this.chartContainer
+    this.svg = this.chartContainer
       .append("svg")
         .classed("chart", true)
         .attr("viewBox", "0 0 " + (this.chartWidth + this.margin.left + this.margin.right) + " " + (this.chartHeight + this.margin.top + this.margin.bottom))
         .attr("preserveAspectRatio", "xMidYMid meet")
-      .append("g")
-        .attr("transform","translate(" + this.margin.left + "," + this.margin.top + ")");
+    this.svgChart = this.svg.append("g")
+        .attr("transform","translate(" + this.margin.left + "," + this.margin.top + ")")
+        .attr("id", "pool-flux-chart");
 
     this.loadData();
     },
     methods:{
+        close() {
+          console.log('close')
+          this.showDialog = false;
+        },
         loadData(){
             const self = this;
 
@@ -141,8 +152,6 @@ export default {
               .attr("y2", d => yScale(d.feature_label))
               .attr("class", d => "chartLine " + d.type)
               .attr("id", d => d.feature_class)
-              // .on("mouseover", d => self.populateTooltip(d))					
-              // .on("mouseout", d => self.fadeEl(self.tooltip, 0, 50))
 
           // Add lollipop circles
           this.svgChart.selectAll("chartCircle")
@@ -154,8 +163,23 @@ export default {
               .attr("r", "3")
               .attr("class", d => "chartCircle " + d.type)
               .attr("id", d => d.feature_class)
-              // .on("mouseover", d => self.populateTooltip(d))					
-              // .on("mouseout", d => self.fadeEl(self.tooltip, 0, 50))
+          
+          // Append rectangle that are the width of the chart that we can use to trigger interaction
+          let svgInteractionGroup = this.svg.append("g")
+            .attr("id", "interaction-container")
+
+          svgInteractionGroup.selectAll("interactionRectangle")
+            .data(data)
+            .enter()
+            .append("rect")
+            .attr("class", d => "interactionRectangle " + d.feature_class)
+            .attr("x", 0)
+            .attr("y", d => yScale(d.feature_label))
+            .attr("width", this.chartWidth + this.margin.left + this.margin.right)
+            .attr("height", this.chartHeight/data.length) //yScale.bandwidth() should work but returns 0
+            .style("fill", "white")
+            .style("opacity",0)
+            .on("click", d => self.populateCard(d))
 
         },
         imagePath(file){
@@ -163,21 +187,17 @@ export default {
           return image_src
 
         },
-        populateTooltip(d){
+        populateCard(d){
           const self = this;
 
-          self.fadeEl(self.tooltip, 0.9)
-
+          // Populate card with information
+          this.cardTitle = d.feature_label;
+          this.cardType = d.type;
+          this.cardFeatureSize = this.d3.format(',')(d.value_km_3) + ' ' +  d.units
           // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
-          let img_file = self.imagePath(d.image_file)
-        
-          self.tooltip
-            .html("<img src='" + img_file + "' >")
-            .attr("class", "popUp")
-
-          self.tooltip.select('img')
-            .style("width", "200px")
-            .style("height", "200px")
+          this.cardImageSource = self.imagePath(d.image_file)
+          this.cardFeatureDefinition = d.definition
+          this.showDialog = true;
 
         },
         changeXScale() {
@@ -205,52 +225,33 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-
-#chart-container {
-  height: 70vh;
-  width: 90vw;
-  margin-top: 1vh;
-  margin-bottom: 2vh;
-}
-.tooltip {	
-    position: fixed;
-    text-align: center;			
-    width: 220px;				
-    max-width: 100px;	
-    height: 220px;					
-    padding: 2px;				
-    border-radius: 8px;			
-    z-index: 100;	
-    opacity: 0;
-    // color: "royalblue";
-    // border: "solid";
-    // border-width: 1px;
-    // border-radius: 5px;
-    // padding: 10px;
-
-    img {
-      max-width: 100px;
-      max-height:100px;
-    }
-}
+  #page-content {
+    display: block;
+  }
+  #chart-container {
+    height: 70vh;
+    width: 90vw;
+    margin-top: 1vh;
+    margin-bottom: 2vh;
+  }
 </style>
 <style lang="scss">
-$poolColor: #bf8508;
-$fluxColor: #0aa687;
-$neutralGrey: #919191;
-.chartLine {
-  stroke-width: 1px;
-}
-.pool {
-  fill: $poolColor;
-  stroke: $poolColor;
-}
-.flux {
-  fill: $fluxColor;
-  stroke: $fluxColor;
-}
-.example {
-  fill: $neutralGrey;
-  stroke: $neutralGrey;
-}
+  $poolColor: #bf8508;
+  $fluxColor: #0aa687;
+  $neutralGrey: #919191;
+  .chartLine {
+    stroke-width: 1px;
+  }
+  .pool {
+    fill: $poolColor;
+    stroke: $poolColor;
+  }
+  .flux {
+    fill: $fluxColor;
+    stroke: $fluxColor;
+  }
+  .example {
+    fill: $neutralGrey;
+    stroke: $neutralGrey;
+  }
 </style>
