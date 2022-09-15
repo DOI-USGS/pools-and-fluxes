@@ -1,6 +1,9 @@
 <template>
   <section>
-    <div id="chart-container" />
+    <div id="page-content">
+      <dialogCard :show="showDialog" :title="cardTitle" :type="cardType" :source="cardImageSource" :size="cardFeatureSize" :definition="cardFeatureDefinition" :close="close"/>
+      <div id="chart-container" />
+    </div>
   </section>
 </template>
 <script>
@@ -8,6 +11,7 @@ import * as d3Base from 'd3';
 export default {
   name: "PoolFluxChart",
     components: {
+      dialogCard: () => import( /* webpackPreload: true */ /*webpackChunkName: "section"*/ "./../components/dialog")
     },
     data() {
     return {
@@ -20,9 +24,16 @@ export default {
       margin: { top: 10, right: 25, bottom: 20, left: 200 },
       chartWidth: null,
       chartHeight: null,
+      svg: null,
       svgChart: null,
       chartContainer: null,
       tooltip: null,
+      showDialog: false,
+      cardTitle: null,
+      cardFeatureSize: null,
+      cardImageSource: null,
+      cardFeatureDefinition: null,
+      cardType: null
       }
   },
   mounted(){      
@@ -34,24 +45,24 @@ export default {
     this.chartWidth = this.w - this.margin.left - this.margin.right;
     this.chartHeight = this.h - this.margin.top - this.margin.bottom;
     this.chartContainer = this.d3.select("#chart-container")
-    
-    // define div for tooltip
-    // this.tooltip = this.chartContainer
-    //   .append("div")
-    //   .attr("class", "tooltip")
 
     // create svg that will hold chart
-    this.svgChart = this.chartContainer
+    this.svg = this.chartContainer
       .append("svg")
         .classed("chart", true)
         .attr("viewBox", "0 0 " + (this.chartWidth + this.margin.left + this.margin.right) + " " + (this.chartHeight + this.margin.top + this.margin.bottom))
         .attr("preserveAspectRatio", "xMidYMid meet")
-      .append("g")
-        .attr("transform","translate(" + this.margin.left + "," + this.margin.top + ")");
+    this.svgChart = this.svg.append("g")
+        .attr("transform","translate(" + this.margin.left + "," + this.margin.top + ")")
+        .attr("id", "pool-flux-chart");
 
     this.loadData();
     },
     methods:{
+        close() {
+          console.log('close')
+          this.showDialog = false;
+        },
         loadData(){
             const self = this;
 
@@ -121,8 +132,6 @@ export default {
               .attr("y1", function(d) { return yScale(d.feature); })
               .attr("y2", function(d) { return yScale(d.feature); })
               .style("stroke", "grey")
-              // .on("mouseover", d => self.populateTooltip(d))					
-              // .on("mouseout", d => self.fadeEl(self.tooltip, 0, 50))
 
           // Add lollipop circles
           this.svgChart.selectAll("chartCircles")
@@ -146,8 +155,23 @@ export default {
                 }
               })
               .attr("stroke", "white")
-              // .on("mouseover", d => self.populateTooltip(d))					
-              // .on("mouseout", d => self.fadeEl(self.tooltip, 0, 50))
+          
+          // Append rectangle that are the width of the chart that we can use to trigger interaction
+          let svgInteractionGroup = this.svg.append("g")
+            .attr("id", "interaction-container")
+
+          svgInteractionGroup.selectAll("interactionRectangle")
+            .data(data)
+            .enter()
+            .append("rect")
+            .attr("class", d => "interactionRectangle " + d.feature)
+            .attr("x", 0)
+            .attr("y", d => yScale(d.feature))
+            .attr("width", this.chartWidth + this.margin.left + this.margin.right)
+            .attr("height", this.chartHeight/data.length) //yScale.bandwidth() should work but returns 0
+            .style("fill", "white")
+            .style("opacity",0)
+            .on("click", d => self.populateTooltip(d))
 
         },
         imagePath(file){
@@ -158,53 +182,26 @@ export default {
         populateTooltip(d){
           const self = this;
 
-          self.fadeEl(self.tooltip, 0.9)
-
+          // Populate card with information
+          this.cardTitle = d.feature;
+          this.cardType = d.type;
+          this.cardFeatureSize = this.d3.format(',')(d.value_km_3) + ' ' +  d.units
           // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
-          let img_file = self.imagePath(d.image_file)
-        
-          self.tooltip
-            .html("<img src='" + img_file + "' >")
-              .attr("class", "popUp")
-
-          self.tooltip.select('img')
-            .style("width", "200px")
-            .style("height", "200px")
-
-        },
-        fadeEl(el, alpha, time_duration = 0){
-          el.transition().duration(time_duration).style("opacity", alpha)
+          this.cardImageSource = self.imagePath(d.image_file)
+          this.cardFeatureDefinition = d.definition
+          this.showDialog = true;
 
         }
     }
 }
 </script>
 <style scoped lang="scss">
-
+#page-content {
+  display: block;
+}
 #chart-container {
   height: 70vh;
   width: 90vw;
-  margin: 1vw;
-}
-.tooltip {	
-    position: fixed;
-    text-align: center;			
-    width: 220px;				
-    max-width: 100px;	
-    height: 220px;					
-    padding: 2px;				
-    border-radius: 8px;			
-    z-index: 100;	
-    opacity: 0;
-    // color: "royalblue";
-    // border: "solid";
-    // border-width: 1px;
-    // border-radius: 5px;
-    // padding: 10px;
-
-    img {
-      max-width: 100px;
-      max-height:100px;
-    }
+  margin-bottom: 5vw;
 }
 </style>
