@@ -1,38 +1,37 @@
-﻿type,feature,value_km_3
-Pool,Rivers,1900
-Pool,Snowpack,2900
-Pool,Atmospheric moisture - over land,3000
-Pool,Atmospheric moisture - over ocean,10000
-Pool,Reservoirs,10800
-Pool,Wetlands,14100
-Pool,Soil moisture,54100
-Pool,Lakes - saline,94700
-Pool,Lakes - fresh,108000
-Pool,Permafrost,207000
-Pool,Groundwater,22630000
-Pool,Ice sheets and glaciers,25800000
-Pool,Ocean - mixed zone,134000000
-Pool,Ocean - deep water zone,1206000000
-Flux,Streamflow to closed basins,800
-Flux,snowmelt,3100
-Flux,Groundwater discharge to ocean,4500
-Flux,Groundwater recharge,13000
-Flux,human water use,24400
-Flux,Streamflow to ocean,36000
-Flux,Transport of moisture from ocean to land,46000
-Flux,Evapotranspiration,68900
-Flux,Precipitation over land ,111000
-Flux,Precipitation over ocean,380500
-Flux,Ocean evaporation,420500
-Flux,Ocean circulation,7100000
-Example,Great Salt Lake,18.9
-Example,Dead Sea,147
-Example,Lake Winnepeg,284
-Example,Lake Erie,480
-Example,Lake Titicaca,893
-Example,Lake Victoria,2700
-Example,Grand canyon,4166.8
-Example,Lake Vostok,5400
-Example,Lake Superior,11600
-Example,Lake Baikal,23600
-Example,Caspian Sea,78200
+﻿type,feature,value_km_3,units,image_file,image_credit,definition
+Pool,Rivers,1900,cubic kilometers,river.jpg,Water Resources - Multimedia | U.S. Geological Survey (usgs.gov),A natural body of water that flows from higher to lower elevations as a result of gravity. Rivers typically flow into lakes or to the ocean but sometimes end due to evaporation or through loss of streamflow to groundwater. 
+Pool,Snowpack,2900,cubic kilometers,NA,NA,Snow that accumulates seasonally at high latitudes or elevations. 
+Pool,Atmospheric moisture - over land,3000,cubic kilometers,NA,NA,Water that is present as water vapor (water in gaseous form) in the atmosphere above land masses. Water vapor in the atmosphere is invisible to the human eye. 
+Pool,Atmospheric moisture - over ocean,10000,cubic kilometers,NA,NA,Water that is present as water vapor (water in gaseous form) in the atmosphere above oceans. Water vapor in the atmosphere is invisible to the human eye. 
+Pool,Reservoirs,10800,cubic kilometers,NA,NA,"A reservoir is a human-made lake. Reservoirs form when a dam is built on a river, allowing water to pool behind the dam."
+Pool,Wetlands,14100,cubic kilometers,wetlands.jpg,"Herring River Estuary, Cape Cod, MA | U.S. Geological Survey (usgs.gov)","Wetlands are areas where the soil is saturated or flooded year-round or during the growing season. Wetlands support the growth of aquatic (water) and terrestrial (land) plants that are adapted to grow in soils with low oxygen.  They include mangroves, marshes (salt, brackish, intermediate, and fresh), swamps, forested wetlands, bogs, wet prairies, prairie potholes, and vernal pools."
+Pool,Soil moisture,54100,cubic kilometers,soilMoisture.jpg,International Institute of Tropical Agriculture - https://www.flickr.com/photos/iita-media-library/7637264088,
+Pool,Lakes - saline,94700,cubic kilometers,salineLake.jpg,Bernadette Simpson - https://commons.wikimedia.org/wiki/File:Saline_Lake_at_Ras_Mohamed_National_Park.jpg,
+Pool,Lakes - fresh,108000,cubic kilometers,freshLake.jpg,Water Lake Nature - Free photo on Pixabay,
+Pool,Permafrost,207000,cubic kilometers,Permafrost.png,https://www.usgs.gov/media/images/mapping-barter-island-all-terrain-vehicle-atv,
+Pool,Groundwater,22630000,cubic kilometers,NA,NA,
+Pool,Ice sheets and glaciers,25800000,cubic kilometers,Glacier.jpg,File:Grinnell Glacier from summit of Mt Gould 2015 7648 crop.jpg - Wikimedia Commons,
+Pool,Ocean - mixed zone,134000000,cubic kilometers,NA,NA,
+Pool,Ocean - deep water zone,1206000000,cubic kilometers,NA,NA,
+Flux,Streamflow to closed basins,800,cubic kilometers per year,NA,NA,
+Flux,Groundwater discharge to ocean,4500,cubic kilometers per year,NA,NA,
+Flux,Groundwater recharge,13000,cubic kilometers per year,NA,NA,
+Flux,human water use,24400,cubic kilometers per year,NA,NA,
+Flux,Streamflow to ocean,36000,cubic kilometers per year,NA,NA,
+Flux,Transport of moisture from ocean to land,46000,cubic kilometers per year,NA,NA,
+Flux,Evapotranspiration,68900,cubic kilometers per year,NA,NA,
+Flux,Precipitation over land ,111000,cubic kilometers per year,landRain.jpg,100+ kostenlose Regen-Duschen und Regen-Bilder (pixabay.com),
+Flux,Precipitation over ocean,380500,cubic kilometers per year,oceanPrecipitation.jpg,Water Waves Horizon - Pixabay free pictures,
+Flux,Ocean evaporation,420500,cubic kilometers per year,NA,NA,
+Flux,Ocean circulation,7100000,cubic kilometers per year,NA,NA,
+Example pool,Great Salt Lake,18.9,cubic kilometers,NA,NA,
+Example pool,Dead Sea,147,cubic kilometers,deadSea.jpg,https://www.usgs.gov/media/images/kafrein-reservoir-captures-runoff-near-dead-sea-jordan,
+Example pool,Lake Winnepeg,284,cubic kilometers,NA,NA,
+Example pool,Lake Erie,480,cubic kilometers,lakeErie.jpg,Beautiful sunset landscape over lake erie free image download (pixy.org),
+Example pool,Lake Titicaca,893,cubic kilometers,lakeTiticaca.jpg,Do Lago Titicaca BolÃ­via Montanha - Foto gratuita no Pixabay,
+Example pool,Lake Victoria,2700,cubic kilometers,NA,NA,
+Example pool,Grand canyon,4166.8,cubic kilometers,grandCanyon.jpg,NA,
+Example pool,Lake Vostok,5400,cubic kilometers,NA,NA,
+Example pool,Lake Superior,11600,cubic kilometers,lakeSuperior.jpg,File:Gfp-michigan-upper-peninsula-shoreline-of-lake-superior.jpg - Wikimedia Commons,
+Example pool,Lake Baikal,23600,cubic kilometers,baikal.jpg,NA,
+Example pool,Caspian Sea,78200,cubic kilometers,NA,NA,
