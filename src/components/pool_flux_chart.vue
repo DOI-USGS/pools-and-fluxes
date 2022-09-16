@@ -10,6 +10,9 @@
           <label><input type="radio" name="x-scale" value="log" checked> log </label>
           <label><input type="radio" name="x-scale" value="linear"> linear </label>          
         </form>
+        <p>You are probably familiar with linear scales. When you move a fixed distance on a linear axis, you add a fixed value to your starting value. When you move a fixed distance on a log axis, you multiplying the starting value by a value of 10.
+        The data for this chart are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019) Human domination of the global water cycle absent from depictions and perceptions.</a>
+        </p>
       </div>
     </div>
   </section>
