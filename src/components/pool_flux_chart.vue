@@ -32,7 +32,7 @@ export default {
       // dimensions
       w: null,
       h: null,
-      margin: { top: 10, right: 30, bottom: 20, left: 200 },
+      margin: { top: 10, right: 35, bottom: 20, left: 200 },
       chartWidth: null,
       chartHeight: null,
       svg: null,
@@ -225,7 +225,7 @@ export default {
         redraw() {
           const self = this;
           
-          const animationDuration = 400;
+          const animationDuration = 2000;
 
           this.domXAxis.transition()
               .duration(animationDuration)
