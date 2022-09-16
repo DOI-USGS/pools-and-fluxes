@@ -1,37 +1,37 @@
-type,feature_label,value_km_3,feature_class,units,image_file,image_credit,definition,notes
-pool,Rivers,1900,rivers,cubic kilometers,river.jpg,Water Resources - Multimedia | U.S. Geological Survey (usgs.gov),A natural body of water that flows from higher to lower elevations as a result of gravity. Rivers typically flow into lakes or to the ocean but sometimes end due to evaporation or through loss of streamflow to groundwater.,NA
-pool,Snowpack,2900,atmospheric_moisture_over_land,cubic kilometers,snowpack.png,"Forest Service Alaska Region, USDA | Aleph-Skookum-Snowpit",Snow that accumulates seasonally at high latitudes or elevations.¬†,https://www.flickr.com/photos/alaska_region/33309715270/in/photolist-SKsZRG-qkuXUB-5JBTKo-qvUXhD-qyg6Q2-dKsndW-hy4wnd-TfFPXG-5JTH2M-5UnPYm-5JXBtS-4AtCcq-24wZaNi-5Uo3NS-TkpN6z-2m3uyu4-2cHX2aH-qVNiVA-2a6qzsZ-5UiH5H-5UikBg-5Jymtv-2jVSd7M-2hYTPii-QFoe4h-CwZCgS-e6Ei2r-Bb7A8N-zWxkbQ-5UiDL2-5UiFU8-5M3vFw-28aV5bR-5UnYC7-28aVgVx-5Uir9p-yoYGzX-5UiCBi-7CdR9y-5UitfZ-2kjcdCF-5UiEqV-5Uiw6K-5Uiyq8-Bj8JDR-5Uiwqe-2k4ZwsT-5UixYa-AQpbMq-2k5TCGr
-pool,Atmospheric moisture - over land,3000,atmospheric_moisture_over_ocean,cubic kilometers,"NA","NA",Water that is present as water vapor (water in gaseous form)¬†in the atmosphere above land masses. Water vapor in the atmosphere is invisible to the human eye.¬†,NA
-pool,Atmospheric moisture - over ocean,10000,reservoirs,cubic kilometers,"NA","NA",Water that is present as water vapor (water in gaseous form) in the atmosphere above oceans. Water vapor in the atmosphere is invisible to the human eye.¬†,NA
-pool,Reservoirs,10800,wetlands,cubic kilometers,reservoirs.png,https://www.flickr.com/photos/130783166@N07/46877961804/in/photolist-2eqrNQL-NtyLcK-cyU8qW-CBeNM6-FAZXoh-nFbBCq-CYrv2B-BCpvhE-9MAbzh-DBzaeW-w8ik6t-25aozwk-CyyoYY-Q54Yvc-5aoxHC-hbVMi7-KakrE3-DwYkk2-EAS3Ya-HkyUmk-txTqzv-vLTAj4-KStCd5-nYjbJP-oCk9WZ-aZk6tK-y5jzi-29Uu7wH-prEyLo-AkJLHZ-GbJe22-zEJPTc-2a7grLj-8ipeX7-kSjQjF-rHgAxE-cPjMtY-rj3weF-8Ub4SL-xKJ4yg-bEDSfu-ri3VuS-5ZoXNX-22cPXiU-hVrfp-x2g6w6-afZCQZ-f8Jiyy-DLqj6h-AMpiED,"A reservoir is a human-made lake. Reservoirs form when a dam is built on a river, allowing water to pool behind the dam.",NA
-pool,Wetlands,14100,soil_moisture,cubic kilometers,wetlands.jpg,"Herring River Estuary, Cape Cod, MA | U.S. Geological Survey (usgs.gov)","Wetlands are areas where the soil is saturated or flooded year-round or during the growing season. Wetlands support the growth of aquatic (water) and terrestrial (land) plants that are adapted to grow in soils with low oxygen.  They include mangroves, marshes (salt, brackish, intermediate, and fresh), swamps, forested wetlands, bogs, wet prairies, prairie potholes, and vernal pools.",NA
-pool,Soil moisture,54100,lakes_saline,cubic kilometers,soilMoisture.jpg,International Institute of Tropical Agriculture - https://www.flickr.com/photos/iita-media-library/7637264088,NA,NA
-pool,Lakes - saline,94700,lakes_fresh,cubic kilometers,salineLake.jpg,Bernadette Simpson - https://commons.wikimedia.org/wiki/File:Saline_Lake_at_Ras_Mohamed_National_Park.jpg,NA,NA
-pool,Lakes - fresh,108000,permafrost,cubic kilometers,freshLake.jpg,Water Lake Nature - Free photo on Pixabay,NA,NA
-pool,Permafrost,207000,groundwater,cubic kilometers,permafrost.png,National Snow and Ice Data Center | Permafrost landscape,NA,https://www.flickr.com/photos/nsidc/51844880559/in/photolist-2mZmyK2-LJAShs-amBrA6-JhYLjj-dRifBo-Ki6fX3-54coyN-qN3m6V-YdWQqe-2mA7HAi-aQaBie-RNoCeE-6LYmCT-2mA2ift-2hFGstb-MEedKa-2mAa1hw-W75wep-2mA2jZf-2mZoHjJ-2gVtxUb-2mA2A7K-KEgywr-JHJHay-fJ8E6r-n4CLKN-a53r89-9FS2N3-f4iEkM-9Ypw8F-8M6eD2-8L9NQ6-dn6K1e-nG8P2d-G97BPJ-2mZoLYY-8UEZ4p-Mcjzmh-6Mnfoa-as1Ffg-adAxKc-2mZmRD7-2mAbemw-2mAbdVS-MEdRpV-amBs3K-aCe6w9-2kSscnH-a3Mpq7-8qHNrU
-pool,Groundwater,22630000,ice_sheets_and_glaciers,cubic kilometers,groundwater.png,"Erin Murray | Idaho Water Science Center, USGS",https://www.usgs.gov/media/images/usgs-hydrologist-measuring-groundwater-level-a-well,NA
-pool,Ice sheets and glaciers,25800000,ocean_mixed_zone,cubic kilometers,Glacier.jpg,File:Grinnell Glacier from summit of Mt Gould 2015 7648 crop.jpg - Wikimedia Commons,NA,NA
-pool,Ocean - mixed zone,134000000,ocean_deep_water_zone,cubic kilometers,"NA","NA",NA,NA
-pool,Ocean - deep water zone,1206000000,streamflow_to_closed_basins,cubic kilometers,deepOcean.png,Nasa Images,https://nasasearch.nasa.gov/search/images?affiliate=nasa&query=deep+sea,NA
-flux,Streamflow to closed basins,800,snowmelt,cubic kilometers per year,"NA","NA",NA,NA
-flux,Groundwater discharge to ocean,4500,groundwater_discharge_to_ocean,cubic kilometers per year,"NA","NA",NA,NA
-flux,Groundwater recharge,13000,groundwater_recharge,cubic kilometers per year,"NA","NA",NA,NA
-flux,human water use,24400,human_water_use,cubic kilometers per year,"NA","NA",NA,NA
-flux,Streamflow to ocean,36000,streamflow_to_ocean,cubic kilometers per year,"NA","NA",NA,NA
-flux,Transport of moisture from ocean to land,46000,transport_of_moisture_from_ocean_to_land,cubic kilometers per year,"NA","NA",NA,NA
-flux,Evapotranspiration,68900,evapotranspiration,cubic kilometers per year,evapotranspiration.png,Center for International Forestry Research | Amazon Rainforest,https://www.nasa.gov/feature/new-study-shows-the-amazon-makes-its-own-rainy-season,NA
-flux,Precipitation over land,111000,precipitation_over_land,cubic kilometers per year,landRain.jpg,100+ kostenlose Regen-Duschen und Regen-Bilder (pixabay.com),NA,NA
-flux,Precipitation over ocean,380500,precipitation_over_ocean,cubic kilometers per year,oceanPrecipitation.jpg,Water Waves Horizon - Pixabay free pictures,NA,NA
-flux,Ocean evaporation,420500,ocean_evaporation,cubic kilometers per year,oceanEvaporation.png,https://www.flickr.com/photos/le_k/26640707858/in/photolist-GA9Aih-NYbFfc-LfCNDG-pzm74Z-Cs1Ltd-Jh2bab-27QPBGc-2eGNq2Z-28uzkfF-ZiuW2p-2bemoTi-af1eBU-2dYaXQi-28Uoz6L-CZJGwf-7svMub-pqu1WY-Nwx3Pe-GcnwJV-tQpubj-2acCw7d-fLj2H7-kuQUeB-2ekUoPx-bTaFuF-ktfXjj-coRzNu-u1jL3D-22kJKwS-21vAvTf-pZ3ZKG-NPeVyL-AH1HBR-ySLw6v-9kmYGP-ku68a6-EyXSb9-cGMMaq-7sxFVQ-26HWK4j-puMHtd-jyvM7x-22v6P5u-EjaCxP-HGRnoy-2bemoyk-mzZ8gA-ZYFACE-neAc7Y-dxVZQt,NA,NA
-flux,Ocean circulation,7100000,ocean_circulation,cubic kilometers per year,oceanCirculation.png,"NASA Goddard Space Flight Center",https://www.flickr.com/photos/24662369@N07/7402445224,NA
-example,Great Salt Lake,18.9,great_salt_lake,cubic kilometers,greatSaltLake.png,"Hannah E. McIlwain | Utah Water Science Center, USGS",NA,https://www.usgs.gov/media/images/great-salt-lake-may-reach-historic-low-soon
-example,Dead Sea,147,dead_sea,cubic kilometers,deadSea.jpg,https://www.usgs.gov/media/images/kafrein-reservoir-captures-runoff-near-dead-sea-jordan,NA,NA
-example,Lake Winnepeg,284,lake_winnepeg,cubic kilometers,lakeWinnepeg.png,"Jacques Descloitres, MODIS Rapid Response Team, NASA/GSFC",NA,https://visibleearth.nasa.gov/images/72159/lake-winnipeg-manitoba-canada
-example,Lake Erie,480,lake_erie,cubic kilometers,lakeErie.jpg,Beautiful sunset landscape over lake erie free image download (pixy.org),NA,NA
-example,Lake Titicaca,893,lake_titicaca,cubic kilometers,lakeTiticaca.jpg,Do Lago Titicaca Bol√É¬≠via Montanha - Foto gratuita no Pixabay,NA,NA
-example,Lake Victoria,2700,lake_victoria,cubic kilometers,lakeVictoria.png,https://www.flickr.com/photos/thomasreissnecker/42318884800/in/photolist-27tzm5Q-2ntGQU7-2h6kz3B-LA74-RyLPiC-SPpzgm-2ToBot-6NfKh1-2hHyvBG-b3D9YZ-RPHbAg-E5stKa-2ih7Yn8-2ighogC-2gDvE3q-KGonki-2kQftTj-7zCWYd-2iu1BvD-K4Hija-2iu1Au5-CvDuky-yimnzd-2bYdmr1-CATHpA-eMWFdy-S65LCa-QoKeP4-FF5Uq1-Sqwqgo-rY95t-U5b8jG-2j2TzWh-pjL3nc-2j844ht-29MTVXd-2n6uaDd-2kJXELF-DSoDU-r8V2MK-ijpEam-2ii5AoL-bnY7BE-rkbmE7-2kLj8mv-2m8rmzR-EdVMGM-2itWPph-rdVup3-sx8TwE,NA,NA
-example,Grand canyon,4166.8,grand_canyon,cubic kilometers,grandCanyon.png,"Annie Scott | Office of Science Quality and Integrity, USGS",NA,https://www.usgs.gov/media/images/grand-canyon-south-rim-near-powell-point
-example,Lake Vostok,5400,lake_vostok,cubic kilometers,lakeVostok.png,https://www.earthdata.nasa.gov/learn/articles/fathoming-antarctica,NA,NA
-example,Lake Superior,11600,lake_superior,cubic kilometers,lakeSuperior.jpg,File:Gfp-michigan-upper-peninsula-shoreline-of-lake-superior.jpg - Wikimedia Commons,NA,NA
-example,Lake Baikal,23600,lake_baikal,cubic kilometers,lakeBaikal.png,"NA",NA,NA
-example,Caspian Sea,78200,caspian_sea,cubic kilometers,caspianSea.png,https://wordpress.org/openverse/image/2a791db5-29cf-40a7-92ff-bf3d98a86834,NA,NA
+type,feature_label,value_km_3,feature_class,units,image_file,image_credit,definition
+pool,Rivers,1900,rivers,cubic kilometers,river.jpg,Water Resources - Multimedia | U.S. Geological Survey (usgs.gov),A natural body of water that flows from higher to lower elevations as a result of gravity. Rivers typically flow into lakes or to the ocean but sometimes end due to evaporation or through loss of streamflow to groundwater.
+pool,Snowpack,2900,atmospheric_moisture_over_land,cubic kilometers,NA,NA,Snow that accumulates seasonally at high latitudes or elevations. 
+pool,Atmospheric moisture - over land,3000,atmospheric_moisture_over_ocean,cubic kilometers,NA,NA,Water that is present as water vapor (water in gaseous form) in the atmosphere above land masses. Water vapor in the atmosphere is invisible to the human eye. 
+pool,Atmospheric moisture - over ocean,10000,reservoirs,cubic kilometers,NA,NA,Water that is present as water vapor (water in gaseous form) in the atmosphere above oceans. Water vapor in the atmosphere is invisible to the human eye. 
+pool,Reservoirs,10800,wetlands,cubic kilometers,NA,NA,"A reservoir is a human-made lake. Reservoirs form when a dam is built on a river, allowing water to pool behind the dam."
+pool,Wetlands,14100,soil_moisture,cubic kilometers,wetlands.jpg,"Herring River Estuary, Cape Cod, MA | U.S. Geological Survey (usgs.gov)","Wetlands are areas where the soil is saturated or flooded year-round or during the growing season. Wetlands support the growth of aquatic (water) and terrestrial (land) plants that are adapted to grow in soils with low oxygen.  They include mangroves, marshes (salt, brackish, intermediate, and fresh), swamps, forested wetlands, bogs, wet prairies, prairie potholes, and vernal pools."
+pool,Soil moisture,54100,lakes_saline,cubic kilometers,soilMoisture.jpg,International Institute of Tropical Agriculture - https://www.flickr.com/photos/iita-media-library/7637264088,NA
+pool,Lakes - saline,94700,lakes_fresh,cubic kilometers,salineLake.jpg,Bernadette Simpson - https://commons.wikimedia.org/wiki/File:Saline_Lake_at_Ras_Mohamed_National_Park.jpg,NA
+pool,Lakes - fresh,108000,permafrost,cubic kilometers,freshLake.jpg,Water Lake Nature - Free photo on Pixabay,NA
+pool,Permafrost,207000,groundwater,cubic kilometers,Permafrost.png,https://www.usgs.gov/media/images/mapping-barter-island-all-terrain-vehicle-atv,NA
+pool,Groundwater,22630000,ice_sheets_and_glaciers,cubic kilometers,NA,NA,NA
+pool,Ice sheets and glaciers,25800000,ocean_mixed_zone,cubic kilometers,Glacier.jpg,File:Grinnell Glacier from summit of Mt Gould 2015 7648 crop.jpg - Wikimedia Commons,NA
+pool,Ocean - mixed zone,134000000,ocean_deep_water_zone,cubic kilometers,NA,NA,NA
+pool,Ocean - deep water zone,1206000000,streamflow_to_closed_basins,cubic kilometers,NA,NA,NA
+flux,Streamflow to closed basins,800,snowmelt,cubic kilometers per year,NA,NA,NA
+flux,Groundwater discharge to ocean,4500,groundwater_discharge_to_ocean,cubic kilometers per year,NA,NA,NA
+flux,Groundwater recharge,13000,groundwater_recharge,cubic kilometers per year,NA,NA,NA
+flux,human water use,24400,human_water_use,cubic kilometers per year,NA,NA,NA
+flux,Streamflow to ocean,36000,streamflow_to_ocean,cubic kilometers per year,NA,NA,NA
+flux,Transport of moisture from ocean to land,46000,transport_of_moisture_from_ocean_to_land,cubic kilometers per year,NA,NA,NA
+flux,Evapotranspiration,68900,evapotranspiration,cubic kilometers per year,NA,NA,NA
+flux,Precipitation over land,111000,precipitation_over_land,cubic kilometers per year,landRain.jpg,100+ kostenlose Regen-Duschen und Regen-Bilder (pixabay.com),NA
+flux,Precipitation over ocean,380500,precipitation_over_ocean,cubic kilometers per year,oceanPrecipitation.jpg,Water Waves Horizon - Pixabay free pictures,NA
+flux,Ocean evaporation,420500,ocean_evaporation,cubic kilometers per year,NA,NA,NA
+flux,Ocean circulation,7100000,ocean_circulation,cubic kilometers per year,NA,NA,NA
+example,Great Salt Lake,18.9,great_salt_lake,cubic kilometers,NA,NA,NA
+example,Dead Sea,147,dead_sea,cubic kilometers,deadSea.jpg,https://www.usgs.gov/media/images/kafrein-reservoir-captures-runoff-near-dead-sea-jordan,NA
+example,Lake Winnepeg,284,lake_winnepeg,cubic kilometers,NA,NA,NA
+example,Lake Erie,480,lake_erie,cubic kilometers,lakeErie.jpg,Beautiful sunset landscape over lake erie free image download (pixy.org),NA
+example,Lake Titicaca,893,lake_titicaca,cubic kilometers,lakeTiticaca.jpg,Do Lago Titicaca BolÃ­via Montanha - Foto gratuita no Pixabay,NA
+example,Lake Victoria,2700,lake_victoria,cubic kilometers,NA,NA,NA
+example,Grand canyon,4166.8,grand_canyon,cubic kilometers,grandCanyon.jpg,NA,NA
+example,Lake Vostok,5400,lake_vostok,cubic kilometers,NA,NA,NA
+example,Lake Superior,11600,lake_superior,cubic kilometers,lakeSuperior.jpg,File:Gfp-michigan-upper-peninsula-shoreline-of-lake-superior.jpg - Wikimedia Commons,NA
+example,Lake Baikal,23600,lake_baikal,cubic kilometers,baikal.jpg,NA,NA
+example,Caspian Sea,78200,caspian_sea,cubic kilometers,NA,NA,NA

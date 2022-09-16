@@ -84,7 +84,7 @@ export default {
 
             // read in data
             let promises = [
-                self.d3.csv("https://labs.waterdata.usgs.gov/visualizations/data/water_volumes.csv", this.d3.autoType) // file stored in s3 via pipeline
+                self.d3.csv(self.publicPath + "data/pools-fluxes-examples-limited.csv", this.d3.autoType) // to be repalced with file stored in s3 via pipeline
             ];
             Promise.all(promises).then(self.callback);
         },
