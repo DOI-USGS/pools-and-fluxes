@@ -11,7 +11,7 @@ list(
     # data as xlsx so manually editable
     water_volume_data,
     # magnitude of pools and fluxes and file paths/credits for images
-    read_xlsx('in/abbott-pools-and-fluxes.xlsx')
+    read_xlsx('in/pools-fluxes-examples-limited.xlsx')
   ),
   tar_target(
     # convert to csv to read into vue
