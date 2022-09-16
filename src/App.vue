@@ -122,20 +122,16 @@ p {
       font-size: 0.7em;
   }
 }
-text {
-  font-size: 1.2em;
-  padding: 1em 0 0 0; 
-  font-family: $Assistant;
-  @media screen and (max-width: 600px) {
-      font-size: 1m;
-  }
-}
 form {
   padding: 0.1em 0 0 0; 
   font-family: $Assistant;
 }
 label {
   padding: 0.1em 0 0 0; 
+  font-family: $Assistant;
+}
+.button {
+  padding: 0.2em 0 0.2em 0; 
   font-family: $Assistant;
 }
 </style>
