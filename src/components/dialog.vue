@@ -3,10 +3,14 @@
 
 
     <div class="dialog">
+      <div class="dialog__header" background-color="color">
+        <h3 class="dialog__type" v-text="type"></h3>
+      </div>
+
+      <hr />
 
       <div class="dialog__content">
         <h2 class="dialog__title" v-text="title"></h2>
-        <h3 class="dialog__type" v-text="type"></h3>
         <p class="dialog__size" v-text="size"></p>
         <img v-bind:src="source" width="200px" height="200px">
         <p class="dialog__definition" v-text="definition"></p>
@@ -15,7 +19,7 @@
       <hr />
 
       <div class="dialog__footer">
-        <button @click="close" class="dialog__close">Close</button>
+        <button @click="close" class="button dialog__close">Close</button>
       </div>
 
     </div>
@@ -25,7 +29,7 @@
 
 <script>
 export default {
-    props: ['show', 'title', 'type', 'size', 'source', 'definition', 'close']
+    props: ['show', 'title', 'type', 'color', 'size', 'source', 'definition', 'close']
 }
 </script>
 <style>
@@ -52,6 +56,12 @@ export default {
   margin-top: 2.5rem;
   max-width: 90%;
   width: 24rem;
+}
+.dialog__header {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
 }
 .dialog__content {
   padding-left: 0.75rem;
@@ -92,8 +102,8 @@ export default {
 .dialog__footer {
   display: flex;
   justify-content: flex-end;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-top: 0.05rem;
+  padding-bottom: 0.05rem;
 }
 .dialog__close {
   border-radius: 0.75rem;
