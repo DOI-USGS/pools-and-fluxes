@@ -368,6 +368,9 @@ export default {
     margin-top: 0.5rem;
     max-width: 10%;
     width: 24rem;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
   }
   .button:hover {
     background-color: $darkGrey;
