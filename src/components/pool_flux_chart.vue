@@ -344,6 +344,7 @@ export default {
 </script>
 <style scoped lang="scss">
   $lightestGrey: #949494;
+  $darkGrey: #6E6E6E;
   #page-content {
     display: block;
   }
@@ -367,10 +368,15 @@ export default {
     max-width: 10%;
     width: 24rem;
   }
+  .button:focus {
+    background-color: $darkGrey;
+    color: white;
+  }
   .button:hover {
     background-color: $lightestGrey;
     color: white;
   }
+
 </style>
 <style lang="scss">
   // Fonts
