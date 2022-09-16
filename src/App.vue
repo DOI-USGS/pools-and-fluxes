@@ -84,25 +84,25 @@ body {
       }
   }
 h1{
-  font-size: 3.5em;
+  font-size: 2.3em;
   font-weight: 300;
   font-family: $Assistant;
   line-height: 1;
   text-align: left;
   text-shadow: 1px 1px 100px rgba(0,0,0,.8);
   @media screen and (max-width: 600px) {
-    font-size: 2.5em;
+    font-size: 1.3em;
   }
 }
 h2{
   font-weight: 300;
   text-align: left;
   font-family:$Assistant;
-  font-size: 2.3em;
+  font-size: 2em;
   margin-top: 5px;
   line-height: 1.2;
   @media screen and (max-width: 600px) {
-    font-size: 1.3em;
+    font-size: 1.1em;
   }
 }
 h3{
@@ -111,12 +111,12 @@ h3{
   font-family: $Assistant;
   font-weight: 300;
   @media screen and (max-width: 600px) {
-      font-size: 1.1em;
+      font-size: 0.9em;
   }  
 }
 p {
   font-size: 0.8em;
-  padding: 1em 0 0 0; 
+  padding: 0.5em 0 0 0; 
   font-family: $Assistant;
   @media screen and (max-width: 600px) {
       font-size: 0.7em;

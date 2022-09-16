@@ -72,40 +72,26 @@ export default {
 }
 .dialog__title {
   font-weight: 500;
-  font-size: 1.125rem;
   line-height: 1.75rem;
   margin-bottom: 0.5rem;
-  --tw-text-opacity: 1;
-  color: rgba(17, 24, 39, var(--tw-text-opacity));
 }
 .dialog__type {
   font-weight: 500;
-  font-size: 1 rem;
   line-height: 1.75rem;
   margin-bottom: 0.5rem;
-  --tw-text-opacity: 1;
-  color: rgba(17, 24, 39, var(--tw-text-opacity));
 }
 .dialog__size {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  margin-bottom: 1rem;
-  --tw-text-opacity: 1;
-  color: rgba(107, 114, 128, var(--tw-text-opacity));
+  line-height: 1rem;
+  font-weight: 500;
 }
 .dialog__range {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  line-height: 1rem;
   margin-bottom: 1rem;
-  --tw-text-opacity: 1;
-  color: rgba(107, 114, 128, var(--tw-text-opacity));
+  color: #6E6E6E;
 }
 .dialog__definition {
-  font-size: 0.875rem;
   line-height: 1.25rem;
-  margin-bottom: 1rem;
-  --tw-text-opacity: 1;
-  color: rgba(107, 114, 128, var(--tw-text-opacity));
+  margin-bottom: 0.25rem;
 }
 .dialog__footer {
   display: flex;
@@ -115,30 +101,14 @@ export default {
 }
 .dialog__close {
   border-radius: 0.75rem;
-  font-weight: 500;
+  font-weight: 400;
   margin-right: 1rem;
-}
-.dialog__close:focus{
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-}
-.dialog__close{
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   padding-left: 1rem;
   padding-right: 1rem;
-}
-.dialog__close:focus{
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgba(75, 85, 99, var(--tw-ring-opacity));
-  --tw-ring-opacity: 0.5;
-}
-.dialog__close{
   --tw-text-opacity: 1;
-  color: rgba(17, 24, 39, var(--tw-text-opacity));
+  color: #6E6E6E;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -147,5 +117,7 @@ export default {
 .dialog__close:hover {
   --tw-text-opacity: 1;
   color: rgba(55, 65, 81, var(--tw-text-opacity));
+  color: black;
+  font-weight: 500;
 }
 </style>

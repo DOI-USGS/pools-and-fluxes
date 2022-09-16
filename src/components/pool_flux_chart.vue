@@ -287,7 +287,7 @@ export default {
 
           // Populate card with information
           this.cardTitle = d.feature_label;
-          this.cardType = d.type;
+          this.cardType = d.type.charAt(0).toUpperCase() + d.type.slice(1);
           switch (d.type) {
             case 'pool':
               this.cardColor = '#bf8508';
@@ -358,13 +358,18 @@ export default {
   }
   .button {
     --tw-bg-opacity: 1;
-    background-color: $lightestGrey;
+    background-color: white;
+    border: 0.5px solid $lightestGrey;
     border-radius: 0.25rem;
     margin-left: auto;
-    margin-right: auto;
+    margin-right: 2px;
     margin-top: 0.5rem;
     max-width: 10%;
     width: 24rem;
+  }
+  .button:hover {
+    background-color: $lightestGrey;
+    color: white;
   }
 </style>
 <style lang="scss">
