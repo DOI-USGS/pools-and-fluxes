@@ -8,12 +8,8 @@
           class="ui button toggle"
           @click="toggle"
           :class="[showUncertainty ? 'active' : '']"
-        >Show uncertainty</button>
-        <button
-          class="ui button toggle"
-          @click="toggle"
-          :class="[!showUncertainty ? 'active' : '']"
-        >Hide uncertainty</button>
+          :text="uncertaintyPrompt"
+        >{{ uncertaintyPrompt }}</button>
       </div>
       <div id="chart-container" class="chart-area">
         <svg class="chart" />
@@ -66,11 +62,14 @@ export default {
       cardFeatureDefinition: null,
       cardType: null,
       cardColor: null,
-      showUncertainty: false
+      showUncertainty: false,
+      uncertaintyPrompt: null
       }
   },
   mounted(){      
     this.d3 = Object.assign(d3Base);
+    
+    this.uncertaintyPrompt = "Show uncertainty"
 
     // chart elements
     this.w = document.getElementById("chart-container").offsetWidth;
@@ -100,11 +99,13 @@ export default {
         toggle() {
           this.showUncertainty = !this.showUncertainty;
           if (this.showUncertainty) {
+            this.uncertaintyPrompt = 'Hide uncertainty'
             this.d3.selectAll('.chartBandBkgd')
               .style("opacity", 1)
             this.d3.selectAll('.chartBand')
               .style("opacity", 0.3)
           } else {
+            this.uncertaintyPrompt = 'Show uncertainty'
             this.d3.selectAll('.chartBandBkgd')
               .style("opacity", 0)
             this.d3.selectAll('.chartBand')
@@ -367,13 +368,12 @@ export default {
     margin-top: 0.5rem;
     max-width: 10%;
     width: 24rem;
-  }
-  .button:focus {
-    background-color: $darkGrey;
-    color: white;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
   }
   .button:hover {
-    background-color: $lightestGrey;
+    background-color: $darkGrey;
     color: white;
   }
 
