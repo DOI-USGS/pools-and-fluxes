@@ -43,6 +43,8 @@ vignettes/*.pdf
 */tmp/*
 */out/*
 !*/out/*.ind
+!*/out/water_volumes.csv
+in/
 .remake
 build/
 

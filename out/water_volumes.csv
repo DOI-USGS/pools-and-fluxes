@@ -9,7 +9,7 @@ pool,Soil moisture,54100,lakes_saline,cubic kilometers,soilMoisture.jpg,Internat
 pool,Lakes - saline,94700,lakes_fresh,cubic kilometers,salineLake.jpg,Bernadette Simpson - https://commons.wikimedia.org/wiki/File:Saline_Lake_at_Ras_Mohamed_National_Park.jpg,NA
 pool,Lakes - fresh,108000,permafrost,cubic kilometers,freshLake.jpg,Water Lake Nature - Free photo on Pixabay,NA
 pool,Permafrost,207000,groundwater,cubic kilometers,Permafrost.png,https://www.usgs.gov/media/images/mapping-barter-island-all-terrain-vehicle-atv,NA
-pool,Groundwater,22630000,ice_sheets_and_glaciers,cubic kilometers,NA,NA,NA
+pool,Groundwater,22630000,ice_sheets_and_glaciers,cubic kilometers,download.png,NA,NA
 pool,Ice sheets and glaciers,25800000,ocean_mixed_zone,cubic kilometers,Glacier.jpg,File:Grinnell Glacier from summit of Mt Gould 2015 7648 crop.jpg - Wikimedia Commons,NA
 pool,Ocean - mixed zone,134000000,ocean_deep_water_zone,cubic kilometers,download.png,NA,NA
 pool,Ocean - deep water zone,1206000000,streamflow_to_closed_basins,cubic kilometers,download.png,NA,NA
@@ -24,14 +24,14 @@ flux,Precipitation over land,111000,precipitation_over_land,cubic kilometers per
 flux,Precipitation over ocean,380500,precipitation_over_ocean,cubic kilometers per year,oceanPrecipitation.jpg,Water Waves Horizon - Pixabay free pictures,NA
 flux,Ocean evaporation,420500,ocean_evaporation,cubic kilometers per year,download.png,NA,NA
 flux,Ocean circulation,7100000,ocean_circulation,cubic kilometers per year,download.png,NA,NA
-example,Great Salt Lake,18.9,great_salt_lake,cubic kilometers,NA,NA,NA
+example,Great Salt Lake,18.9,great_salt_lake,cubic kilometers,download.png,NA,NA
 example,Dead Sea,147,dead_sea,cubic kilometers,deadSea.jpg,https://www.usgs.gov/media/images/kafrein-reservoir-captures-runoff-near-dead-sea-jordan,NA
-example,Lake Winnepeg,284,lake_winnepeg,cubic kilometers,NA,NA,NA
+example,Lake Winnepeg,284,lake_winnepeg,cubic kilometers,download.png,NA,NA
 example,Lake Erie,480,lake_erie,cubic kilometers,lakeErie.jpg,Beautiful sunset landscape over lake erie free image download (pixy.org),NA
 example,Lake Titicaca,893,lake_titicaca,cubic kilometers,lakeTiticaca.jpg,Do Lago Titicaca Bol√É¬≠via Montanha - Foto gratuita no Pixabay,NA
-example,Lake Victoria,2700,lake_victoria,cubic kilometers,NA,NA,NA
+example,Lake Victoria,2700,lake_victoria,cubic kilometers,download.png,NA,NA
 example,Grand canyon,4166.8,grand_canyon,cubic kilometers,grandCanyon.jpg,NA,NA
-example,Lake Vostok,5400,lake_vostok,cubic kilometers,NA,NA,NA
+example,Lake Vostok,5400,lake_vostok,cubic kilometers,download.png,NA,NA
 example,Lake Superior,11600,lake_superior,cubic kilometers,lakeSuperior.jpg,File:Gfp-michigan-upper-peninsula-shoreline-of-lake-superior.jpg - Wikimedia Commons,NA
 example,Lake Baikal,23600,lake_baikal,cubic kilometers,baikal.jpg,NA,NA
 example,Caspian Sea,78200,caspian_sea,cubic kilometers,NA,NA,NA

@@ -84,7 +84,7 @@ export default {
 
             // read in data
             let promises = [
-                self.d3.csv(self.publicPath + "data/pools-fluxes-examples-limited.csv", this.d3.autoType) //self.d3.csv("https://labs.waterdata.usgs.gov/visualizations/data/abbott_pools_and_fluxes_images.csv", this.d3.autoType)
+                self.d3.csv("https://labs.waterdata.usgs.gov/visualizations/data/water_volumes.csv", this.d3.autoType) // file stored in s3 via pipeline
             ];
             Promise.all(promises).then(self.callback);
         },
@@ -93,7 +93,7 @@ export default {
 
           // pools and fluxes of water
           this.volume = data[0];
-          // console.log(this.volume)
+          console.log(this.volume)
 
           // customize each x scale
           this.adaptScales(this.volume, 1);
