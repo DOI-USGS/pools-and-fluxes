@@ -84,39 +84,43 @@ body {
       }
   }
 h1{
-  font-size: 3.5em;
+  font-size: 2.3em;
   font-weight: 300;
   font-family: $Assistant;
   line-height: 1;
   text-align: left;
   text-shadow: 1px 1px 100px rgba(0,0,0,.8);
   @media screen and (max-width: 600px) {
-    font-size: 2.5em;
+    font-size: 1.3em;
   }
 }
 h2{
   font-weight: 300;
   text-align: left;
   font-family:$Assistant;
-  font-size: 2.3em;
+  font-size: 2em;
   margin-top: 5px;
   line-height: 1.2;
   @media screen and (max-width: 600px) {
-    font-size: 1.3em;
+    font-size: 1.1em;
   }
 }
 h3{
-  font-size: 1.5em;
+  font-size: 1.3em;
   padding-top: .5em;
   font-family: $Assistant;
   font-weight: 300;
   @media screen and (max-width: 600px) {
-      font-size: 1.4em;
+      font-size: 0.9em;
   }  
 }
-p, text {
-  padding: 1em 0 0 0; 
+p {
+  font-size: 0.8em;
+  padding: 0.5em 0 0 0; 
   font-family: $Assistant;
+  @media screen and (max-width: 600px) {
+      font-size: 0.7em;
+  }
 }
 form {
   padding: 0.1em 0 0 0; 
@@ -124,6 +128,10 @@ form {
 }
 label {
   padding: 0.1em 0 0 0; 
+  font-family: $Assistant;
+}
+.button {
+  padding: 0.2em 0 0.2em 0; 
   font-family: $Assistant;
 }
 </style>
