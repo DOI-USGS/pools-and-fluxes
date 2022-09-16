@@ -2,10 +2,9 @@ library(targets)
 library(tidyverse)
 
 options(tidyverse.quiet = TRUE)
-tar_option_set(packages = c('readxl'))
+tar_option_set(packages = c('readxl', 'aws.s3'))
 
 source("data-src/s3_upload.R")
-source("data-src/prep_logpile_data.R")
 
 list(
   tar_target(
