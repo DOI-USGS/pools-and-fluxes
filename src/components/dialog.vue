@@ -12,6 +12,7 @@
       <div class="dialog__content">
         <h2 class="dialog__title" v-text="title"></h2>
         <p class="dialog__size" v-text="size"></p>
+        <p class="dialog__range" v-text="range"></p>
         <img v-bind:src="source" width="200px" height="200px">
         <p class="dialog__definition" v-text="definition"></p>
       </div>
@@ -29,7 +30,7 @@
 
 <script>
 export default {
-    props: ['show', 'title', 'type', 'color', 'size', 'source', 'definition', 'close']
+    props: ['show', 'title', 'type', 'color', 'size', 'range', 'source', 'definition', 'close']
 }
 </script>
 <style>
@@ -86,6 +87,13 @@ export default {
   color: rgba(17, 24, 39, var(--tw-text-opacity));
 }
 .dialog__size {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  margin-bottom: 1rem;
+  --tw-text-opacity: 1;
+  color: rgba(107, 114, 128, var(--tw-text-opacity));
+}
+.dialog__range {
   font-size: 0.875rem;
   line-height: 1.25rem;
   margin-bottom: 1rem;

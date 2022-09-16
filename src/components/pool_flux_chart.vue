@@ -1,7 +1,7 @@
 <template>
   <section>
     <div id="page-content">
-      <dialogCard :show="showDialog" :title="cardTitle" :type="cardType" :color="cardColor" :source="cardImageSource" :size="cardFeatureSize" :definition="cardFeatureDefinition" :close="close"/>
+      <dialogCard :show="showDialog" :title="cardTitle" :type="cardType" :color="cardColor" :source="cardImageSource" :size="cardFeatureSize" :range="cardFeatureRange" :definition="cardFeatureDefinition" :close="close"/>
       <h3>Click on any row of the chart to pull up more information</h3>
       <div class="ui buttons big">
         <button
@@ -61,6 +61,7 @@ export default {
       showDialog: false,
       cardTitle: null,
       cardFeatureSize: null,
+      cardFeatureRange:  null,
       cardImageSource: null,
       cardFeatureDefinition: null,
       cardType: null,
@@ -299,6 +300,8 @@ export default {
               break;
           }
           this.cardFeatureSize = this.d3.format(',')(d.value_km_3) + ' ' +  d.units
+          this.cardFeatureRange = this.d3.format(',')(d.range_low) + ' - ' + this.d3.format(',')(d.range_high) + ' ' +  d.units
+          console.log(this.cardFeatureRange)
           // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
           this.cardImageSource = self.imagePath(d.image_file)
           this.cardFeatureDefinition = d.definition
