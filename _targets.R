@@ -8,10 +8,14 @@ source("data-src/s3_upload.R")
 
 list(
   tar_target(
+    water_volume_path,
+    'in/abbott-pools-and-fluxes.xlsx'
+    ),
+  tar_target(
     # data as xlsx so manually editable
     water_volume_data,
     # magnitude of pools and fluxes and filepaths/credits for images
-    read_xlsx('in/abbott-pools-and-fluxes.xlsx')
+    read_xlsx(water_volume_path)
   ),
   tar_target(
     # convert to csv to read into vue
@@ -23,7 +27,7 @@ list(
     water_volume_s3,
     s3_upload(filepath_s3 = "visualizations/data/water_volume_pools_and_fluxes.csv",
               on_exists = "replace",
-              filepath_local = water_volume_xlsx)
+              filepath_local = water_volume_path)
   ),
   tar_target(
     # find images to put in s3
@@ -48,7 +52,7 @@ list(
   tar_target(
     upload_log_csv,{
       file_out <- 'out/upload_log.csv'
-    bind_rows(water_volume_logpile_log, image_upload_log) %>%
+    bind_rows(water_volume_s3, image_upload_s3) %>%
       write_csv(file_out)
       return(file_out)
     },
