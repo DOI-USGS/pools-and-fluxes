@@ -29,7 +29,7 @@ export default {
       // dimensions
       w: null,
       h: null,
-      margin: { top: 10, right: 25, bottom: 20, left: 200 },
+      margin: { top: 10, right: 30, bottom: 20, left: 200 },
       chartWidth: null,
       chartHeight: null,
       svg: null,
@@ -111,7 +111,7 @@ export default {
         adaptScales(data, xMin) {
           Object.keys(this.scales).forEach(function (scaleType) {
               this.scales[scaleType]
-                  .domain([xMin, this.d3.max(data, d => d.value_km_3)])
+                  .domain([xMin, this.d3.max(data, d => d.range_high)])
                   .range([0, this.chartWidth]);
           }, this);
         },
@@ -153,6 +153,21 @@ export default {
               .attr("class", d => "chartLine " + d.type)
               .attr("id", d => d.feature_class)
 
+          // add lines for uncertainty bands
+          this.svgChart.selectAll("chartBand")
+            .data(data)
+            .enter()
+            .append("line")
+            .filter(function(d) { return d.type === 'pool' || d.type === 'flux' })
+              .attr("x1",  d => self.xScale(d.range_high))
+              .attr("x2", d => self.xScale(d.range_low))
+              .attr("y1", d => yScale(d.feature_label))
+              .attr("y2", d => yScale(d.feature_label))
+              .attr("stroke-width", 7)
+              .attr("stroke-linecap", "round")
+              .attr("class", d => "chartBand " + d.type)
+              .attr("id", d => d.feature_class)
+
           // Add lollipop circles
           this.svgChart.selectAll("chartCircle")
             .data(data)
@@ -172,14 +187,14 @@ export default {
             .data(data)
             .enter()
             .append("rect")
-            .attr("class", d => "interactionRectangle " + d.feature_class)
-            .attr("x", 0)
-            .attr("y", d => yScale(d.feature_label))
-            .attr("width", this.chartWidth + this.margin.left + this.margin.right)
-            .attr("height", this.chartHeight/data.length) //yScale.bandwidth() should work but returns 0
-            .style("fill", "white")
-            .style("opacity", 0)
-            .on("click", d => self.populateCard(d))
+              .attr("class", d => "interactionRectangle " + d.feature_class)
+              .attr("x", 0)
+              .attr("y", d => yScale(d.feature_label))
+              .attr("width", this.chartWidth + this.margin.left + this.margin.right)
+              .attr("height", this.chartHeight/data.length) //yScale.bandwidth() should work but returns 0
+              .style("fill", "white")
+              .style("opacity", 0)
+              .on("click", d => self.populateCard(d))
 
         },
         imagePath(file){
@@ -212,6 +227,11 @@ export default {
           this.domXAxis.transition()
               .duration(animationDuration)
               .call(self.xAxis.scale(this.xScale));
+          this.svgChart.selectAll(".chartBand")
+            .transition()
+            .duration(animationDuration)
+            .attr("x1", d => self.xScale(d.range_high))
+            .attr("x2", d => self.xScale(d.range_low))
           this.svgChart.selectAll(".chartCircle")
             .transition()
             .duration(animationDuration)
@@ -243,15 +263,15 @@ export default {
     stroke-width: 1px;
   }
   .pool {
-    fill: $poolColor;
+    fill: #ffffff;
     stroke: $poolColor;
   }
   .flux {
-    fill: $fluxColor;
+    fill: #ffffff;
     stroke: $fluxColor;
   }
   .example {
-    fill: $neutralGrey;
+    fill: #ffffff;
     stroke: $neutralGrey;
   }
 </style>
