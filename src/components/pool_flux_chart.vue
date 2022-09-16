@@ -299,9 +299,8 @@ export default {
               this.cardColor = "#919191";
               break;
           }
-          this.cardFeatureSize = this.d3.format(',')(d.value_km_3) + ' ' +  d.units
-          this.cardFeatureRange = this.d3.format(',')(d.range_low) + ' - ' + this.d3.format(',')(d.range_high) + ' ' +  d.units
-          console.log(this.cardFeatureRange)
+          this.cardFeatureSize = 'Estimate: ' + this.d3.format(',')(d.value_km_3) + ' ' +  d.units
+          this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low) + ' - ' + this.d3.format(',')(d.range_high) + ' ' +  d.units
           // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
           this.cardImageSource = self.imagePath(d.image_file)
           this.cardFeatureDefinition = d.definition
