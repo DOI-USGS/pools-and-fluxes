@@ -69,7 +69,7 @@ export default {
   mounted(){      
     this.d3 = Object.assign(d3Base);
     
-    this.uncertaintyPrompt = "Show Uncertainty"
+    this.uncertaintyPrompt = "Show uncertainty"
 
     // chart elements
     this.w = document.getElementById("chart-container").offsetWidth;
@@ -99,13 +99,13 @@ export default {
         toggle() {
           this.showUncertainty = !this.showUncertainty;
           if (this.showUncertainty) {
-            this.uncertaintyPrompt = 'Hide Uncertainty'
+            this.uncertaintyPrompt = 'Hide uncertainty'
             this.d3.selectAll('.chartBandBkgd')
               .style("opacity", 1)
             this.d3.selectAll('.chartBand')
               .style("opacity", 0.3)
           } else {
-            this.uncertaintyPrompt = 'Show Uncertainty'
+            this.uncertaintyPrompt = 'Show uncertainty'
             this.d3.selectAll('.chartBandBkgd')
               .style("opacity", 0)
             this.d3.selectAll('.chartBand')
