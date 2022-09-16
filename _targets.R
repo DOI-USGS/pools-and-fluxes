@@ -10,31 +10,31 @@ source("data-src/prep_logpile_data.R")
 list(
   tar_target(
     # data as xlsx so manually editable
-    water_volume_xlsx,
+    water_volume_data,
     # magnitude of pools and fluxes and filepaths/credits for images
-    'in/abbott-pools-and-fluxes.xlsx'
+    read_xlsx('in/abbott-pools-and-fluxes.xlsx')
   ),
   tar_target(
-    # convert to csv to read into javascript page - should be json??
+    # convert to csv to read into vue
     water_volume_csv,
-    read_xlsx(water_volume_xlsx) |> write_csv('out/water_volume_pools_and_fluxes.csv')
+    write_csv(water_volume_data, 'out/water_volume_pools_and_fluxes.csv')
   ),
   tar_target(
     # push file to prod on s3 so accessible by vue
     water_volume_s3,
     s3_upload(filepath_s3 = "visualizations/data/water_volume_pools_and_fluxes.csv",
               on_exists = "replace",
-              filepath_local = water_volume_xlsx
-  )),
-  tar_target(
-    # images to upload to s3
-    water_images,
-    image_data %>%
-      distinct(Feature, image_file, image_credit) %>%
-      filter(!is.na(image_file))
+              filepath_local = water_volume_xlsx)
   ),
   tar_target(
-    image_upload_log, {
+    # find images to put in s3
+    water_images,
+    water_volume_data %>%
+      distinct(type, feature_label, feature_class, image_file, image_credit) %>%
+      filter(!(is.na(image_file) | image_file == "NA"))
+  ),
+  tar_target(
+    image_upload_s3, {
       file_name <- water_images$image_file
       file_s3 <- sprintf('visualizations/images/%s', file_name)
       file_local <- sprintf('Images/%s', file_name)
