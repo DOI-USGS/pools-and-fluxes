@@ -8,14 +8,12 @@ source("data-src/s3_upload.R")
 
 list(
   tar_target(
-    # data as xlsx so manually editable
     water_volume_csv,
     # magnitude of pools and fluxes and file paths/credits for images
     'public/data/pools-fluxes-examples-limited.csv',
     format = 'file'
   ),
   tar_target(
-    # data as xlsx so manually editable
     water_volume_data,
     # magnitude of pools and fluxes and file paths/credits for images
     read_csv(water_volume_csv)
