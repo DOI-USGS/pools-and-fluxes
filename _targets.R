@@ -9,16 +9,16 @@ source("data-src/s3_upload.R")
 list(
   tar_target(
     # data as xlsx so manually editable
-    water_volume_data,
+    water_volume_csv,
     # magnitude of pools and fluxes and file paths/credits for images
-    read_csv('public/data/pools-fluxes-examples-limited.csv')
+    'public/data/pools-fluxes-examples-limited.csv',
+    format = 'file'
   ),
   tar_target(
-    # convert to csv to read into vue
-    water_volume_csv,{ out_file <- 'out/water_volumes.csv'
-    write_csv(water_volume_data, out_file)
-    return(out_file)},
-    format = 'file'
+    # data as xlsx so manually editable
+    water_volume_data,
+    # magnitude of pools and fluxes and file paths/credits for images
+    read_csv(water_volume_csv)
   ),
   tar_target(
     # push file to prod on s3 so accessible by vue
