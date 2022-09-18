@@ -54,7 +54,7 @@ list(
       out_file <- sprintf('tmp/%swebp', file_name)
       image_read(sprintf('Images/%s', water_images)) |>
         image_scale("x200") |>
-        image_write(out_file, density = 92)
+        image_write(out_file, density = 92, compression = "WebP")
       return(out_file)
     },
     pattern = map(water_images),
