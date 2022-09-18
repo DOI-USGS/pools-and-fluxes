@@ -304,6 +304,7 @@ export default {
           this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low) + ' - ' + this.d3.format(',')(d.range_high) + ' ' +  d.units
           // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
           this.cardImageSource = self.imagePath(d.image_file)
+          this.cardImageSourceWebp = self.imagePath(d.image_file_webp)
           this.cardFeatureDefinition = d.definition
           this.showDialog = true;
 
