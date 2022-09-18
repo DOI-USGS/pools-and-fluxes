@@ -1,7 +1,19 @@
 <template>
   <section>
     <div id="page-content">
-      <dialogCard :show="showDialog" :title="cardTitle" :type="cardType" :color="cardColor" :source="cardImageSource" :size="cardFeatureSize" :range="cardFeatureRange" :definition="cardFeatureDefinition" :close="close"/>
+      <dialogCard 
+        :show="showDialog" 
+        :title="cardTitle" 
+        :type="cardType" 
+        :color="cardColor" 
+        :source="cardImageSource" 
+        :sourceWebp="cardImageSourceWebp" 
+        :size="cardFeatureSize" 
+        :range="cardFeatureRange" 
+        :definition="cardFeatureDefinition" 
+        :close="close"
+        :altText="altText"
+      />
       <h3>Click on any row of the chart to pull up more information</h3>
       <div class="ui buttons big">
         <button
@@ -59,9 +71,11 @@ export default {
       cardFeatureSize: null,
       cardFeatureRange:  null,
       cardImageSource: null,
+      cardImageSourceWebp: null,
       cardFeatureDefinition: null,
       cardType: null,
       cardColor: null,
+      altText: null,
       showUncertainty: false,
       uncertaintyPrompt: null
       }
@@ -304,8 +318,11 @@ export default {
           this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low) + ' - ' + this.d3.format(',')(d.range_high) + ' ' +  d.units
           // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
           this.cardImageSource = self.imagePath(d.image_file)
+          this.cardImageSourceWebp = self.imagePath(d.image_file + '?webp')
+          //this.cardImageSourceWebp = self.imagePath(d.image_file.substring(0, d.image_file.indexOf('.')) + '.webp')
           this.cardFeatureDefinition = d.definition
           this.showDialog = true;
+          this.altText = d.alt_text;
 
         },
         changeXScale() {
