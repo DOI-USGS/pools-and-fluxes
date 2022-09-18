@@ -11,7 +11,7 @@ s3_upload <- function(filepath_s3,
   # Check to see if the file already exists and use `on_exists`
   # argument to determine what the user wants to do
   bucket_contents <- aws.s3::get_bucket_df(bucket = s3_config$bucket)
-  exists_on_s3 <- filepath_local %in% bucket_contents$Key
+  exists_on_s3 <- filepath_s3 %in% bucket_contents$Key
   match.arg(on_exists)
 
   if (exists_on_s3 && on_exists == "stop") {
