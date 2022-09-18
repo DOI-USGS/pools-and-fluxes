@@ -29,7 +29,7 @@ list(
     # find images to put in s3
     water_images,
     water_volume_data %>%
-      distinct(type, feature_label, feature_class, image_file, image_credit) %>%
+      distinct(feature_label, feature_class, image_file, image_credit) %>%
       filter(!(is.na(image_file) | image_file == "NA")) |>
       pull(image_file)
   ),
@@ -53,8 +53,8 @@ list(
       file_name <- str_extract(water_images, ".+\\.")
       out_file <- sprintf('tmp/%swebp', file_name)
       image_read(sprintf('Images/%s', water_images)) |>
-        image_scale("x300") |>
-        image_write(out_file, density = 100)
+        image_scale("x200") |>
+        image_write(out_file, density = 92)
       return(out_file)
     },
     pattern = map(water_images),
