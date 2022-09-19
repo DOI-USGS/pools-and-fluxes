@@ -74,8 +74,8 @@ export default {
     // chart elements
     this.w = document.getElementById("chart-container").offsetWidth;
     this.h = document.getElementById("chart-container").offsetHeight;
-    this.chartWidth = this.w - this.margin.left - this.margin.right;
-    this.chartHeight = this.h - this.margin.top - this.margin.bottom;
+    this.chartWidth = 900 - this.margin.left - this.margin.right; 
+    this.chartHeight = 400 - this.margin.top - this.margin.bottom; // if set based on this.h, chart draws differently on laptop and widescreen 
     this.chartContainer = this.d3.select("#chart-container")
     this.captionContainer = this.d3.select("#caption-container")
     
@@ -172,7 +172,7 @@ export default {
           const yScale = this.d3.scaleBand()
             .range([0, this.chartHeight])
             .domain(data.map(d => d.feature_label))
-            .padding(1);
+            .padding(0);
 
           this.yAxis = this.svgChart.append("g")
             .call(this.d3.axisLeft(yScale))
@@ -185,12 +185,12 @@ export default {
             .append("line")
               .attr("x1",  d => self.xScale(d.value_km_3))
               .attr("x2", self.xScale(xMin))
-              .attr("y1", d => yScale(d.feature_label))
-              .attr("y2", d => yScale(d.feature_label))
+              .attr("y1", d => yScale(d.feature_label) + yScale.bandwidth()/2)
+              .attr("y2", d => yScale(d.feature_label) + yScale.bandwidth()/2)
               .attr("class", d => "chartLine " + d.type + " " + d.feature_class)
               .attr("id", d => d.feature_class)
               .style("stroke-dasharray", ("1, 3"))
-              .style("opacity", 0)
+              .style("opacity", 1)
 
           // add lines for uncertainty bands
           this.svgChart.selectAll("chartBandBkgd")
@@ -200,11 +200,11 @@ export default {
             .filter(function(d) { return d.type === 'pool' || d.type === 'flux' })
               .attr("x1",  d => self.xScale(d.range_high))
               .attr("x2", d => self.xScale(d.range_low))
-              .attr("y1", d => yScale(d.feature_label))
-              .attr("y2", d => yScale(d.feature_label))
+              .attr("y1", d => yScale(d.feature_label) + yScale.bandwidth()/2)
+              .attr("y2", d => yScale(d.feature_label) + yScale.bandwidth()/2)
               .attr("class", d => "chartBandBkgd " + d.type)
               .attr("id", d => d.feature_class)
-              .style("stroke-width", 12)
+              .style("stroke-width", 10)
               .style("stroke-linecap", "round")
               .style("opacity", 0)
               
@@ -216,11 +216,11 @@ export default {
             .filter(function(d) { return d.type === 'pool' || d.type === 'flux' })
               .attr("x1",  d => self.xScale(d.range_high))
               .attr("x2", d => self.xScale(d.range_low))
-              .attr("y1", d => yScale(d.feature_label))
-              .attr("y2", d => yScale(d.feature_label))
+              .attr("y1", d => yScale(d.feature_label) + yScale.bandwidth()/2)
+              .attr("y2", d => yScale(d.feature_label) + yScale.bandwidth()/2)
               .attr("class", d => "chartBand " + d.type)
               .attr("id", d => d.feature_class)
-              .style("stroke-width", 12)
+              .style("stroke-width", 10)
               .style("stroke-linecap", "round")
               .style("opacity", 0)
               
@@ -231,26 +231,27 @@ export default {
             .enter()
             .append("circle")
               .attr("cx", d => self.xScale(d.value_km_3))
-              .attr("cy", d => yScale(d.feature_label))
-              .attr("r", "6")
+              .attr("cy", d => yScale(d.feature_label) + yScale.bandwidth()/2)
+              .attr("r", "5")
               .attr("class", d => "chartCircle " + d.type)
               .attr("id", d => d.feature_class)
           
           // Append rectangle that are the width of the chart that we can use to trigger interaction
           let svgInteractionGroup = this.svg.append("g")
             .attr("id", "interaction-container")
-
+          console.log(yScale.bandwidth())
           svgInteractionGroup.selectAll("interactionRectangle")
             .data(data)
             .enter()
             .append("rect")
               .attr("class", d => "interactionRectangle " + d.feature_class)
               .attr("x", 1)
-              .attr("y", d => yScale(d.feature_label))
+              .attr("y", d => yScale(d.feature_label) + yScale.bandwidth()/1.5) // # changes if change width/height of chart :(
               .attr("width", this.chartWidth + this.margin.left + this.margin.right - 2)
-              .attr("height", this.chartHeight/data.length) //yScale.bandwidth() should work but returns 0
+              .attr("height", yScale.bandwidth())
               .style("fill", "white")
-              .style("opacity", 0)
+              .style("opacity", 0.5)
+              .style("stroke", "black")
               .on("click", d => self.populateCard(d))
               .on("mouseover", function(d) {
                 let current_feature = d.feature_class;
@@ -416,14 +417,14 @@ export default {
   .chartBand {
     opacity: 0.3;
   }
-  .y_axis line {
-    visibility:hidden;
-  }
-  .y_axis path {
-    visibility:hidden;
-  }
+  // .y_axis line {
+  //   visibility:hidden;
+  // }
+  // .y_axis path {
+  //   visibility:hidden;
+  // }
   .y_axis text {
-    font-size: 1.6em;
+    font-size: 1.3em;
     padding: 1em 0 0 0; 
     font-family: $Assistant;
     @media screen and (max-width: 600px) {
