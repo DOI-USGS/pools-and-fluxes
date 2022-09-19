@@ -49,6 +49,8 @@ export default {
       chartContainer: null,
       captionContainer: null,
       scales: null,
+      scaleType: null,
+      customNumberFormat: null,
       xScale: null,
       xAxis: null,
       domXAxis: null,
@@ -130,6 +132,18 @@ export default {
           // pools and fluxes of water
           this.volume = data[0];
 
+          // define custom number formatting for xAxis linear scale
+          let formatBillion = function(x) { return self.d3.format(".1f")(x / 1e9) + "B"; },
+              formatMillion = function(x) { return self.d3.format(".0f")(x / 1e6) + "M"; },
+              formatThousand = function(x) { return self.d3.format(".0f")(x / 1e3) + "k"; };
+
+          this.customNumberFormat = function(x) {
+            let v = Math.abs(x);
+            return (v >= .9995e9 ? formatBillion
+                : v >= .9995e6 ? formatMillion
+                : formatThousand)(x);
+          }
+
           // customize each x scale
           this.adaptScales(this.volume, 1);
 
@@ -150,11 +164,9 @@ export default {
                   .range([0, this.chartWidth]);
           }, this);
         },
-        setXScale() {
-          let scaleType;
-          
-          scaleType = this.d3.select('input[name="x-scale"]:checked').node().value;
-          this.xScale = this.scales[scaleType];
+        setXScale() {          
+          this.scaleType = this.d3.select('input[name="x-scale"]:checked').node().value;
+          this.xScale = this.scales[this.scaleType];
         },
         drawChart(data, xMin) {
 
@@ -162,6 +174,9 @@ export default {
 
           this.xAxis = this.d3.axisBottom()
             .scale(self.xScale)
+
+          // Set x-axis number format, depending on scale type
+          self.setXAxisNumberFormat(this.scaleType)
 
           this.domXAxis = this.svgChart.append("g")
             .attr("transform", "translate(0," + this.chartHeight + ")")
@@ -312,10 +327,22 @@ export default {
           this.setXScale();
           this.redraw();
         },
+        setXAxisNumberFormat(currentScale) {
+          const self = this;
+
+          if (currentScale === 'log') {
+            this.xAxis.tickFormat(d => this.xScale.tickFormat(0, self.d3.format(".1s"))(d).replace("G","B"))
+          } else if (currentScale === 'linear') {
+            this.xAxis.tickFormat(d => this.customNumberFormat(d))
+          }
+        },
         redraw() {
           const self = this;
           
           const animationDuration = 2000;
+
+          // Reset number format for x axis
+          self.setXAxisNumberFormat(this.scaleType)
 
           this.domXAxis.transition()
               .duration(animationDuration)
