@@ -35,7 +35,7 @@
           <label><input type="radio" name="x-scale" value="log" checked> log </label>
           <label><input type="radio" name="x-scale" value="linear"> linear </label>          
         </form>
-        <p>You are probably familiar with linear scales. When you move a fixed distance on a linear axis, you add a fixed value to your starting value. When you move a fixed distance on a log axis, you multiply the starting value by a value of 10.</p>
+        <p :text="axisExplanation">{{ axisExplanation }}</p>
         <p>The data for this chart are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019) Human domination of the global water cycle absent from depictions and perceptions.</a></p>
       </div>
     </div>
@@ -82,13 +82,15 @@ export default {
       cardColor: null,
       altText: null,
       showUncertainty: false,
-      uncertaintyPrompt: null
+      uncertaintyPrompt: null,
+      axisExplanation: null
       }
   },
   mounted(){      
     this.d3 = Object.assign(d3Base);
     
-    this.uncertaintyPrompt = "Show uncertainty"
+    // Set starting value for uncertainty prompt
+    this.uncertaintyPrompt = "Show ranges for estimates"
 
     // chart elements
     this.w = document.getElementById("chart-container").offsetWidth;
@@ -118,13 +120,13 @@ export default {
         toggle() {
           this.showUncertainty = !this.showUncertainty;
           if (this.showUncertainty) {
-            this.uncertaintyPrompt = 'Hide uncertainty'
+            this.uncertaintyPrompt = 'Hide ranges for estimates'
             this.d3.selectAll('.chartBandBkgd')
               .style("opacity", 1)
             this.d3.selectAll('.chartBand')
               .style("opacity", 0.3)
           } else {
-            this.uncertaintyPrompt = 'Show uncertainty'
+            this.uncertaintyPrompt = 'Show ranges for estimates'
             this.d3.selectAll('.chartBandBkgd')
               .style("opacity", 0)
             this.d3.selectAll('.chartBand')
@@ -166,6 +168,9 @@ export default {
 
           // set starting x scale
           this.setXScale();
+
+          // set starting value for explanation of axis scale in figure caption
+          this.setAxisExplanation();
           
           // draw chart
           this.drawChart(this.volume, 1)
@@ -347,6 +352,12 @@ export default {
         changeXScale() {
           this.setXScale();
           this.redraw();
+          this.setAxisExplanation();
+        },
+        setAxisExplanation() {
+          this.axisExplanation = this.scaleType==='log' ? 
+                  'When you move a fixed distance on a log axis, you multiply the starting value by a value of 10.' : 
+                  'When you move a fixed distance on a linear axis, you add a fixed value to your starting value.'
         },
         setXAxisNumberFormat(currentScale) {
           const self = this;
