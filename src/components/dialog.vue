@@ -13,7 +13,11 @@
         <h2 class="dialog__title" v-text="title"></h2>
         <p class="dialog__size" v-text="size"></p>
         <p class="dialog__range" v-text="range"></p>
-        <img v-bind:src="source" width="200px" height="200px">
+        <picture>
+          <source v-bind:srcset="sourceWebp" type="image/webp">
+          <source v-bind:srcset="source" type="image/png">
+          <img v-bind:src="sourceWebp" width="200px" height="200px" v-bind:alt="altText">
+        </picture>
         <p class="dialog__definition" v-text="definition"></p>
       </div>
     
@@ -30,7 +34,7 @@
 
 <script>
 export default {
-    props: ['show', 'title', 'type', 'color', 'size', 'range', 'source', 'definition', 'close']
+    props: ['show', 'title', 'type', 'color', 'size', 'range', 'source', 'sourceWebp', 'definition', 'close', 'altText']
 }
 </script>
 <style>

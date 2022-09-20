@@ -41,6 +41,7 @@ vignettes/*.pdf
 
 # scipiper files
 */tmp/*
+tmp/
 */out/*
 !*/out/*.ind
 !*/out/water_volumes.csv
