@@ -74,8 +74,8 @@ export default {
     // chart elements
     this.w = document.getElementById("chart-container").offsetWidth;
     this.h = document.getElementById("chart-container").offsetHeight;
-    this.chartWidth = 900 - this.margin.left - this.margin.right; 
-    this.chartHeight = 400 - this.margin.top - this.margin.bottom; // if set based on this.h, chart draws differently on laptop and widescreen 
+    this.chartWidth = this.w - this.margin.left - this.margin.right; 
+    this.chartHeight = this.h - this.margin.top - this.margin.bottom; // if set based on this.h, chart draws differently on laptop and widescreen 
     this.chartContainer = this.d3.select("#chart-container")
     this.captionContainer = this.d3.select("#caption-container")
     
@@ -88,7 +88,9 @@ export default {
     // create svg that will hold chart
     this.svg = this.chartContainer.select('.chart')
         .attr("viewBox", "0 0 " + (this.chartWidth + this.margin.left + this.margin.right) + " " + (this.chartHeight + this.margin.top + this.margin.bottom))
-        .attr("preserveAspectRatio", "xMidYMid meet")
+        // .attr("preserveAspectRatio", "xMidYMid meet")
+        .attr("width", '100%')
+        .attr("height", '100%')
     this.svgChart = this.svg.append("g")
         .attr("transform","translate(" + this.margin.left + "," + this.margin.top + ")")
         .attr("id", "pool-flux-chart");
@@ -246,21 +248,22 @@ export default {
             .append("rect")
               .attr("class", d => "interactionRectangle " + d.feature_class)
               .attr("x", 1)
-              .attr("y", d => yScale(d.feature_label) + yScale.bandwidth()/1.5) // # changes if change width/height of chart :(
+              .attr("y", d => yScale(d.feature_label) + yScale.bandwidth()) // Not aligning depending on how chart height is set
               .attr("width", this.chartWidth + this.margin.left + this.margin.right - 2)
               .attr("height", yScale.bandwidth())
               .style("fill", "white")
               .style("opacity", 0.5)
               .style("stroke", "black")
               .on("click", d => self.populateCard(d))
-              .on("mouseover", function(d) {
-                let current_feature = d.feature_class;
-                self.mouseoverRect(current_feature)
-              })
-              .on("mouseout", function(d) {
-                let current_feature = d.feature_class;
-                self.mouseoutRect(current_feature)
-              })
+              // comment out mouseover while adjusting chart dimension variables
+              // .on("mouseover", function(d) {
+              //   let current_feature = d.feature_class;
+              //   self.mouseoverRect(current_feature)
+              // })
+              // .on("mouseout", function(d) {
+              //   let current_feature = d.feature_class;
+              //   self.mouseoutRect(current_feature)
+              // })
           
         },
         mouseoverRect(current_feature) {
@@ -352,7 +355,9 @@ export default {
   }
   #chart-container {
     height: 70vh;
+    max-height: 100%;
     width: 90vw;
+    max-width: 100%;
     margin-top: 1vh;
     margin-bottom: 2vh;
   }
@@ -417,6 +422,7 @@ export default {
   .chartBand {
     opacity: 0.3;
   }
+  // Show y axis while troubleshooting chart height issue
   // .y_axis line {
   //   visibility:hidden;
   // }
@@ -424,19 +430,19 @@ export default {
   //   visibility:hidden;
   // }
   .y_axis text {
-    font-size: 1.3em;
+    font-size: 1em;
     padding: 1em 0 0 0; 
     font-family: $Assistant;
     @media screen and (max-width: 600px) {
-        font-size: 1m;
+        font-size: 0.8em;
     }
   }
   .x_axis text {
-    font-size: 1.3em;
+    font-size: 1em;
     padding: 1em 0 0 0; 
     font-family: $Assistant;
     @media screen and (max-width: 600px) {
-        font-size: 1m;
+        font-size: 0.7em;
     }
   }
 </style>
