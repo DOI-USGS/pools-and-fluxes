@@ -1,6 +1,10 @@
 <template>
   <section>
     <div id="page-content">
+      <h1>Pools and fluxes in the water cycle</h1>
+      <h3>Click on any row of the chart to pull up more information</h3>
+      <p><span class='poolText' >Pools</span> are places where water is stored, like the ocean.</p>
+      <p><span class='fluxText'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use.</p>
       <dialogCard 
         :show="showDialog" 
         :title="cardTitle" 
@@ -14,7 +18,6 @@
         :close="close"
         :altText="altText"
       />
-      <h3>Click on any row of the chart to pull up more information</h3>
       <div class="ui buttons big">
         <button
           class="ui button toggle"
@@ -403,6 +406,14 @@ export default {
   #caption-container {
     display: block;
   }
+  .poolText {
+    color: $poolColor;
+    font-weight: 500;
+  }
+  .fluxText {
+    color: $fluxColor;
+    font-weight: 500;
+  }
   .button {
     --tw-bg-opacity: 1;
     background-color: white;
@@ -411,8 +422,8 @@ export default {
     margin-left: auto;
     margin-right: 2px;
     margin-top: 0.5rem;
-    max-width: 10%;
-    width: 24rem;
+    padding: 5px 8px 5px 8px;;
+    max-width: 24rem;
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
