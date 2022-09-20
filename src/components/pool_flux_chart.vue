@@ -320,6 +320,7 @@ export default {
           this.cardImageSource = self.imagePath(d.image_file)
           this.cardImageSourceWebp = self.imagePath(d.image_file + '?webp')
           //this.cardImageSourceWebp = self.imagePath(d.image_file.substring(0, d.image_file.indexOf('.')) + '.webp')
+
           this.cardFeatureDefinition = d.definition
           this.showDialog = true;
           this.altText = d.alt_text;
