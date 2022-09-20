@@ -37,6 +37,7 @@
         </form>
         <p :text="axisExplanation">{{ axisExplanation }}</p>
         <p>The data for this chart are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019) Human domination of the global water cycle absent from depictions and perceptions.</a></p>
+        <p>Learn more about the water cycle and see a diagram of the water cycle on the <a href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></p>
       </div>
     </div>
   </section>
