@@ -392,6 +392,8 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+  $poolColor: #bf8508;
+  $fluxColor: #0aa687;
   $lightestGrey: #949494;
   $darkGrey: #6E6E6E;
   #page-content {
