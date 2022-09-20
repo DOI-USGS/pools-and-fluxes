@@ -41,7 +41,7 @@ list(
       out_file <- sprintf('tmp/%s', water_images)
       image_read(sprintf('Images/%s', water_images)) |>
         image_scale("x300") |>
-        image_write(out_file, density = 100)
+        image_write(out_file, density = 92)
       return(out_file)
     },
     pattern = map(water_images),
