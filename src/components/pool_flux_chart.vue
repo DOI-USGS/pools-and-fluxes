@@ -3,8 +3,6 @@
     <div id="page-content">
       <h1>Pools and fluxes in the water cycle</h1>
       <h3>Click on any row of the chart to pull up more information</h3>
-      <p><span class='poolText' >Pools</span> are places where water is stored, like the ocean.</p>
-      <p><span class='fluxText'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use.</p>
       <dialogCard 
         :show="showDialog" 
         :title="cardTitle" 
@@ -36,6 +34,7 @@
           <label><input type="radio" name="x-scale" value="linear"> linear </label>          
         </form>
         <p :text="axisExplanation">{{ axisExplanation }}</p>
+        <p><span class='poolText' >Pools</span> are places where water is stored, like the ocean. <span class='fluxText'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use.</p>
         <p>The data for this chart are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019) Human domination of the global water cycle absent from depictions and perceptions.</a></p>
         <p>Learn more about the water cycle and see a diagram of the water cycle on the <a href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></p>
       </div>
