@@ -44,6 +44,7 @@
 </template>
 <script>
 import * as d3Base from 'd3';
+import { isMobile } from 'mobile-device-detect';
 export default {
   name: "PoolFluxChart",
     components: {
@@ -53,11 +54,12 @@ export default {
     return {
       publicPath: process.env.BASE_URL, // this is need for the data files in the public folder, this allows the application to find the files when on different deployment roots
       d3: null,
+      mobileView: isMobile,
 
       // dimensions
       w: null,
       h: null,
-      margin: { top: 10, right: 40, bottom: 25, left: 300 },
+      margin: null,
       chartWidth: null,
       chartHeight: null,
       svg: null,
@@ -94,6 +96,7 @@ export default {
     this.uncertaintyPrompt = "Show ranges for estimates"
 
     // chart elements
+    this.margin = this.mobileView ? { top: 10, right: 40, bottom: 25, left:  10 } : { top: 10, right: 40, bottom: 25, left: 300 }
     this.w = document.getElementById("chart-container").offsetWidth;
     this.h = document.getElementById("chart-container").offsetHeight;
     this.chartWidth = this.w - this.margin.left - this.margin.right;
@@ -199,7 +202,7 @@ export default {
             .scale(self.xScale)
 
           // Set x-axis number format, depending on scale type
-          self.setXAxisNumberFormat(this.scaleType)
+          self.setXAxisNumberFormat(this.scaleType, this.mobileView)
 
           this.domXAxis = this.svgChart.append("g")
             .attr("transform", "translate(0," + this.chartHeight + ")")
@@ -278,7 +281,7 @@ export default {
           let svgInteractionGroup = this.svg.append("g")
             .attr("id", "interaction-container")
 
-          svgInteractionGroup.selectAll("interactionRectangle")
+          let interactionRectangles = svgInteractionGroup.selectAll("interactionRectangle")
             .data(data)
             .enter()
             .append("rect")
@@ -290,6 +293,9 @@ export default {
               .style("fill", "white")
               .style("opacity", 0)
               .on("click", d => self.populateCard(d))
+
+          if (this.mobileView===false) {
+            interactionRectangles
               .on("mouseover", function(d) {
                 let current_feature = d.feature_class;
                 self.mouseoverRect(current_feature)
@@ -298,6 +304,12 @@ export default {
                 let current_feature = d.feature_class;
                 self.mouseoutRect(current_feature)
               })
+          } else if (this.mobileView===true) {
+            this.yAxis.selectAll('text')
+              .attr("text-anchor","start")
+              .attr("x", 0)
+          }
+
           
         },
         mouseoverRect(current_feature) {
@@ -360,13 +372,25 @@ export default {
                   'When you move a fixed distance on a log axis, you multiply the starting value by a value of 10.' : 
                   'When you move a fixed distance on a linear axis, you add a fixed value to your starting value.'
         },
-        setXAxisNumberFormat(currentScale) {
+        setXAxisNumberFormat(currentScale, currentlyMobile) {
           const self = this;
 
-          if (currentScale === 'log') {
-            this.xAxis.tickFormat(d => this.xScale.tickFormat(0, self.d3.format(".1s"))(d).replace("G","B"))
-          } else if (currentScale === 'linear') {
-            this.xAxis.tickFormat(d => this.customNumberFormat(d))
+          if ((currentScale === 'log' ) && (currentlyMobile===false)) {
+            this.xAxis
+              .ticks(10)
+              .tickFormat(d => this.xScale.tickFormat(0, self.d3.format(".1s"))(d).replace("G","B"))
+          } else if ((currentScale === 'log' ) && (currentlyMobile===true)) {
+            this.xAxis
+              .ticks(7)
+              .tickFormat(d => this.xScale.tickFormat(0, self.d3.format(".1s"))(d).replace("G","B"))
+          } else if ((currentScale === 'linear') && (currentlyMobile===false)) {
+            this.xAxis
+              .ticks(10)
+              .tickFormat(d =>this.customNumberFormat(d))
+          }  else if (currentScale === 'linear' && currentlyMobile===true) {
+            this.xAxis
+              .ticks(6)
+              .tickFormat(d =>this.customNumberFormat(d))
           }
         },
         redraw() {
@@ -375,7 +399,7 @@ export default {
           const animationDuration = 2000;
 
           // Reset number format for x axis
-          self.setXAxisNumberFormat(this.scaleType)
+          self.setXAxisNumberFormat(this.scaleType, this.mobileView)
 
           this.domXAxis.transition()
               .duration(animationDuration)
