@@ -95,7 +95,7 @@ export default {
     this.uncertaintyPrompt = "Show ranges for estimates"
 
     // chart elements
-    this.margin = this.mobileView ? { top: 10, right: 40, bottom: 25, left:  10 } : { top: 10, right: 40, bottom: 25, left: 300 }
+    this.margin = this.mobileView ? { top: 10, right: 120, bottom: 25, left:  10 } : { top: 10, right: 40, bottom: 25, left: 300 }
     this.w = document.getElementById("chart-container").offsetWidth;
     this.h = document.getElementById("chart-container").offsetHeight;
     this.chartWidth = this.w - this.margin.left - this.margin.right;
@@ -121,7 +121,12 @@ export default {
     },
     methods:{
         toggle() {
+          const self = this;
+
+          // Update global value for show Uncertainty
           this.showUncertainty = !this.showUncertainty;
+          
+          // Toggle on or off uncertainty bars
           if (this.showUncertainty) {
             this.uncertaintyPrompt = 'Hide ranges for estimates'
             this.d3.selectAll('.chartBandBkgd')
@@ -134,6 +139,14 @@ export default {
               .style("opacity", 0)
             this.d3.selectAll('.chartBand')
               .style("opacity", 0)
+          }
+
+          // Adjust y-axis label placement on mobile
+          if (this.mobileView) {
+            self.yAxis.selectAll("text")
+              .transition()
+              .duration(200)
+              .attr("x", d => self.placeYAxisText(d, this.showUncertainty))
           }
         },
         close() {
@@ -217,6 +230,13 @@ export default {
           this.yAxis = this.svgChart.append("g")
             .call(this.d3.axisLeft(yScale))
             .attr("class", "y_axis")
+
+          // Style y-axis text on mobile
+          if (this.mobileView===true) {
+            this.yAxis.selectAll('text')
+              .attr("text-anchor","start")
+              .attr("x", d => self.placeYAxisText(d, this.showUncertainty))
+          }
 
           // add lollipop lines
           this.svgChart.selectAll("chartLine")
@@ -303,12 +323,7 @@ export default {
                 let current_feature = d.feature_class;
                 self.mouseoutRect(current_feature)
               })
-          } else if (this.mobileView===true) {
-            this.yAxis.selectAll('text')
-              .attr("text-anchor","start")
-              .attr("x", 0)
           }
-
           
         },
         mouseoverRect(current_feature) {
@@ -392,6 +407,28 @@ export default {
               .tickFormat(d =>this.customNumberFormat(d))
           }
         },
+        placeYAxisText(currentFeature, currentlyShowingUncertainty) {
+          const self = this;
+
+          // Pull data associated with y axis label
+          let featureData = self.volume.filter(function(dataRow) {
+            return dataRow.feature_label === currentFeature
+          })[0]
+
+          // Identify feature type (pool/flux/example)
+          let featureType = featureData.type
+
+          // Set buffer distance between point and label
+          let xBuffer = 10;
+
+          // Set position of y axis label
+          if (featureType === 'example' || currentlyShowingUncertainty === false) {
+            return self.xScale(featureData.value_km_3) + xBuffer
+          } else if ((featureType != 'example') && (currentlyShowingUncertainty === true)) {
+            return self.xScale(featureData.range_high) + xBuffer
+          }
+          
+        },
         redraw() {
           const self = this;
           
@@ -400,6 +437,7 @@ export default {
           // Reset number format for x axis
           self.setXAxisNumberFormat(this.scaleType, this.mobileView)
 
+          // Shift chart elements
           this.domXAxis.transition()
               .duration(animationDuration)
               .call(self.xAxis.scale(this.xScale));
@@ -421,7 +459,15 @@ export default {
             .transition()
             .duration(animationDuration)
             .attr("x1", d => self.xScale(d.value_km_3))
-
+          
+          // If on mobile, shift y axis labels
+          if (this.mobileView) {
+            console.log(self.yAxis)
+            self.yAxis.selectAll("text")
+              .transition()
+              .duration(animationDuration)
+              .attr("x", d => self.placeYAxisText(d, this.showUncertainty))
+          }
     },
     }
 }
@@ -520,7 +566,7 @@ export default {
     padding: 1em 0 0 0; 
     font-family: $Assistant;
     @media screen and (max-width: 600px) {
-        font-size: 1m;
+        font-size: 1em;
     }
   }
   .x_axis text {
@@ -528,7 +574,7 @@ export default {
     padding: 1em 0 0 0; 
     font-family: $Assistant;
     @media screen and (max-width: 600px) {
-        font-size: 1m;
+        font-size: 1em;
     }
   }
 </style>
