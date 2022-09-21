@@ -369,7 +369,7 @@ export default {
         setAxisExplanation() {
           this.axisExplanation = this.scaleType==='log' ? 
                   'When you move a fixed distance on a log axis, you multiply the starting value by a value of 10.' : 
-                  'When you move a fixed distance on a linear axis, you add a fixed value to your starting value.'
+                  'When you move a fixed distance on a linear axis, you add a fixed value to the starting value.'
         },
         setXAxisNumberFormat(currentScale, currentlyMobile) {
           const self = this;
