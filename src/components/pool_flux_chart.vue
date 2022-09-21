@@ -95,7 +95,7 @@ export default {
     this.uncertaintyPrompt = "Show ranges for estimates"
 
     // chart elements
-    this.margin = this.mobileView ? { top: 10, right: 120, bottom: 25, left:  10 } : { top: 10, right: 40, bottom: 25, left: 300 }
+    this.margin = this.mobileView ? { top: 10, right: 75, bottom: 25, left:  10 } : { top: 10, right: 40, bottom: 25, left: 300 }
     this.w = document.getElementById("chart-container").offsetWidth;
     this.h = document.getElementById("chart-container").offsetHeight;
     this.chartWidth = this.w - this.margin.left - this.margin.right;
