@@ -35,7 +35,7 @@
           <label><input type="radio" name="x-scale" value="log" checked> log </label>
           <label><input type="radio" name="x-scale" value="linear"> linear </label>          
         </form>
-        <p :text="axisExplanation">{{ axisExplanation }}</p>
+        <p :text="axisExplanation">Compare the magnitude of major pools and fluxes of water on Earth. Switch between a linear and log scale x-axis using the toggle. {{ axisExplanation }}</p>
         <p>The data for this chart are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019) Human domination of the global water cycle absent from depictions and perceptions.</a></p>
       </div>
     </div>
@@ -412,8 +412,8 @@ export default {
         },
         setAxisExplanation() {
           this.axisExplanation = this.scaleType==='log' ? 
-                  'When you move a fixed distance on a log axis, you multiply the starting value by a value of 10.' : 
-                  'When you move a fixed distance on a linear axis, you add a fixed value to the starting value.'
+                  'Right now, you\'re looking at the log scale x-axis. When you move a fixed distance on a log axis, you multiply the starting value by a value of 10. Using a log scale is useful when values are distributed across many orders of magnitude.' : 
+                  'Right now, you\'re looking at the linear scale x-axis. When you move a fixed distance on a linear axis, you add a fixed value to the starting value.'
         },
         setXAxisNumberFormat(currentScale, currentlyMobile) {
           const self = this;
