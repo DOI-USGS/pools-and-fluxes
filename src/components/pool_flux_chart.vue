@@ -247,7 +247,7 @@ export default {
           }
 
           // add lollipop lines
-          this.svgChart.selectAll("chartLine")
+          let dataLines = this.svgChart.selectAll("chartLine")
             .data(data)
             .enter()
             .append("line")
@@ -258,10 +258,12 @@ export default {
               .attr("class", d => "chartLine " + d.type + " " + d.feature_class)
               .attr("id", d => d.feature_class)
               .style("stroke-dasharray", ("1, 3"))
-              .style("opacity", 0)
+
+          // Set default opacity for lollipop lines to 1 on mobile, 0 on desktop
+          dataLines.style("opacity", d => this.mobileView ? 1 : 0)
 
           // add lines for uncertainty bands
-          this.svgChart.selectAll("chartBandBkgd")
+          let dataBands = this.svgChart.selectAll("chartBandBkgd")
             .data(data)
             .enter()
             .append("line")
@@ -272,12 +274,11 @@ export default {
               .attr("y2", d => yScale(d.feature_label))
               .attr("class", d => "chartBandBkgd " + d.type)
               .attr("id", d => d.feature_class)
-              .style("stroke-width", 12)
               .style("stroke-linecap", "round")
               .style("opacity", 0)
               
               
-          this.svgChart.selectAll("chartBand")
+          let dataBandBkgds = this.svgChart.selectAll("chartBand")
             .data(data)
             .enter()
             .append("line")
@@ -288,21 +289,24 @@ export default {
               .attr("y2", d => yScale(d.feature_label))
               .attr("class", d => "chartBand " + d.type)
               .attr("id", d => d.feature_class)
-              .style("stroke-width", 12)
               .style("stroke-linecap", "round")
               .style("opacity", 0)
-              
 
           // Add lollipop circles
-          this.svgChart.selectAll("chartCircle")
+          let dataPoints = this.svgChart.selectAll("chartCircle")
             .data(data)
             .enter()
             .append("circle")
               .attr("cx", d => self.xScale(d.value_km_3))
               .attr("cy", d => yScale(d.feature_label))
-              .attr("r", "6")
               .attr("class", d => "chartCircle " + d.type)
               .attr("id", d => d.feature_class)
+
+          // Set different sizing for points and uncetainty bands on mobile and desktop
+          let pointSize = this.mobileView ? 5 : 6
+          dataPoints.attr("r", pointSize)
+          dataBands.style("stroke-width", pointSize*2)
+          dataBandBkgds.style("stroke-width", pointSize*2)
           
           // Append rectangle that are the width of the chart that we can use to trigger interaction
           let svgInteractionGroup = this.svg.append("g")
