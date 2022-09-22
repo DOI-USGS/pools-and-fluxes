@@ -546,6 +546,10 @@ export default {
   .button:hover {
     background-color: $darkGrey;
     color: white;
+    @media screen and (max-width: 600px) {
+      background-color: white;
+      color: black;
+    }
   }
 
 </style>
