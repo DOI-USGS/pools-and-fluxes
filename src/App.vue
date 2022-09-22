@@ -115,11 +115,11 @@ h3{
   }  
 }
 p {
-  font-size: 0.8em;
+  font-size: 1em;
   padding: 0.5em 0 0 0; 
   font-family: $Assistant;
   @media screen and (max-width: 600px) {
-      font-size: 0.7em;
+      font-size: 0.9em;
   }
 }
 form {
