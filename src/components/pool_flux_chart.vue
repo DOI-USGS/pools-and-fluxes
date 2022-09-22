@@ -351,21 +351,31 @@ export default {
           const self = this;
 
           // Populate card with information
-          this.cardTitle = d.feature_label;
+          this.cardTitle = d.feature_title;
           this.cardType = d.type.charAt(0).toUpperCase() + d.type.slice(1);
           switch (d.type) {
             case 'pool':
-              this.cardColor = '#bf8508';
+              this.cardColor = '#9C6D07'; // 5:1 contrast (since text)
               break;
             case 'flux':
-              this.cardColor = "#0aa687";
+              this.cardColor = "#06846A"; // 5:1 contrast (since text)
               break;
             case 'example':
-              this.cardColor = "#919191";
+              this.cardColor = "#6E6E6E"; // 5:1 contrast (since text)
               break;
           }
-          this.cardFeatureSize = 'Estimate: ' + this.d3.format(',')(d.value_km_3) + ' ' +  d.units
-          this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low) + ' - ' + this.d3.format(',')(d.range_high) + ' ' +  d.units
+
+          // Provide volume/rate estimate
+          let prefix = d.type==='flux' ? 'Rate ' : 'Volume '
+          this.cardFeatureSize = prefix + 'estimate: ' + this.d3.format(',')(d.value_km_3) + ' ' +  d.units
+
+          // Provide range
+          if (d.type != 'example') {
+            this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low) + ' - ' + this.d3.format(',')(d.range_high) + ' ' +  d.units
+          } else {
+            this.cardFeatureRange = ''
+          }
+
           // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
           this.cardImageSource = self.imagePath(d.image_file)
           this.cardImageSourceWebp = self.imagePath(d.image_file + '?webp')
@@ -473,10 +483,13 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-  $poolColor: #bf8508;
-  $fluxColor: #0aa687;
-  $lightestGrey: #949494;
-  $darkGrey: #6E6E6E;
+  $poolColor: #bf8508; //3.2:1 contrast
+  $fluxColor: #0aa687; //3:1 contrast
+  $poolColorDark: #9C6D07; //4.5:1 contrast
+  $fluxColorDark: #06846A; //4.5:1 contrast
+  $lightestGrey: #949494; //3:1 contrast
+  $neutralGrey: #919191; //3.15:1 contrast
+  $darkGrey: #6E6E6E; //5:1 contrast
   #page-content {
     display: block;
   }
@@ -524,10 +537,13 @@ export default {
   $Cairo: 'Cairo', sans-serif;
   $Assistant: 'Assistant', sans-serif;
 
-  $poolColor: #bf8508;
-  $fluxColor: #0aa687;
-  $neutralGrey: #919191;
-  $lightestGrey: #949494;
+  $poolColor: #bf8508; //3.2:1 contrast
+  $fluxColor: #0aa687; //3:1 contrast
+  $poolColorDark: #9C6D07; //4.5:1 contrast
+  $fluxColorDark: #06846A; //4.5:1 contrast
+  $lightestGrey: #949494; //3:1 contrast
+  $neutralGrey: #919191; //3.15:1 contrast
+  $darkGrey: #6E6E6E; //5:1 contrast
 
 
   .pool {
