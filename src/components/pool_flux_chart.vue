@@ -24,7 +24,7 @@
           :text="uncertaintyPrompt"
         >{{ uncertaintyPrompt }}</button>
       </div>
-      <div id="chart-container" class="chart-area">
+      <div id="chart-container">
         <svg class="chart" />
       </div>
       <div id="caption-container">
@@ -95,7 +95,7 @@ export default {
     this.uncertaintyPrompt = "Show ranges for estimates"
 
     // chart elements
-    this.margin = this.mobileView ? { top: 10, right: 75, bottom: 50, left:  10 } : { top: 10, right: 40, bottom: 50, left: 300 }
+    this.margin = this.mobileView ? { top: 10, right: 10, bottom: 50, left:  10 } : { top: 10, right: 15, bottom: 50, left: 300 }
     this.w = document.getElementById("chart-container").offsetWidth;
     this.h = document.getElementById("chart-container").offsetHeight;
     this.chartWidth = this.w - this.margin.left - this.margin.right;
@@ -197,9 +197,16 @@ export default {
         },
         adaptScales(data, xMin) {
           Object.keys(this.scales).forEach(function (scaleType) {
+            if (this.mobileView) {
+              let axisExtension = scaleType==='log' ? 1000000000000 : 300000000
               this.scales[scaleType]
-                  .domain([xMin, this.d3.max(data, d => d.range_high)])
-                  .range([0, this.chartWidth]);
+                .domain([xMin, this.d3.max(data, d => d.range_high)  + axisExtension]) // extend axis
+                .range([0, this.chartWidth]);
+            } else {
+              this.scales[scaleType]
+                .domain([xMin, this.d3.max(data, d => d.range_high)])
+                .range([0, this.chartWidth]);
+            }
           }, this);
         },
         setXScale() {          
@@ -417,7 +424,7 @@ export default {
               .tickFormat(d => this.xScale.tickFormat(0, self.d3.format(".1s"))(d).replace("G","B"))
           } else if ((currentScale === 'log' ) && (currentlyMobile===true)) {
             this.xAxis
-              .ticks(7)
+              .ticks(10)
               .tickFormat(d => this.xScale.tickFormat(0, self.d3.format(".1s"))(d).replace("G","B"))
           } else if ((currentScale === 'linear') && (currentlyMobile===false)) {
             this.xAxis
@@ -507,7 +514,7 @@ export default {
   }
   #chart-container {
     height: 70vh;
-    width: 90vw;
+    // width: 90vw;
     margin-top: 1vh;
     margin-bottom: 2vh;
   }
