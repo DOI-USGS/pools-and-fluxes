@@ -95,7 +95,7 @@ export default {
     this.uncertaintyPrompt = "Show ranges for estimates"
 
     // chart elements
-    this.margin = this.mobileView ? { top: 10, right: 75, bottom: 25, left:  10 } : { top: 10, right: 40, bottom: 25, left: 300 }
+    this.margin = this.mobileView ? { top: 10, right: 75, bottom: 50, left:  10 } : { top: 10, right: 40, bottom: 50, left: 300 }
     this.w = document.getElementById("chart-container").offsetWidth;
     this.h = document.getElementById("chart-container").offsetHeight;
     this.chartWidth = this.w - this.margin.left - this.margin.right;
@@ -220,6 +220,14 @@ export default {
             .attr("transform", "translate(0," + this.chartHeight + ")")
             .call(this.xAxis)
             .attr("class", "x_axis")
+
+          // Add x axis title
+          this.svgChart.append("text")
+            .attr("class", "x_label")
+            .attr("text-anchor", "middle")
+            .attr("x", this.chartWidth/2)
+            .attr("y", this.chartHeight + 42)
+            .text("Pool volume (km³) or flux rate (km³ per year)")
 
           // y axis scale for lollipop chart
           const yScale = this.d3.scaleBand()
@@ -591,6 +599,14 @@ export default {
     font-family: $Assistant;
     @media screen and (max-width: 600px) {
         font-size: 1em;
+    }
+  }
+  .x_label {
+    font-size: 1em;
+    padding: 1em 0 0 0; 
+    font-family: $Assistant;
+    @media screen and (max-width: 600px) {
+        font-size: 0.9em;
     }
   }
 </style>
