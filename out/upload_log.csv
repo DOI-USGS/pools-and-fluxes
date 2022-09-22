@@ -1,5 +1,5 @@
 local_filepath,s3_filepath,timestamp
-public/data/pools-fluxes-examples-limited.csv,visualizations/data/water_volumes.csv,2022-09-20T17:28:37Z
+public/data/pools-fluxes-examples-limited.csv,visualizations/data/water_volumes.csv,2022-09-22T17:24:53Z
 tmp/river.png,visualizations/images/river.png,2022-09-20T15:01:08Z
 tmp/snowpack.png,visualizations/images/snowpack.png,2022-09-20T15:01:11Z
 tmp/atmosphericMoistureLand.png,visualizations/images/atmosphericMoistureLand.png,2022-09-20T15:01:14Z

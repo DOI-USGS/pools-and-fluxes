@@ -1,6 +1,10 @@
 <template>
   <section>
     <div id="page-content">
+      <h1><span class='poolText' >Pools</span> and <span class='fluxText'>fluxes</span> in the water cycle</h1>
+      <p><span class='poolText' >Pools</span> are places where water is stored, like the ocean. <span class='fluxText'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use.</p>
+      <p>Learn more about the water cycle and see the water cycle diagram on the <a href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></p>
+      <h3>Click on any row of the chart to pull up more information</h3>
       <dialogCard 
         :show="showDialog" 
         :title="cardTitle" 
@@ -14,7 +18,6 @@
         :close="close"
         :altText="altText"
       />
-      <h3>Click on any row of the chart to pull up more information</h3>
       <div class="ui buttons big">
         <button
           class="ui button toggle"
@@ -23,7 +26,7 @@
           :text="uncertaintyPrompt"
         >{{ uncertaintyPrompt }}</button>
       </div>
-      <div id="chart-container" class="chart-area">
+      <div id="chart-container">
         <svg class="chart" />
       </div>
       <div id="caption-container">
@@ -32,14 +35,15 @@
           <label><input type="radio" name="x-scale" value="log" checked> log </label>
           <label><input type="radio" name="x-scale" value="linear"> linear </label>          
         </form>
-        <p>You are probably familiar with linear scales. When you move a fixed distance on a linear axis, you add a fixed value to your starting value. When you move a fixed distance on a log axis, you multiply the starting value by a value of 10.</p>
-        <p>The data for this chart are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019) Human domination of the global water cycle absent from depictions and perceptions.</a></p>
+        <p :text="axisExplanation">Compare the magnitude of major pools and fluxes of water on Earth. Switch between a linear and log scale x-axis using the toggle. {{ axisExplanation }}</p>
+        <p>The data for this chart are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019) Human domination of the global water cycle absent from depictions and perceptions.</a> Abbott et al. note that the estimate for each pool or flux "represents the most recent or comprehensive individual estimate". The ranges for each estimate, if shown, "represent the range of reported values and their uncertainties."</p>
       </div>
     </div>
   </section>
 </template>
 <script>
 import * as d3Base from 'd3';
+import { isMobile } from 'mobile-device-detect';
 export default {
   name: "PoolFluxChart",
     components: {
@@ -49,11 +53,12 @@ export default {
     return {
       publicPath: process.env.BASE_URL, // this is need for the data files in the public folder, this allows the application to find the files when on different deployment roots
       d3: null,
+      mobileView: isMobile,
 
       // dimensions
       w: null,
       h: null,
-      margin: { top: 10, right: 40, bottom: 25, left: 300 },
+      margin: null,
       chartWidth: null,
       chartHeight: null,
       svg: null,
@@ -79,15 +84,18 @@ export default {
       cardColor: null,
       altText: null,
       showUncertainty: false,
-      uncertaintyPrompt: null
+      uncertaintyPrompt: null,
+      axisExplanation: null
       }
   },
   mounted(){      
     this.d3 = Object.assign(d3Base);
     
-    this.uncertaintyPrompt = "Show uncertainty"
+    // Set starting value for uncertainty prompt
+    this.uncertaintyPrompt = "Show ranges for estimates"
 
     // chart elements
+    this.margin = this.mobileView ? { top: 10, right: 10, bottom: 50, left:  10 } : { top: 10, right: 15, bottom: 50, left: 300 }
     this.w = document.getElementById("chart-container").offsetWidth;
     this.h = document.getElementById("chart-container").offsetHeight;
     this.chartWidth = this.w - this.margin.left - this.margin.right;
@@ -113,19 +121,32 @@ export default {
     },
     methods:{
         toggle() {
+          const self = this;
+
+          // Update global value for show Uncertainty
           this.showUncertainty = !this.showUncertainty;
+          
+          // Toggle on or off uncertainty bars
           if (this.showUncertainty) {
-            this.uncertaintyPrompt = 'Hide uncertainty'
+            this.uncertaintyPrompt = 'Hide ranges for estimates'
             this.d3.selectAll('.chartBandBkgd')
               .style("opacity", 1)
             this.d3.selectAll('.chartBand')
               .style("opacity", 0.3)
           } else {
-            this.uncertaintyPrompt = 'Show uncertainty'
+            this.uncertaintyPrompt = 'Show ranges for estimates'
             this.d3.selectAll('.chartBandBkgd')
               .style("opacity", 0)
             this.d3.selectAll('.chartBand')
               .style("opacity", 0)
+          }
+
+          // Adjust y-axis label placement on mobile
+          if (this.mobileView) {
+            self.yAxis.selectAll("text")
+              .transition()
+              .duration(200)
+              .attr("x", d => self.placeYAxisText(d, this.showUncertainty))
           }
         },
         close() {
@@ -163,6 +184,9 @@ export default {
 
           // set starting x scale
           this.setXScale();
+
+          // set starting value for explanation of axis scale in figure caption
+          this.setAxisExplanation();
           
           // draw chart
           this.drawChart(this.volume, 1)
@@ -173,9 +197,16 @@ export default {
         },
         adaptScales(data, xMin) {
           Object.keys(this.scales).forEach(function (scaleType) {
+            if (this.mobileView) {
+              let axisExtension = scaleType==='log' ? 1000000000000 : 300000000
               this.scales[scaleType]
-                  .domain([xMin, this.d3.max(data, d => d.range_high)])
-                  .range([0, this.chartWidth]);
+                .domain([xMin, this.d3.max(data, d => d.range_high)  + axisExtension]) // extend axis
+                .range([0, this.chartWidth]);
+            } else {
+              this.scales[scaleType]
+                .domain([xMin, this.d3.max(data, d => d.range_high)])
+                .range([0, this.chartWidth]);
+            }
           }, this);
         },
         setXScale() {          
@@ -190,12 +221,20 @@ export default {
             .scale(self.xScale)
 
           // Set x-axis number format, depending on scale type
-          self.setXAxisNumberFormat(this.scaleType)
+          self.setXAxisNumberFormat(this.scaleType, this.mobileView)
 
           this.domXAxis = this.svgChart.append("g")
             .attr("transform", "translate(0," + this.chartHeight + ")")
             .call(this.xAxis)
             .attr("class", "x_axis")
+
+          // Add x axis title
+          this.svgChart.append("text")
+            .attr("class", "x_label")
+            .attr("text-anchor", "middle")
+            .attr("x", this.chartWidth/2)
+            .attr("y", this.chartHeight + 42)
+            .text("Pool volume (km³) or flux rate (km³ per year)")
 
           // y axis scale for lollipop chart
           const yScale = this.d3.scaleBand()
@@ -207,8 +246,15 @@ export default {
             .call(this.d3.axisLeft(yScale))
             .attr("class", "y_axis")
 
+          // Style y-axis text on mobile
+          if (this.mobileView===true) {
+            this.yAxis.selectAll('text')
+              .attr("text-anchor","start")
+              .attr("x", d => self.placeYAxisText(d, this.showUncertainty))
+          }
+
           // add lollipop lines
-          this.svgChart.selectAll("chartLine")
+          let dataLines = this.svgChart.selectAll("chartLine")
             .data(data)
             .enter()
             .append("line")
@@ -219,10 +265,12 @@ export default {
               .attr("class", d => "chartLine " + d.type + " " + d.feature_class)
               .attr("id", d => d.feature_class)
               .style("stroke-dasharray", ("1, 3"))
-              .style("opacity", 0)
+
+          // Set default opacity for lollipop lines to 1 on mobile, 0 on desktop
+          dataLines.style("opacity", d => this.mobileView ? 1 : 0)
 
           // add lines for uncertainty bands
-          this.svgChart.selectAll("chartBandBkgd")
+          let dataBands = this.svgChart.selectAll("chartBandBkgd")
             .data(data)
             .enter()
             .append("line")
@@ -233,12 +281,11 @@ export default {
               .attr("y2", d => yScale(d.feature_label))
               .attr("class", d => "chartBandBkgd " + d.type)
               .attr("id", d => d.feature_class)
-              .style("stroke-width", 12)
               .style("stroke-linecap", "round")
               .style("opacity", 0)
               
               
-          this.svgChart.selectAll("chartBand")
+          let dataBandBkgds = this.svgChart.selectAll("chartBand")
             .data(data)
             .enter()
             .append("line")
@@ -249,27 +296,30 @@ export default {
               .attr("y2", d => yScale(d.feature_label))
               .attr("class", d => "chartBand " + d.type)
               .attr("id", d => d.feature_class)
-              .style("stroke-width", 12)
               .style("stroke-linecap", "round")
               .style("opacity", 0)
-              
 
           // Add lollipop circles
-          this.svgChart.selectAll("chartCircle")
+          let dataPoints = this.svgChart.selectAll("chartCircle")
             .data(data)
             .enter()
             .append("circle")
               .attr("cx", d => self.xScale(d.value_km_3))
               .attr("cy", d => yScale(d.feature_label))
-              .attr("r", "6")
               .attr("class", d => "chartCircle " + d.type)
               .attr("id", d => d.feature_class)
+
+          // Set different sizing for points and uncetainty bands on mobile and desktop
+          let pointSize = this.mobileView ? 5 : 6
+          dataPoints.attr("r", pointSize)
+          dataBands.style("stroke-width", pointSize*2)
+          dataBandBkgds.style("stroke-width", pointSize*2)
           
           // Append rectangle that are the width of the chart that we can use to trigger interaction
           let svgInteractionGroup = this.svg.append("g")
             .attr("id", "interaction-container")
 
-          svgInteractionGroup.selectAll("interactionRectangle")
+          let interactionRectangles = svgInteractionGroup.selectAll("interactionRectangle")
             .data(data)
             .enter()
             .append("rect")
@@ -281,6 +331,9 @@ export default {
               .style("fill", "white")
               .style("opacity", 0)
               .on("click", d => self.populateCard(d))
+
+          if (this.mobileView===false) {
+            interactionRectangles
               .on("mouseover", function(d) {
                 let current_feature = d.feature_class;
                 self.mouseoverRect(current_feature)
@@ -289,6 +342,7 @@ export default {
                 let current_feature = d.feature_class;
                 self.mouseoutRect(current_feature)
               })
+          }
           
         },
         mouseoverRect(current_feature) {
@@ -316,21 +370,31 @@ export default {
           const self = this;
 
           // Populate card with information
-          this.cardTitle = d.feature_label;
+          this.cardTitle = d.feature_title;
           this.cardType = d.type.charAt(0).toUpperCase() + d.type.slice(1);
           switch (d.type) {
             case 'pool':
-              this.cardColor = '#bf8508';
+              this.cardColor = '#9C6D07'; // 5:1 contrast (since text)
               break;
             case 'flux':
-              this.cardColor = "#0aa687";
+              this.cardColor = "#06846A"; // 5:1 contrast (since text)
               break;
             case 'example':
-              this.cardColor = "#919191";
+              this.cardColor = "#6E6E6E"; // 5:1 contrast (since text)
               break;
           }
-          this.cardFeatureSize = 'Estimate: ' + this.d3.format(',')(d.value_km_3) + ' ' +  d.units
-          this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low) + ' - ' + this.d3.format(',')(d.range_high) + ' ' +  d.units
+
+          // Provide volume/rate estimate
+          let prefix = d.type==='flux' ? 'Rate ' : 'Volume '
+          this.cardFeatureSize = prefix + 'estimate: ' + this.d3.format(',')(d.value_km_3) + ' ' +  d.units
+
+          // Provide range
+          if (d.type != 'example') {
+            this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low) + ' - ' + this.d3.format(',')(d.range_high) + ' ' +  d.units
+          } else {
+            this.cardFeatureRange = ''
+          }
+
           // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
           this.cardImageSource = self.imagePath(d.image_file)
           this.cardImageSourceWebp = self.imagePath(d.image_file + '?webp')
@@ -344,15 +408,55 @@ export default {
         changeXScale() {
           this.setXScale();
           this.redraw();
+          this.setAxisExplanation();
         },
-        setXAxisNumberFormat(currentScale) {
+        setAxisExplanation() {
+          this.axisExplanation = this.scaleType==='log' ? 
+                  'Right now, you\'re looking at the log scale x-axis. When you move a fixed distance on a log axis, you multiply the starting value by a value of 10. Using a log scale is useful when values are distributed across many orders of magnitude.' : 
+                  'Right now, you\'re looking at the linear scale x-axis. When you move a fixed distance on a linear axis, you add a fixed value to the starting value.'
+        },
+        setXAxisNumberFormat(currentScale, currentlyMobile) {
           const self = this;
 
-          if (currentScale === 'log') {
-            this.xAxis.tickFormat(d => this.xScale.tickFormat(0, self.d3.format(".1s"))(d).replace("G","B"))
-          } else if (currentScale === 'linear') {
-            this.xAxis.tickFormat(d => this.customNumberFormat(d))
+          if ((currentScale === 'log' ) && (currentlyMobile===false)) {
+            this.xAxis
+              .ticks(10)
+              .tickFormat(d => this.xScale.tickFormat(0, self.d3.format(".1s"))(d).replace("G","B"))
+          } else if ((currentScale === 'log' ) && (currentlyMobile===true)) {
+            this.xAxis
+              .ticks(10)
+              .tickFormat(d => this.xScale.tickFormat(0, self.d3.format(".1s"))(d).replace("G","B"))
+          } else if ((currentScale === 'linear') && (currentlyMobile===false)) {
+            this.xAxis
+              .ticks(10)
+              .tickFormat(d =>this.customNumberFormat(d))
+          }  else if (currentScale === 'linear' && currentlyMobile===true) {
+            this.xAxis
+              .ticks(6)
+              .tickFormat(d =>this.customNumberFormat(d))
           }
+        },
+        placeYAxisText(currentFeature, currentlyShowingUncertainty) {
+          const self = this;
+
+          // Pull data associated with y axis label
+          let featureData = self.volume.filter(function(dataRow) {
+            return dataRow.feature_label === currentFeature
+          })[0]
+
+          // Identify feature type (pool/flux/example)
+          let featureType = featureData.type
+
+          // Set buffer distance between point and label
+          let xBuffer = 10;
+
+          // Set position of y axis label
+          if (featureType === 'example' || currentlyShowingUncertainty === false) {
+            return self.xScale(featureData.value_km_3) + xBuffer
+          } else if ((featureType != 'example') && (currentlyShowingUncertainty === true)) {
+            return self.xScale(featureData.range_high) + xBuffer
+          }
+          
         },
         redraw() {
           const self = this;
@@ -360,8 +464,9 @@ export default {
           const animationDuration = 2000;
 
           // Reset number format for x axis
-          self.setXAxisNumberFormat(this.scaleType)
+          self.setXAxisNumberFormat(this.scaleType, this.mobileView)
 
+          // Shift chart elements
           this.domXAxis.transition()
               .duration(animationDuration)
               .call(self.xAxis.scale(this.xScale));
@@ -383,25 +488,46 @@ export default {
             .transition()
             .duration(animationDuration)
             .attr("x1", d => self.xScale(d.value_km_3))
-
+          
+          // If on mobile, shift y axis labels
+          if (this.mobileView) {
+            console.log(self.yAxis)
+            self.yAxis.selectAll("text")
+              .transition()
+              .duration(animationDuration)
+              .attr("x", d => self.placeYAxisText(d, this.showUncertainty))
+          }
     },
     }
 }
 </script>
 <style scoped lang="scss">
-  $lightestGrey: #949494;
-  $darkGrey: #6E6E6E;
+  $poolColor: #bf8508; //3.2:1 contrast
+  $fluxColor: #0aa687; //3:1 contrast
+  $poolColorDark: #9C6D07; //4.5:1 contrast
+  $fluxColorDark: #06846A; //4.5:1 contrast
+  $lightestGrey: #949494; //3:1 contrast
+  $neutralGrey: #919191; //3.15:1 contrast
+  $darkGrey: #6E6E6E; //5:1 contrast
   #page-content {
     display: block;
   }
   #chart-container {
     height: 70vh;
-    width: 90vw;
+    // width: 90vw;
     margin-top: 1vh;
     margin-bottom: 2vh;
   }
   #caption-container {
     display: block;
+  }
+  .poolText {
+    color: $poolColor;
+    font-weight: 500;
+  }
+  .fluxText {
+    color: $fluxColor;
+    font-weight: 500;
   }
   .button {
     --tw-bg-opacity: 1;
@@ -411,8 +537,8 @@ export default {
     margin-left: auto;
     margin-right: 2px;
     margin-top: 0.5rem;
-    max-width: 10%;
-    width: 24rem;
+    padding: 5px 8px 5px 8px;;
+    max-width: 24rem;
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
@@ -420,6 +546,10 @@ export default {
   .button:hover {
     background-color: $darkGrey;
     color: white;
+    @media screen and (max-width: 600px) {
+      background-color: white;
+      color: black;
+    }
   }
 
 </style>
@@ -430,10 +560,13 @@ export default {
   $Cairo: 'Cairo', sans-serif;
   $Assistant: 'Assistant', sans-serif;
 
-  $poolColor: #bf8508;
-  $fluxColor: #0aa687;
-  $neutralGrey: #919191;
-  $lightestGrey: #949494;
+  $poolColor: #bf8508; //3.2:1 contrast
+  $fluxColor: #0aa687; //3:1 contrast
+  $poolColorDark: #9C6D07; //4.5:1 contrast
+  $fluxColorDark: #06846A; //4.5:1 contrast
+  $lightestGrey: #949494; //3:1 contrast
+  $neutralGrey: #919191; //3.15:1 contrast
+  $darkGrey: #6E6E6E; //5:1 contrast
 
 
   .pool {
@@ -472,7 +605,7 @@ export default {
     padding: 1em 0 0 0; 
     font-family: $Assistant;
     @media screen and (max-width: 600px) {
-        font-size: 1m;
+        font-size: 1em;
     }
   }
   .x_axis text {
@@ -480,7 +613,15 @@ export default {
     padding: 1em 0 0 0; 
     font-family: $Assistant;
     @media screen and (max-width: 600px) {
-        font-size: 1m;
+        font-size: 1em;
+    }
+  }
+  .x_label {
+    font-size: 1em;
+    padding: 1em 0 0 0; 
+    font-family: $Assistant;
+    @media screen and (max-width: 600px) {
+        font-size: 0.9em;
     }
   }
 </style>
