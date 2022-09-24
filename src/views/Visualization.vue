@@ -1,6 +1,5 @@
 <template>
   <div id="visualization">
-    <h1>Pools and Fluxes in the Water Cycle</h1>
     <PoolFluxChart />
   </div>
 </template>

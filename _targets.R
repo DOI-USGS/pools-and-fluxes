@@ -1,65 +1,92 @@
 library(targets)
-library(dssecrets)
 library(tidyverse)
 
 options(tidyverse.quiet = TRUE)
+tar_option_set(packages = c('readxl', 'aws.s3', 'magick'))
 
 source("data-src/s3_upload.R")
-source("data-src/prep_logpile_data.R")
 
 list(
   tar_target(
-    abbott_data,
-    # magnitude of pools and fluxes
-    read_csv('in/abbott-pools-and-fluxes.csv',
-             skip = 1,
-             col_types = c('ccccnnn'),
-             col_names = c('Type','Category','Feature_group','Feature','Vol_1000km3','Vol_km3', "Vol_m3"))
+    water_volume_csv,
+    # magnitude of pools and fluxes and file paths/credits for images
+    'public/data/pools-fluxes-examples-limited.csv',
+    format = 'file'
   ),
   tar_target(
-    image_data,
-    # contains image file names that correspond to pools and fluxes.
-    # derived from sheet Bekah is working on, so keeping separate from main data
-    read_csv('in/abbott-pools-and-fluxes_images.csv',
-             skip = 1,
-             col_types = c('cccccc'),
-             col_names = c('Type','Category','Feature_group','Feature',"image_file", "image_credit"))
+    water_volume_data,
+    # magnitude of pools and fluxes and file paths/credits for images
+    read_csv(water_volume_csv)
   ),
   tar_target(
-    water_volume_logpile_csv,
-    prep_logpile_data(abbott_data, image_data, file_out = 'out/water_volume_logpile.csv'),
-    format = "file"
-  ),
-  tar_target(
-    water_volume_logpile_log,
-    s3_upload(filepath_s3 = "visualizations/data/abbott_pools_and_fluxes.csv",
+    # push file to prod on s3 so accessible by vue
+    water_volume_s3,
+    s3_upload(filepath_s3 = "visualizations/data/water_volumes.csv",
               on_exists = "replace",
-              filepath_local = water_volume_logpile_csv
-  )),
-  tar_target(
-    # images to upload to s3
-    water_images,
-    image_data %>%
-      distinct(Feature, image_file, image_credit) %>%
-      filter(!is.na(image_file))
+              filepath_local = water_volume_csv)
   ),
   tar_target(
-    image_upload_log, {
-      file_name <- water_images$image_file
+    # find images to put in s3
+    water_image_basenames,
+    water_volume_data %>%
+      distinct(feature_label, feature_class, image_file, image_credit) %>%
+      filter(!(is.na(image_file) | image_file == "NA")) |>
+      pull(image_file)
+  ),
+  tar_target(
+    water_images,
+    file.path('Images', water_image_basenames),
+    pattern = map(water_image_basenames),
+    format = 'file'
+  ),
+
+  # compress images via rescaling size and reduce dpi (density) output
+  tar_target(
+    ## export as png
+    image_scaled_png,{
+      out_file <- sprintf('tmp/%s', basename(water_images))
+      image_read(water_images) |>
+        image_scale("x300") |>
+        image_write(out_file, density = 92)
+      return(out_file)
+    },
+    pattern = map(water_images),
+    format = 'file'
+  ),
+  tar_target(
+    ## export as webp to optimize browser delivery
+    image_scaled_webp,{
+      file_name <- str_extract(basename(water_images), ".+\\.")
+      out_file <- sprintf('tmp/%swebp', file_name)
+      image_read(water_images) |>
+        image_scale("x200") |>
+        image_write(out_file, density = 92, compression = "WebP")
+      return(out_file)
+    },
+    pattern = map(water_images),
+    format = 'file'
+  ),
+  tar_target(
+    image_list,
+    c(image_scaled_png, image_scaled_webp)
+  ),
+  # store compressed images in s3
+  tar_target(
+    image_upload_s3, {
+      file_local <- image_list
+      file_name <- gsub('tmp/', '', file_local)
       file_s3 <- sprintf('visualizations/images/%s', file_name)
-      file_local <- sprintf('Images/%s', file_name)
-      file_parse <- gsub('.', '_', file_name, fixed = TRUE)
       s3_upload(filepath_s3 = file_s3,
                 on_exists = "replace",
                 filepath_local = file_local
       )
       },
-    pattern = map(water_images)
+    pattern = map(image_list)
   ),
   tar_target(
     upload_log_csv,{
       file_out <- 'out/upload_log.csv'
-    bind_rows(water_volume_logpile_log, image_upload_log) %>%
+    bind_rows(water_volume_s3, image_upload_s3) %>%
       write_csv(file_out)
       return(file_out)
     },

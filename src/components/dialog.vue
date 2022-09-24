@@ -3,21 +3,25 @@
 
 
     <div class="dialog">
-      <div class="dialog__header" background-color="color">
+      <div class="dialog__header" :style="{'background-color': color}">
         <h3 class="dialog__type" v-text="type"></h3>
       </div>
 
-      <hr />
+      <hr class="dialog__break"/>
 
       <div class="dialog__content">
         <h2 class="dialog__title" v-text="title"></h2>
         <p class="dialog__size" v-text="size"></p>
         <p class="dialog__range" v-text="range"></p>
-        <img v-bind:src="source" width="200px" height="200px">
+        <picture>
+          <source v-bind:srcset="sourceWebp" type="image/webp">
+          <source v-bind:srcset="source" type="image/png">
+          <img v-bind:src="sourceWebp" width="200px" height="200px" v-bind:alt="altText">
+        </picture>
         <p class="dialog__definition" v-text="definition"></p>
       </div>
     
-      <hr />
+      <hr class="dialog__break"/>
 
       <div class="dialog__footer">
         <button @click="close" class="button dialog__close">Close</button>
@@ -30,7 +34,7 @@
 
 <script>
 export default {
-    props: ['show', 'title', 'type', 'color', 'size', 'range', 'source', 'definition', 'close']
+    props: ['show', 'title', 'type', 'color', 'size', 'range', 'source', 'sourceWebp', 'definition', 'close', 'altText']
 }
 </script>
 <style>
@@ -52,13 +56,19 @@ export default {
   --tw-bg-opacity: 1;
   background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
   border-radius: 0.75rem;
+  overflow: hidden;
   margin-left: auto;
   margin-right: auto;
   margin-top: 2.5rem;
   max-width: 90%;
   width: 24rem;
 }
+.dialog__break {
+  border: 0.5px solid white;
+}
 .dialog__header {
+  color: #ffffff;
+  -moz-border-radius: 0.75rem 0.75rem 0rem 0rem;
   padding-left: 0.75rem;
   padding-right: 0.75rem;
   padding-top: 0.25rem;
