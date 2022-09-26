@@ -565,13 +565,16 @@ export default {
   $darkGrey: #6E6E6E; //5:1 contrast
   #page-content {
     display: block;
+    max-width: 1500px;
+    margin: 0 auto;
   }
   #chart-container {
     min-height: 400px;
     height: 75vh;
     width: 90vw;
     max-width: 1500px;
-    margin: 1vh auto;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
   }
   #caption-container {
     display: block;
