@@ -110,6 +110,9 @@ h3{
   padding-top: .5em;
   font-family: $Assistant;
   font-weight: 300;
+  @media screen and (max-height: 770px) {
+        font-size: 1.2em;
+    }
   @media screen and (max-width: 600px) {
       font-size: 0.9em;
   }  
