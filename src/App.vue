@@ -84,7 +84,7 @@ body {
       }
   }
 h1{
-  font-size: 2.3em;
+  font-size: 2.6em;
   font-weight: 300;
   font-family: $Assistant;
   line-height: 1;
@@ -114,6 +114,9 @@ h3{
       font-size: 0.9em;
   }  
 }
+.emph {
+  font-weight: 500;
+}
 p {
   font-size: 1em;
   padding: 0.5em 0 0 0; 
@@ -133,5 +136,9 @@ label {
 .button {
   padding: 0.2em 0 0.2em 0; 
   font-family: $Assistant;
+  font-size: 1em;
+  @media screen and (max-width: 600px) {
+      font-size: 0.8em;
+  }
 }
 </style>

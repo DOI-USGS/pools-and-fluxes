@@ -599,17 +599,19 @@ export default {
   .chartBand {
     opacity: 0.3;
   }
-  // Show y axis while troubleshooting chart height issue
-  // .y_axis line {
-  //   visibility:hidden;
-  // }
-  // .y_axis path {
-  //   visibility:hidden;
-  // }
+  .y_axis line {
+    visibility:hidden;
+  }
+  .y_axis path {
+    visibility:hidden;
+  }
   .y_axis text {
-    font-size: 1em;
+    font-size: 1.3em;
     padding: 1em 0 0 0; 
     font-family: $Assistant;
+    @media screen and (max-height: 1200px) {
+        font-size: 1.2em;
+    }
     @media screen and (max-width: 600px) {
         font-size: 1em;
     }
@@ -627,7 +629,7 @@ export default {
     padding: 1em 0 0 0; 
     font-family: $Assistant;
     @media screen and (max-width: 600px) {
-        font-size: 0.9em;
+        font-size: 0.8em;
     }
   }
 </style>
