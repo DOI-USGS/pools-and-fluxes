@@ -2,10 +2,9 @@
   <section>
     <div id="page-content">
       <h1><span class='poolText emph' >Pools</span> and <span class='fluxText emph'>fluxes</span> in the water cycle</h1>
-      <br>
-      <h3><span class='poolText emph' >Pools</span> are places where water is stored, like the ocean. <span class='fluxText emph'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use.</h3>
-      <h3>Learn more about the water cycle and see the water cycle diagram on the <a href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></h3>
-      <h3 class = "emph">Click on any row of the chart to pull up more information</h3>
+      <p><span class='poolText emph' >Pools</span> are places where water is stored, like the ocean. <span class='fluxText emph'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use.</p>
+      <p>Learn more about the water cycle and see the water cycle diagram on the <a href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></p>
+      <p class = "emph">Click on any row of the chart to pull up more information</p>
       <dialogCard 
         :show="showDialog" 
         :title="cardTitle" 
@@ -657,7 +656,7 @@ export default {
     visibility:hidden;
   }
   .y_axis text {
-    font-size: 1.3em;
+    font-size: 1.4em;
     padding: 1em 0 0 0; 
     font-family: $Assistant;
     @media screen and (max-height: 770px) {
@@ -668,16 +667,24 @@ export default {
     }
   }
   .x_axis text {
-    font-size: 1em;
+    font-size: 1.4em;
     padding: 1em 0 0 0; 
     font-family: $Assistant;
-    @media screen and (max-width: 600px) {
-        font-size: 1em;
+    @media screen and (max-height: 770px) {
+        font-size: 1.2em;
     }
+    @media screen and (max-width: 600px) {
+        font-size: 1.1em;
+    }
+  }
+  #x-label-container {
+    text-align: center;
+    height: 1.3em;
+    line-height: 1em;
   }
   .x_label {
     font-size: 1em;
-    padding: 1em 0 0 0; 
+    padding: 0em 0 0 0;
     font-family: $Assistant;
     @media screen and (max-width: 600px) {
         font-size: 0.8em;
