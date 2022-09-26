@@ -231,12 +231,12 @@ export default {
             .attr("class", "x_axis")
 
           // Add x axis title
-          this.svgChart.append("text")
-            .attr("class", "x_label")
-            .attr("text-anchor", "middle")
-            .attr("x", this.chartWidth/2)
-            .attr("y", this.chartHeight + 42)
-            .text("Pool volume (km³) or flux rate (km³ per year)")
+          this.svgChart.append("foreignObject")
+            .attr("id", "x-label-container")
+            .attr("x", 0)
+            .attr("y", this.chartHeight+25)
+            .attr("width", this.chartWidth)
+            .html("<p class='x_label'><span class='poolText emph'>Pool</span> volume (km³) or <span class='fluxText emph'>flux</span> rate (km³ per year)</p>")
 
           // y axis scale for lollipop chart
           const yScale = this.d3.scaleBand()
@@ -635,6 +635,12 @@ export default {
   .example {
     fill: $neutralGrey;
     stroke: $neutralGrey;
+  }
+  .poolText {
+    color: $poolColor;
+  }
+  .fluxText {
+    color: $fluxColor;
   }
   .chartLine {
     stroke-width: 1px;
