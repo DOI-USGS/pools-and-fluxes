@@ -219,6 +219,7 @@ export default {
 
           const self = this;
 
+          //// ADD AXES
           this.xAxis = this.d3.axisBottom()
             .scale(self.xScale)
 
@@ -248,6 +249,7 @@ export default {
             .call(this.d3.axisLeft(yScale))
             .attr("class", "y_axis")
 
+          //// ADD CHART ELEMENTS
           // add lollipop lines
           let dataLines = this.svgChart.selectAll("chartLine")
             .data(data)
