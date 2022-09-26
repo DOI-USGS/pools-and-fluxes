@@ -1,10 +1,11 @@
 <template>
   <section>
     <div id="page-content">
-      <h1><span class='poolText' >Pools</span> and <span class='fluxText'>fluxes</span> in the water cycle</h1>
-      <p><span class='poolText' >Pools</span> are places where water is stored, like the ocean. <span class='fluxText'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use.</p>
-      <p>Learn more about the water cycle and see the water cycle diagram on the <a href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></p>
-      <h3>Click on any row of the chart to pull up more information</h3>
+      <h1><span class='poolText emph' >Pools</span> and <span class='fluxText emph'>fluxes</span> in the water cycle</h1>
+      <br>
+      <h3><span class='poolText emph' >Pools</span> are places where water is stored, like the ocean. <span class='fluxText emph'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use.</h3>
+      <h3>Learn more about the water cycle and see the water cycle diagram on the <a href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></h3>
+      <h3 class = "emph">Click on any row of the chart to pull up more information</h3>
       <dialogCard 
         :show="showDialog" 
         :title="cardTitle" 
