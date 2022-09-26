@@ -96,11 +96,11 @@ export default {
     this.uncertaintyPrompt = "Show ranges for estimates"
 
     // chart elements
-    this.margin = this.mobileView ? { top: 10, right: 10, bottom: 50, left:  10 } : { top: 10, right: 15, bottom: 50, left: 300 }
+    this.margin = this.mobileView ? { top: 10, right: 15, bottom: 50, left:  10 } : { top: 10, right: 15, bottom: 50, left: 250 }
     this.w = document.getElementById("chart-container").offsetWidth;
     this.h = document.getElementById("chart-container").offsetHeight;
     this.chartWidth = this.w - this.margin.left - this.margin.right; 
-    this.chartHeight = this.h - this.margin.top - this.margin.bottom; // if set based on this.h, chart draws differently on laptop and widescreen 
+    this.chartHeight = this.h - this.margin.top - this.margin.bottom;
     this.chartContainer = this.d3.select("#chart-container")
     this.captionContainer = this.d3.select("#caption-container")
     
@@ -113,7 +113,7 @@ export default {
     // create svg that will hold chart
     this.svg = this.chartContainer.select('.chart')
         .attr("viewBox", "0 0 " + (this.chartWidth + this.margin.left + this.margin.right) + " " + (this.chartHeight + this.margin.top + this.margin.bottom))
-        // .attr("preserveAspectRatio", "xMidYMid meet")
+        .attr("preserveAspectRatio", "xMidYMid meet")
         .attr("width", '100%')
         .attr("height", '100%')
     this.svgChart = this.svg.append("g")
@@ -254,6 +254,9 @@ export default {
             this.yAxis.selectAll('text')
               .attr("text-anchor","start")
               .attr("x", d => self.placeYAxisText(d, this.showUncertainty))
+          } else {
+            this.yAxis.selectAll('text')
+              .attr("class", d => "yAxisText " + self.getLabelData(d).feature_class) //assign class for desktop interaction
           }
 
           // add lollipop lines
@@ -273,7 +276,8 @@ export default {
           dataLines.style("opacity", d => this.mobileView ? 1 : 0)
 
           // add lines for uncertainty bands
-          let dataBands = this.svgChart.selectAll("chartBandBkgd")
+          // background white band
+          let dataBandBkgds = this.svgChart.selectAll("chartBandBkgd")
             .data(data)
             .enter()
             .append("line")
@@ -286,9 +290,8 @@ export default {
               .attr("id", d => d.feature_class)
               .style("stroke-linecap", "round")
               .style("opacity", 0)
-              
-              
-          let dataBandBkgds = this.svgChart.selectAll("chartBand")
+          // colored partially transparent band
+          let dataBands = this.svgChart.selectAll("chartBand")
             .data(data)
             .enter()
             .append("line")
@@ -318,8 +321,9 @@ export default {
           dataBands.style("stroke-width", pointSize*2)
           dataBandBkgds.style("stroke-width", pointSize*2)
           
-          // Append rectangle that are the width of the chart that we can use to trigger interaction
-          let svgInteractionGroup = this.svg.append("g")
+          //// SET UP INTERACTION
+          // Append rectangles that overlay the chart that we can use to trigger interaction
+          let svgInteractionGroup = this.svgChart.append("g")
             .attr("id", "interaction-container")
 
           let interactionRectangles = svgInteractionGroup.selectAll("interactionRectangle")
@@ -327,15 +331,21 @@ export default {
             .enter()
             .append("rect")
               .attr("class", d => "interactionRectangle " + d.feature_class)
-              .attr("x", 1)
-              .attr("y", d => yScale(d.feature_label) + yScale.bandwidth()) // Not aligning depending on how chart height is set
-              .attr("width", this.chartWidth + this.margin.left + this.margin.right - 2)
+              .attr("y", d => yScale(d.feature_label))
               .attr("height", yScale.bandwidth())
               .style("fill", "white")
-              .style("opacity", 0.5)
-              .style("stroke", "black")
-              .on("click", d => self.populateCard(d))
+              .style("opacity", 0)
+              .on("click", d => self.populateCard(d)) //trigger click on desktop and mobile
 
+          // Set different x placement and width for interaction rectangles on mobile and desktop
+          // on mobile - cover full width of chart + left and right margins
+          // on desktop - start at y axis and cover width of chart + right margin
+          let rectX = this.mobileView ? -this.margin.left : 0
+          let rectWidth = this.mobileView ? this.chartWidth + this.margin.left + this.margin.right : this.chartWidth + this.margin.right
+          interactionRectangles.attr("x", rectX)
+          interactionRectangles.attr("width", rectWidth)
+
+          // On desktop, add mouseover to interaction rectangles that overlay chart
           if (this.mobileView===false) {
             interactionRectangles
               .on("mouseover", function(d) {
@@ -347,22 +357,55 @@ export default {
                 self.mouseoutRect(current_feature)
               })
           }
-          
+
+          // On desktop, dadd additional interaction rectangles over y-axis text to trigger click and interaction
+          if (this.mobileView===false) {
+            let interactionRectanglesText = svgInteractionGroup.selectAll("interactionRectangleText")
+              .data(data)
+              .enter()
+              .append("rect")
+                .attr("class", d => "interactionRectangleText " + d.feature_class)
+                .attr("x", -this.margin.left)
+                .attr("y", d => yScale(d.feature_label))
+                .attr("width", this.margin.left)
+                .attr("height", yScale.bandwidth())
+                .style("fill", "white")
+                .style("opacity", 0)
+                .on("click", d => self.populateCard(d))
+                .on("mouseover", function(d) {
+                  let current_feature = d.feature_class;
+                  self.mouseoverRect(current_feature)
+                })
+                .on("mouseout", function(d) {
+                  let current_feature = d.feature_class;
+                  self.mouseoutRect(current_feature)
+                })
+          }
         },
         mouseoverRect(current_feature) {
           const self = this;
+          // dim y axis text for all but mouseovered row
+          this.d3.selectAll('.yAxisText')
+            .style("opacity", 0.6)
+          this.d3.selectAll('.yAxisText.' + current_feature)
+            .style("opacity", 1)
+          // make interaction rectangles for all but mouseovered row slightly opaque to dim chart
           this.d3.selectAll('.interactionRectangle')
             .style("opacity", 0.6)
-            this.d3.selectAll('.interactionRectangle.' + current_feature)
+          this.d3.selectAll('.interactionRectangle.' + current_feature)
             .style("opacity", 0)
           this.d3.selectAll(".chartLine." + current_feature)
             .style("opacity", 1)
         },
         mouseoutRect(current_feature) {
           const self = this;
+          // Make all y-axis text fully opaque
+          this.d3.selectAll('.yAxisText')
+            .style("opacity", 1)
+          // Make chart interaction rectangles fully transparent
           this.d3.selectAll('.interactionRectangle')
             .style("opacity", 0)
-          this.svgChart.selectAll(".chartLine." + current_feature)
+          this.d3.selectAll(".chartLine." + current_feature)
             .style("opacity", 0)
         },
         imagePath(file){
@@ -440,13 +483,20 @@ export default {
               .tickFormat(d =>this.customNumberFormat(d))
           }
         },
-        placeYAxisText(currentFeature, currentlyShowingUncertainty) {
+        getLabelData(currentFeature) {
           const self = this;
-
           // Pull data associated with y axis label
           let featureData = self.volume.filter(function(dataRow) {
             return dataRow.feature_label === currentFeature
           })[0]
+
+          return (featureData)
+        },
+        placeYAxisText(currentFeature, currentlyShowingUncertainty) {
+          const self = this;
+
+          // Pull data associated with y axis label
+          let featureData = self.getLabelData(currentFeature)
 
           // Identify feature type (pool/flux/example)
           let featureType = featureData.type
@@ -517,23 +567,20 @@ export default {
     display: block;
   }
   #chart-container {
+    min-height: 400px;
     height: 70vh;
-    max-height: 100%;
     width: 90vw;
-    max-width: 100%;
-    margin-top: 1vh;
-    margin-bottom: 2vh;
+    max-width: 1500px;
+    margin: 1vh auto;
   }
   #caption-container {
     display: block;
   }
   .poolText {
     color: $poolColor;
-    font-weight: 500;
   }
   .fluxText {
     color: $fluxColor;
-    font-weight: 500;
   }
   .button {
     --tw-bg-opacity: 1;
