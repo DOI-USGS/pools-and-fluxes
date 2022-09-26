@@ -248,16 +248,6 @@ export default {
             .call(this.d3.axisLeft(yScale))
             .attr("class", "y_axis")
 
-          // Style y-axis text on mobile
-          if (this.mobileView===true) {
-            this.yAxis.selectAll('text')
-              .attr("text-anchor","start")
-              .attr("x", d => self.placeYAxisText(d, this.showUncertainty))
-          } else {
-            this.yAxis.selectAll('text')
-              .attr("class", d => "yAxisText " + self.getLabelData(d).feature_class) //assign class for desktop interaction
-          }
-
           // add lollipop lines
           let dataLines = this.svgChart.selectAll("chartLine")
             .data(data)
@@ -314,11 +304,26 @@ export default {
               .attr("class", d => "chartCircle " + d.type)
               .attr("id", d => d.feature_class)
 
+          //// SET UP DIFFERENT STYLING OF CHART ELEMENTS ON DESKTOP AND MOBILE
           // Set different sizing for points and uncetainty bands on mobile and desktop
           let pointSize = this.mobileView ? 5 : 6
           dataPoints.attr("r", pointSize)
           dataBands.style("stroke-width", pointSize*2)
           dataBandBkgds.style("stroke-width", pointSize*2)
+
+          // Style y-axis text on mobile and desktop
+          let textRectangleBuffer = 5
+          let desktopTextAxisBuffer = pointSize + textRectangleBuffer
+          let desktopRectangleAxisOffset = pointSize + textRectangleBuffer/2
+          if (this.mobileView===true) {
+            this.yAxis.selectAll('text')
+              .attr("text-anchor","start")
+              .attr("x", d => self.placeYAxisText(d, this.showUncertainty))
+          } else {
+            this.yAxis.selectAll('text')
+              .attr("class", d => "yAxisText " + self.getLabelData(d).feature_class) //assign class for desktop interaction
+              .attr("x", -desktopTextAxisBuffer)
+          }
           
           //// SET UP INTERACTION
           // Append rectangles that overlay the chart that we can use to trigger interaction
@@ -339,8 +344,8 @@ export default {
           // Set different x placement and width for interaction rectangles on mobile and desktop
           // on mobile - cover full width of chart + left and right margins
           // on desktop - start at y axis and cover width of chart + right margin
-          let rectX = this.mobileView ? -this.margin.left : 0
-          let rectWidth = this.mobileView ? this.chartWidth + this.margin.left + this.margin.right : this.chartWidth + this.margin.right
+          let rectX = this.mobileView ? -this.margin.left : -desktopRectangleAxisOffset
+          let rectWidth = this.mobileView ? this.chartWidth + this.margin.left + this.margin.right : desktopRectangleAxisOffset + this.chartWidth + this.margin.right
           interactionRectangles.attr("x", rectX)
           interactionRectangles.attr("width", rectWidth)
 
@@ -366,7 +371,7 @@ export default {
                 .attr("class", d => "interactionRectangleText " + d.feature_class)
                 .attr("x", -this.margin.left)
                 .attr("y", d => yScale(d.feature_label))
-                .attr("width", this.margin.left)
+                .attr("width", this.margin.left-desktopRectangleAxisOffset)
                 .attr("height", yScale.bandwidth())
                 .style("fill", "white")
                 .style("opacity", 0)
@@ -606,7 +611,6 @@ export default {
       color: black;
     }
   }
-
 </style>
 <style lang="scss">
   // Fonts
