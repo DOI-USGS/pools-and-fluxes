@@ -1,10 +1,10 @@
 <template>
   <section>
     <div id="page-content">
-      <h1><span class='poolText' >Pools</span> and <span class='fluxText'>fluxes</span> in the water cycle</h1>
-      <p><span class='poolText' >Pools</span> are places where water is stored, like the ocean. <span class='fluxText'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use.</p>
+      <h1><span class='poolText emph' >Pools</span> and <span class='fluxText emph'>fluxes</span> in the water cycle</h1>
+      <p><span class='poolText emph' >Pools</span> are places where water is stored, like the ocean. <span class='fluxText emph'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use.</p>
       <p>Learn more about the water cycle and see the water cycle diagram on the <a href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></p>
-      <h3>Click on any row of the chart to pull up more information</h3>
+      <p class = "emph">Click on any row of the chart to pull up more information</p>
       <dialogCard 
         :show="showDialog" 
         :title="cardTitle" 
@@ -36,7 +36,7 @@
           <label><input type="radio" name="x-scale" value="linear"> linear </label>          
         </form>
         <p :text="axisExplanation">Compare the magnitude of major pools and fluxes of water on Earth. Switch between a linear and log scale x-axis using the toggle. {{ axisExplanation }}</p>
-        <p>The data for this chart are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019) Human domination of the global water cycle absent from depictions and perceptions.</a> Abbott et al. note that the estimate for each pool or flux "represents the most recent or comprehensive individual estimate". The ranges for each estimate, if shown, "represent the range of reported values and their uncertainties."</p>
+        <p>The data for this chart are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019) Human domination of the global water cycle absent from depictions and perceptions.</a> Abbott et al. note that the estimate for each pool or flux "represents the most recent or comprehensive individual estimate." The ranges for each estimate, if shown, "represent the range of reported values and their uncertainties."</p>
       </div>
     </div>
   </section>
@@ -95,10 +95,10 @@ export default {
     this.uncertaintyPrompt = "Show ranges for estimates"
 
     // chart elements
-    this.margin = this.mobileView ? { top: 10, right: 10, bottom: 50, left:  10 } : { top: 10, right: 15, bottom: 50, left: 300 }
+    this.margin = this.mobileView ? { top: 10, right: 15, bottom: 50, left:  10 } : { top: 10, right: 15, bottom: 50, left: 250 }
     this.w = document.getElementById("chart-container").offsetWidth;
     this.h = document.getElementById("chart-container").offsetHeight;
-    this.chartWidth = this.w - this.margin.left - this.margin.right;
+    this.chartWidth = this.w - this.margin.left - this.margin.right; 
     this.chartHeight = this.h - this.margin.top - this.margin.bottom;
     this.chartContainer = this.d3.select("#chart-container")
     this.captionContainer = this.d3.select("#caption-container")
@@ -113,6 +113,8 @@ export default {
     this.svg = this.chartContainer.select('.chart')
         .attr("viewBox", "0 0 " + (this.chartWidth + this.margin.left + this.margin.right) + " " + (this.chartHeight + this.margin.top + this.margin.bottom))
         .attr("preserveAspectRatio", "xMidYMid meet")
+        .attr("width", '100%')
+        .attr("height", '100%')
     this.svgChart = this.svg.append("g")
         .attr("transform","translate(" + this.margin.left + "," + this.margin.top + ")")
         .attr("id", "pool-flux-chart");
@@ -217,6 +219,7 @@ export default {
 
           const self = this;
 
+          //// ADD AXES
           this.xAxis = this.d3.axisBottom()
             .scale(self.xScale)
 
@@ -229,30 +232,24 @@ export default {
             .attr("class", "x_axis")
 
           // Add x axis title
-          this.svgChart.append("text")
-            .attr("class", "x_label")
-            .attr("text-anchor", "middle")
-            .attr("x", this.chartWidth/2)
-            .attr("y", this.chartHeight + 42)
-            .text("Pool volume (km³) or flux rate (km³ per year)")
+          this.svgChart.append("foreignObject")
+            .attr("id", "x-label-container")
+            .attr("x", 0)
+            .attr("y", this.chartHeight+25)
+            .attr("width", this.chartWidth)
+            .html("<p class='x_label'><span class='poolText emph'>Pool</span> volume (km³) or <span class='fluxText emph'>flux</span> rate (km³ per year)</p>")
 
           // y axis scale for lollipop chart
           const yScale = this.d3.scaleBand()
             .range([0, this.chartHeight])
             .domain(data.map(d => d.feature_label))
-            .padding(1);
+            .padding(0);
 
           this.yAxis = this.svgChart.append("g")
             .call(this.d3.axisLeft(yScale))
             .attr("class", "y_axis")
 
-          // Style y-axis text on mobile
-          if (this.mobileView===true) {
-            this.yAxis.selectAll('text')
-              .attr("text-anchor","start")
-              .attr("x", d => self.placeYAxisText(d, this.showUncertainty))
-          }
-
+          //// ADD CHART ELEMENTS
           // add lollipop lines
           let dataLines = this.svgChart.selectAll("chartLine")
             .data(data)
@@ -260,8 +257,8 @@ export default {
             .append("line")
               .attr("x1",  d => self.xScale(d.value_km_3))
               .attr("x2", self.xScale(xMin))
-              .attr("y1", d => yScale(d.feature_label))
-              .attr("y2", d => yScale(d.feature_label))
+              .attr("y1", d => yScale(d.feature_label) + yScale.bandwidth()/2)
+              .attr("y2", d => yScale(d.feature_label) + yScale.bandwidth()/2)
               .attr("class", d => "chartLine " + d.type + " " + d.feature_class)
               .attr("id", d => d.feature_class)
               .style("stroke-dasharray", ("1, 3"))
@@ -270,30 +267,30 @@ export default {
           dataLines.style("opacity", d => this.mobileView ? 1 : 0)
 
           // add lines for uncertainty bands
-          let dataBands = this.svgChart.selectAll("chartBandBkgd")
+          // background white band
+          let dataBandBkgds = this.svgChart.selectAll("chartBandBkgd")
             .data(data)
             .enter()
             .append("line")
             .filter(function(d) { return d.type === 'pool' || d.type === 'flux' })
               .attr("x1",  d => self.xScale(d.range_high))
               .attr("x2", d => self.xScale(d.range_low))
-              .attr("y1", d => yScale(d.feature_label))
-              .attr("y2", d => yScale(d.feature_label))
+              .attr("y1", d => yScale(d.feature_label) + yScale.bandwidth()/2)
+              .attr("y2", d => yScale(d.feature_label) + yScale.bandwidth()/2)
               .attr("class", d => "chartBandBkgd " + d.type)
               .attr("id", d => d.feature_class)
               .style("stroke-linecap", "round")
               .style("opacity", 0)
-              
-              
-          let dataBandBkgds = this.svgChart.selectAll("chartBand")
+          // colored partially transparent band
+          let dataBands = this.svgChart.selectAll("chartBand")
             .data(data)
             .enter()
             .append("line")
             .filter(function(d) { return d.type === 'pool' || d.type === 'flux' })
               .attr("x1",  d => self.xScale(d.range_high))
               .attr("x2", d => self.xScale(d.range_low))
-              .attr("y1", d => yScale(d.feature_label))
-              .attr("y2", d => yScale(d.feature_label))
+              .attr("y1", d => yScale(d.feature_label) + yScale.bandwidth()/2)
+              .attr("y2", d => yScale(d.feature_label) + yScale.bandwidth()/2)
               .attr("class", d => "chartBand " + d.type)
               .attr("id", d => d.feature_class)
               .style("stroke-linecap", "round")
@@ -305,18 +302,34 @@ export default {
             .enter()
             .append("circle")
               .attr("cx", d => self.xScale(d.value_km_3))
-              .attr("cy", d => yScale(d.feature_label))
+              .attr("cy", d => yScale(d.feature_label) + yScale.bandwidth()/2)
               .attr("class", d => "chartCircle " + d.type)
               .attr("id", d => d.feature_class)
 
+          //// SET UP DIFFERENT STYLING OF CHART ELEMENTS ON DESKTOP AND MOBILE
           // Set different sizing for points and uncetainty bands on mobile and desktop
           let pointSize = this.mobileView ? 5 : 6
           dataPoints.attr("r", pointSize)
           dataBands.style("stroke-width", pointSize*2)
           dataBandBkgds.style("stroke-width", pointSize*2)
+
+          // Style y-axis text on mobile and desktop
+          let textRectangleBuffer = 5
+          let desktopTextAxisBuffer = pointSize + textRectangleBuffer
+          let desktopRectangleAxisOffset = pointSize + textRectangleBuffer/2
+          if (this.mobileView===true) {
+            this.yAxis.selectAll('text')
+              .attr("text-anchor","start")
+              .attr("x", d => self.placeYAxisText(d, this.showUncertainty))
+          } else {
+            this.yAxis.selectAll('text')
+              .attr("class", d => "yAxisText " + self.getLabelData(d).feature_class) //assign class for desktop interaction
+              .attr("x", -desktopTextAxisBuffer)
+          }
           
-          // Append rectangle that are the width of the chart that we can use to trigger interaction
-          let svgInteractionGroup = this.svg.append("g")
+          //// SET UP INTERACTION
+          // Append rectangles that overlay the chart that we can use to trigger interaction
+          let svgInteractionGroup = this.svgChart.append("g")
             .attr("id", "interaction-container")
 
           let interactionRectangles = svgInteractionGroup.selectAll("interactionRectangle")
@@ -324,14 +337,21 @@ export default {
             .enter()
             .append("rect")
               .attr("class", d => "interactionRectangle " + d.feature_class)
-              .attr("x", 1)
               .attr("y", d => yScale(d.feature_label))
-              .attr("width", this.chartWidth + this.margin.left + this.margin.right - 2)
-              .attr("height", this.chartHeight/data.length) //yScale.bandwidth() should work but returns 0
+              .attr("height", yScale.bandwidth())
               .style("fill", "white")
               .style("opacity", 0)
-              .on("click", d => self.populateCard(d))
+              .on("click", d => self.populateCard(d)) //trigger click on desktop and mobile
 
+          // Set different x placement and width for interaction rectangles on mobile and desktop
+          // on mobile - cover full width of chart + left and right margins
+          // on desktop - start at y axis and cover width of chart + right margin
+          let rectX = this.mobileView ? -this.margin.left : -desktopRectangleAxisOffset
+          let rectWidth = this.mobileView ? this.chartWidth + this.margin.left + this.margin.right : desktopRectangleAxisOffset + this.chartWidth + this.margin.right
+          interactionRectangles.attr("x", rectX)
+          interactionRectangles.attr("width", rectWidth)
+
+          // On desktop, add mouseover to interaction rectangles that overlay chart
           if (this.mobileView===false) {
             interactionRectangles
               .on("mouseover", function(d) {
@@ -343,22 +363,55 @@ export default {
                 self.mouseoutRect(current_feature)
               })
           }
-          
+
+          // On desktop, dadd additional interaction rectangles over y-axis text to trigger click and interaction
+          if (this.mobileView===false) {
+            let interactionRectanglesText = svgInteractionGroup.selectAll("interactionRectangleText")
+              .data(data)
+              .enter()
+              .append("rect")
+                .attr("class", d => "interactionRectangleText " + d.feature_class)
+                .attr("x", -this.margin.left)
+                .attr("y", d => yScale(d.feature_label))
+                .attr("width", this.margin.left-desktopRectangleAxisOffset)
+                .attr("height", yScale.bandwidth())
+                .style("fill", "white")
+                .style("opacity", 0)
+                .on("click", d => self.populateCard(d))
+                .on("mouseover", function(d) {
+                  let current_feature = d.feature_class;
+                  self.mouseoverRect(current_feature)
+                })
+                .on("mouseout", function(d) {
+                  let current_feature = d.feature_class;
+                  self.mouseoutRect(current_feature)
+                })
+          }
         },
         mouseoverRect(current_feature) {
           const self = this;
+          // dim y axis text for all but mouseovered row
+          this.d3.selectAll('.yAxisText')
+            .style("opacity", 0.6)
+          this.d3.selectAll('.yAxisText.' + current_feature)
+            .style("opacity", 1)
+          // make interaction rectangles for all but mouseovered row slightly opaque to dim chart
           this.d3.selectAll('.interactionRectangle')
             .style("opacity", 0.6)
-            this.d3.selectAll('.interactionRectangle.' + current_feature)
+          this.d3.selectAll('.interactionRectangle.' + current_feature)
             .style("opacity", 0)
           this.d3.selectAll(".chartLine." + current_feature)
             .style("opacity", 1)
         },
         mouseoutRect(current_feature) {
           const self = this;
+          // Make all y-axis text fully opaque
+          this.d3.selectAll('.yAxisText')
+            .style("opacity", 1)
+          // Make chart interaction rectangles fully transparent
           this.d3.selectAll('.interactionRectangle')
             .style("opacity", 0)
-          this.svgChart.selectAll(".chartLine." + current_feature)
+          this.d3.selectAll(".chartLine." + current_feature)
             .style("opacity", 0)
         },
         imagePath(file){
@@ -436,13 +489,20 @@ export default {
               .tickFormat(d =>this.customNumberFormat(d))
           }
         },
-        placeYAxisText(currentFeature, currentlyShowingUncertainty) {
+        getLabelData(currentFeature) {
           const self = this;
-
           // Pull data associated with y axis label
           let featureData = self.volume.filter(function(dataRow) {
             return dataRow.feature_label === currentFeature
           })[0]
+
+          return (featureData)
+        },
+        placeYAxisText(currentFeature, currentlyShowingUncertainty) {
+          const self = this;
+
+          // Pull data associated with y axis label
+          let featureData = self.getLabelData(currentFeature)
 
           // Identify feature type (pool/flux/example)
           let featureType = featureData.type
@@ -511,23 +571,25 @@ export default {
   $darkGrey: #6E6E6E; //5:1 contrast
   #page-content {
     display: block;
+    max-width: 1500px;
+    margin: 0 auto;
   }
   #chart-container {
-    height: 70vh;
-    // width: 90vw;
+    min-height: 400px;
+    height: 75vh;
+    width: 90vw;
+    max-width: 1500px;
     margin-top: 1vh;
-    margin-bottom: 2vh;
+    margin-bottom: 1vh;
   }
   #caption-container {
     display: block;
   }
   .poolText {
     color: $poolColor;
-    font-weight: 500;
   }
   .fluxText {
     color: $fluxColor;
-    font-weight: 500;
   }
   .button {
     --tw-bg-opacity: 1;
@@ -551,7 +613,6 @@ export default {
       color: black;
     }
   }
-
 </style>
 <style lang="scss">
   // Fonts
@@ -581,6 +642,12 @@ export default {
     fill: $neutralGrey;
     stroke: $neutralGrey;
   }
+  .poolText {
+    color: $poolColor;
+  }
+  .fluxText {
+    color: $fluxColor;
+  }
   .chartLine {
     stroke-width: 1px;
     stroke: $lightestGrey;
@@ -601,27 +668,38 @@ export default {
     visibility:hidden;
   }
   .y_axis text {
-    font-size: 1.6em;
+    font-size: 1.4em;
     padding: 1em 0 0 0; 
     font-family: $Assistant;
+    @media screen and (max-height: 770px) {
+        font-size: 1.2em;
+    }
     @media screen and (max-width: 600px) {
         font-size: 1em;
     }
   }
   .x_axis text {
-    font-size: 1.3em;
+    font-size: 1.4em;
     padding: 1em 0 0 0; 
     font-family: $Assistant;
-    @media screen and (max-width: 600px) {
-        font-size: 1em;
+    @media screen and (max-height: 770px) {
+        font-size: 1.2em;
     }
+    @media screen and (max-width: 600px) {
+        font-size: 1.1em;
+    }
+  }
+  #x-label-container {
+    text-align: center;
+    height: 1.3em;
+    line-height: 1em;
   }
   .x_label {
     font-size: 1em;
-    padding: 1em 0 0 0; 
+    padding: 0em 0 0 0;
     font-family: $Assistant;
     @media screen and (max-width: 600px) {
-        font-size: 0.9em;
+        font-size: 0.8em;
     }
   }
 </style>
