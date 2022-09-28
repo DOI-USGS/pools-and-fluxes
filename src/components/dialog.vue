@@ -11,8 +11,8 @@
 
       <div class="dialog__content">
         <h2 class="dialog__title" v-text="title"></h2>
-        <p class="dialog__size" v-text="size"></p>
-        <p class="dialog__range" v-text="range"></p>
+        <p class="dialog__size"><a v-bind:href="dataSource" target="_blank" v-text="size"></a></p>
+        <p class="dialog__range" v-text="range">range</p>
         <picture>
           <source v-bind:srcset="sourceWebp" type="image/webp">
           <source v-bind:srcset="source" type="image/png">
@@ -34,7 +34,7 @@
 
 <script>
 export default {
-    props: ['show', 'title', 'type', 'color', 'size', 'range', 'source', 'sourceWebp', 'definition', 'close', 'altText']
+    props: ['show', 'title', 'type', 'color', 'size', 'range', 'source', 'dataSource', 'sourceWebp', 'definition', 'close', 'altText']
 }
 </script>
 <style>
@@ -93,6 +93,13 @@ export default {
 .dialog__size {
   line-height: 1rem;
   font-weight: 500;
+  padding: 0.25em 0 0 0;
+}
+.dialog__range {
+  line-height: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.25em 0 0 0;
+  color: #6E6E6E;
 }
 .dialog__range {
   line-height: 1rem;
@@ -101,7 +108,7 @@ export default {
 }
 .dialog__definition {
   line-height: 1.25rem;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.1rem;
 }
 .dialog__footer {
   display: flex;
