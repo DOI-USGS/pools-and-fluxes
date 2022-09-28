@@ -16,7 +16,9 @@
         <picture>
           <source v-bind:srcset="sourceWebp" type="image/webp">
           <source v-bind:srcset="source" type="image/png">
+          <a v-bind:href="imageSite" target="_blank">
           <img v-bind:src="sourceWebp" width="200px" height="200px" v-bind:alt="altText">
+          </a>
         </picture>
         <p class="dialog__definition" v-text="definition"></p>
       </div>
@@ -34,7 +36,7 @@
 
 <script>
 export default {
-    props: ['show', 'title', 'type', 'color', 'size', 'range', 'source', 'dataSource', 'sourceWebp', 'definition', 'close', 'altText']
+    props: ['show', 'title', 'type', 'color', 'size', 'range', 'dataSource', 'source', 'sourceWebp', 'imageSite', 'definition', 'close', 'altText']
 }
 </script>
 <style>

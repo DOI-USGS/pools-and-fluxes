@@ -11,7 +11,8 @@
         :type="cardType" 
         :color="cardColor" 
         :source="cardImageSource" 
-        :sourceWebp="cardImageSourceWebp" 
+        :sourceWebp="cardImageSourceWebp"
+        :imageSite="cardImageSite"
         :size="cardFeatureSize" 
         :range="cardFeatureRange"
         :dataSource="cardFeatureDataSource" 
@@ -78,8 +79,10 @@ export default {
       cardTitle: null,
       cardFeatureSize: null,
       cardFeatureRange:  null,
+      cardFeatureDataSource: null,
       cardImageSource: null,
       cardImageSourceWebp: null,
+      cardImageSite: null,
       cardFeatureDefinition: null,
       cardType: null,
       cardColor: null,
@@ -456,6 +459,7 @@ export default {
           this.cardImageSource = self.imagePath(d.image_file)
           this.cardImageSourceWebp = self.imagePath(d.image_file + '?webp')
           //this.cardImageSourceWebp = self.imagePath(d.image_file.substring(0, d.image_file.indexOf('.')) + '.webp')
+          this.cardImageSite = d.image_source
 
           // Provide volume/rate estimate
           let definitionPrefix = d.type==='example' ? 'Description: ' : 'Definition: '
