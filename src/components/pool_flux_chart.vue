@@ -392,12 +392,12 @@ export default {
           const self = this;
           // dim y axis text for all but mouseovered row
           this.d3.selectAll('.yAxisText')
-            .style("opacity", 0.6)
+            .style("opacity", 0.5)
           this.d3.selectAll('.yAxisText.' + current_feature)
             .style("opacity", 1)
           // make interaction rectangles for all but mouseovered row slightly opaque to dim chart
           this.d3.selectAll('.interactionRectangle')
-            .style("opacity", 0.6)
+            .style("opacity", 0.5)
           this.d3.selectAll('.interactionRectangle.' + current_feature)
             .style("opacity", 0)
           this.d3.selectAll(".chartLine." + current_feature)
@@ -583,6 +583,12 @@ export default {
     max-width: 1500px;
     margin-top: 1vh;
     margin-bottom: 1vh;
+    @media screen and (max-height: 770px) {
+        height: 85vh;
+    }
+    @media screen and (max-width: 600px) {
+        height: 75vh;
+    }
   }
   #caption-container {
     display: block;
