@@ -438,8 +438,8 @@ export default {
           }
 
           // Provide volume/rate estimate
-          let prefix = d.type==='flux' ? 'Rate ' : 'Volume '
-          this.cardFeatureSize = prefix + 'estimate: ' + this.d3.format(',')(d.value_km_3) + ' ' +  d.units
+          let numberPrefix = d.type==='flux' ? 'Rate ' : 'Volume '
+          this.cardFeatureSize = numberPrefix + 'estimate: ' + this.d3.format(',')(d.value_km_3) + ' ' +  d.units
 
           // Provide range
           if (d.type != 'example') {
@@ -453,7 +453,9 @@ export default {
           this.cardImageSourceWebp = self.imagePath(d.image_file + '?webp')
           //this.cardImageSourceWebp = self.imagePath(d.image_file.substring(0, d.image_file.indexOf('.')) + '.webp')
 
-          this.cardFeatureDefinition = d.definition
+          // Provide volume/rate estimate
+          let definitionPrefix = d.type==='example' ? 'Description: ' : 'Definition: '
+          this.cardFeatureDefinition = definitionPrefix + d.definition
           this.showDialog = true;
           this.altText = d.alt_text;
 
