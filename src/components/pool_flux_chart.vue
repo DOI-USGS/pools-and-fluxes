@@ -13,7 +13,8 @@
         :source="cardImageSource" 
         :sourceWebp="cardImageSourceWebp" 
         :size="cardFeatureSize" 
-        :range="cardFeatureRange" 
+        :range="cardFeatureRange"
+        :dataSource="cardFeatureDataSource" 
         :definition="cardFeatureDefinition" 
         :close="close"
         :altText="altText"
@@ -447,6 +448,9 @@ export default {
           } else {
             this.cardFeatureRange = ''
           }
+
+          // Provide data source
+          this.cardFeatureDataSource = d.data_source
 
           // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
           this.cardImageSource = self.imagePath(d.image_file)
