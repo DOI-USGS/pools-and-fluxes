@@ -202,11 +202,11 @@ export default {
             if (this.mobileView) {
               let axisExtension = scaleType==='log' ? 1000000000000 : 300000000
               this.scales[scaleType]
-                .domain([xMin, this.d3.max(data, d => d.range_high)  + axisExtension]) // extend axis
+                .domain([xMin, this.d3.max(data, d => d.range_high_km_3)  + axisExtension]) // extend axis
                 .range([0, this.chartWidth]);
             } else {
               this.scales[scaleType]
-                .domain([xMin, this.d3.max(data, d => d.range_high)])
+                .domain([xMin, this.d3.max(data, d => d.range_high_km_3)])
                 .range([0, this.chartWidth]);
             }
           }, this);
@@ -273,8 +273,8 @@ export default {
             .enter()
             .append("line")
             .filter(function(d) { return d.type === 'pool' || d.type === 'flux' })
-              .attr("x1",  d => self.xScale(d.range_high))
-              .attr("x2", d => self.xScale(d.range_low))
+              .attr("x1",  d => self.xScale(d.range_high_km_3))
+              .attr("x2", d => self.xScale(d.range_low_km_3))
               .attr("y1", d => yScale(d.feature_label) + yScale.bandwidth()/2)
               .attr("y2", d => yScale(d.feature_label) + yScale.bandwidth()/2)
               .attr("class", d => "chartBandBkgd " + d.type)
@@ -287,8 +287,8 @@ export default {
             .enter()
             .append("line")
             .filter(function(d) { return d.type === 'pool' || d.type === 'flux' })
-              .attr("x1",  d => self.xScale(d.range_high))
-              .attr("x2", d => self.xScale(d.range_low))
+              .attr("x1",  d => self.xScale(d.range_high_km_3))
+              .attr("x2", d => self.xScale(d.range_low_km_3))
               .attr("y1", d => yScale(d.feature_label) + yScale.bandwidth()/2)
               .attr("y2", d => yScale(d.feature_label) + yScale.bandwidth()/2)
               .attr("class", d => "chartBand " + d.type)
@@ -443,7 +443,7 @@ export default {
 
           // Provide range
           if (d.type != 'example') {
-            this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low) + ' - ' + this.d3.format(',')(d.range_high) + ' ' +  d.units
+            this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low_km_3) + ' - ' + this.d3.format(',')(d.range_high_km_3) + ' ' +  d.units
           } else {
             this.cardFeatureRange = ''
           }
@@ -514,7 +514,7 @@ export default {
           if (featureType === 'example' || currentlyShowingUncertainty === false) {
             return self.xScale(featureData.value_km_3) + xBuffer
           } else if ((featureType != 'example') && (currentlyShowingUncertainty === true)) {
-            return self.xScale(featureData.range_high) + xBuffer
+            return self.xScale(featureData.range_high_km_3) + xBuffer
           }
           
         },
@@ -533,13 +533,13 @@ export default {
           this.svgChart.selectAll(".chartBand")
             .transition()
             .duration(animationDuration)
-            .attr("x1", d => self.xScale(d.range_high))
-            .attr("x2", d => self.xScale(d.range_low))
+            .attr("x1", d => self.xScale(d.range_high_km_3))
+            .attr("x2", d => self.xScale(d.range_low_km_3))
           this.svgChart.selectAll(".chartBandBkgd")
             .transition()
             .duration(animationDuration)
-            .attr("x1", d => self.xScale(d.range_high))
-            .attr("x2", d => self.xScale(d.range_low))
+            .attr("x1", d => self.xScale(d.range_high_km_3))
+            .attr("x2", d => self.xScale(d.range_low_km_3))
           this.svgChart.selectAll(".chartCircle")
             .transition()
             .duration(animationDuration)
