@@ -11,16 +11,20 @@
 
       <div class="dialog__content">
         <h2 class="dialog__title" v-text="title"></h2>
-        <p class="dialog__size"><a v-bind:href="dataSource" target="_blank" v-text="size"></a></p>
-        <p class="dialog__range" v-text="range">range</p>
-        <picture>
-          <source v-bind:srcset="sourceWebp" type="image/webp">
-          <source v-bind:srcset="source" type="image/png">
-          <a v-bind:href="imageSite" target="_blank">
-          <img v-bind:src="sourceWebp" width="200px" height="200px" v-bind:alt="altText">
-          </a>
-        </picture>
-        <p class="dialog__definition" v-text="definition"></p>
+        <p><span class="dialog__size_prefix" v-text="sizePrefix"></span>
+        <span class="dialog__size"><a v-bind:href="dataSource" target="_blank" v-text="size"></a></span></p>
+        <p class="dialog__range" v-text="range"></p>
+        <p class="dialog__def_prefix" v-text="definitionPrefix"></p>
+        <div class="dialog__def_content">
+          <picture>
+            <source v-bind:srcset="sourceWebp" type="image/webp">
+            <source v-bind:srcset="source" type="image/png">
+            <a v-bind:href="imageSite" target="_blank">
+            <img class="dialog__image" v-bind:src="sourceWebp" width="200px" height="200px" v-bind:alt="altText">
+            </a>
+          </picture>
+          <p class="dialog__definition" v-text="definition"></p>
+        </div>
       </div>
     
       <hr class="dialog__break"/>
@@ -36,7 +40,7 @@
 
 <script>
 export default {
-    props: ['show', 'title', 'type', 'color', 'size', 'range', 'dataSource', 'source', 'sourceWebp', 'imageSite', 'definition', 'close', 'altText']
+    props: ['show', 'title', 'type', 'color', 'sizePrefix', 'size', 'range', 'dataSource', 'source', 'sourceWebp', 'imageSite', 'definitionPrefix', 'definition', 'close', 'altText']
 }
 </script>
 <style>
@@ -62,7 +66,8 @@ export default {
   margin-left: auto;
   margin-right: auto;
   margin-top: 2.5rem;
-  max-width: 60%;
+  width: 35rem;
+  max-width: 90%;
   max-height: 90%;
 }
 .dialog__break {
@@ -83,7 +88,7 @@ export default {
   padding-bottom: 1rem;
 }
 .dialog__title {
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1.75rem;
   margin-bottom: 0.5rem;
 }
@@ -91,6 +96,9 @@ export default {
   font-weight: 500;
   line-height: 1.75rem;
   margin-bottom: 0.5rem;
+}
+.dialog__size_prefix {
+  font-weight: 700;
 }
 .dialog__size {
   line-height: 1rem;
@@ -107,6 +115,16 @@ export default {
   line-height: 1rem;
   margin-bottom: 1rem;
   color: #6E6E6E;
+}
+.dialog__image {
+  float: right;
+  margin: 5px;
+}
+.dialog__def_prefix {
+  font-weight: 700;
+}
+.dialog__def_content {
+  min-height: 200px;
 }
 .dialog__definition {
   line-height: 1.25rem;

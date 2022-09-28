@@ -13,9 +13,11 @@
         :source="cardImageSource" 
         :sourceWebp="cardImageSourceWebp"
         :imageSite="cardImageSite"
+        :sizePrefix = "cardSizePrefix"
         :size="cardFeatureSize" 
         :range="cardFeatureRange"
         :dataSource="cardFeatureDataSource" 
+        :definitionPrefix="cardFeatureDefinitionPrefix"
         :definition="cardFeatureDefinition" 
         :close="close"
         :altText="altText"
@@ -83,6 +85,7 @@ export default {
       cardImageSource: null,
       cardImageSourceWebp: null,
       cardImageSite: null,
+      cardFeatureDefinitionPrefix: null,
       cardFeatureDefinition: null,
       cardType: null,
       cardColor: null,
@@ -442,12 +445,13 @@ export default {
           }
 
           // Provide volume/rate estimate
-          let numberPrefix = d.type==='flux' ? 'Rate ' : 'Volume '
-          this.cardFeatureSize = numberPrefix + 'estimate: ' + this.d3.format(',')(d.value_km_3) + ' ' +  d.units
+          this.cardSizePrefix = d.type==='flux' ? 'Rate estimate: ' : 'Volume estimate: '
+          let unitsText = d.units==='cubic kilometers' ? 'km³' : 'km³ per year'
+          this.cardFeatureSize = this.d3.format(',')(d.value_km_3) + ' ' +  unitsText
 
           // Provide range
           if (d.type != 'example') {
-            this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low) + ' - ' + this.d3.format(',')(d.range_high) + ' ' +  d.units
+            this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low) + ' - ' + this.d3.format(',')(d.range_high) + ' ' +  unitsText
           } else {
             this.cardFeatureRange = ''
           }
@@ -463,7 +467,8 @@ export default {
 
           // Provide volume/rate estimate
           let definitionPrefix = d.type==='example' ? 'Description: ' : 'Definition: '
-          this.cardFeatureDefinition = definitionPrefix + d.definition
+          this.cardFeatureDefinitionPrefix = definitionPrefix
+          this.cardFeatureDefinition = d.definition
           this.showDialog = true;
           this.altText = d.alt_text;
 
