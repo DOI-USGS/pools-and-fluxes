@@ -60,8 +60,8 @@ export default {
   margin-left: auto;
   margin-right: auto;
   margin-top: 2.5rem;
-  max-width: 90%;
-  width: 24rem;
+  max-width: 60%;
+  max-height: 90%;
 }
 .dialog__break {
   border: 0.5px solid white;
