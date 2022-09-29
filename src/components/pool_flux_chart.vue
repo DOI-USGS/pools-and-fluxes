@@ -449,15 +449,18 @@ export default {
           let unitsText = d.units==='cubic kilometers' ? 'km³' : 'km³ per year'
           this.cardFeatureSize = this.d3.format(',')(d.value_km_3) + ' ' +  unitsText
 
-          // Provide range
+          // Provide range and data source, as applicable
           if (d.type != 'example') {
+            // Provide range
             this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low) + ' - ' + this.d3.format(',')(d.range_high) + ' ' +  unitsText
+            // Data source already provided in caption text
+            this.cardFeatureDataSource = null
           } else {
+            // No range to provide
             this.cardFeatureRange = ''
+            // Provide data source
+            this.cardFeatureDataSource = d.data_source
           }
-
-          // Provide data source
-          this.cardFeatureDataSource = d.data_source
 
           // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
           this.cardImageSource = self.imagePath(d.image_file)
