@@ -11,9 +11,13 @@
         :type="cardType" 
         :color="cardColor" 
         :source="cardImageSource" 
-        :sourceWebp="cardImageSourceWebp" 
+        :sourceWebp="cardImageSourceWebp"
+        :imageSite="cardImageSite"
+        :sizePrefix = "cardSizePrefix"
         :size="cardFeatureSize" 
-        :range="cardFeatureRange" 
+        :range="cardFeatureRange"
+        :dataSource="cardFeatureDataSource" 
+        :definitionPrefix="cardFeatureDefinitionPrefix"
         :definition="cardFeatureDefinition" 
         :close="close"
         :altText="altText"
@@ -36,7 +40,7 @@
           <label><input type="radio" name="x-scale" value="linear"> linear </label>          
         </form>
         <p :text="axisExplanation">Compare the magnitude of major pools and fluxes of water on Earth. Switch between a linear and log scale x-axis using the toggle. {{ axisExplanation }}</p>
-        <p>The data for this chart are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019) Human domination of the global water cycle absent from depictions and perceptions.</a> Abbott et al. note that the estimate for each pool or flux "represents the most recent or comprehensive individual estimate." The ranges for each estimate, if shown, "represent the range of reported values and their uncertainties."</p>
+        <p>The pool volume and flux rate data for this chart are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019) Human domination of the global water cycle absent from depictions and perceptions</a>. Abbott et al. note that the estimate for each pool or flux "represents the most recent or comprehensive individual estimate." The ranges for each estimate, if shown, "represent the range of reported values and their uncertainties."</p>
       </div>
     </div>
   </section>
@@ -77,8 +81,11 @@ export default {
       cardTitle: null,
       cardFeatureSize: null,
       cardFeatureRange:  null,
+      cardFeatureDataSource: null,
       cardImageSource: null,
       cardImageSourceWebp: null,
+      cardImageSite: null,
+      cardFeatureDefinitionPrefix: null,
       cardFeatureDefinition: null,
       cardType: null,
       cardColor: null,
@@ -392,12 +399,12 @@ export default {
           const self = this;
           // dim y axis text for all but mouseovered row
           this.d3.selectAll('.yAxisText')
-            .style("opacity", 0.6)
+            .style("opacity", 0.5)
           this.d3.selectAll('.yAxisText.' + current_feature)
             .style("opacity", 1)
           // make interaction rectangles for all but mouseovered row slightly opaque to dim chart
           this.d3.selectAll('.interactionRectangle')
-            .style("opacity", 0.6)
+            .style("opacity", 0.5)
           this.d3.selectAll('.interactionRectangle.' + current_feature)
             .style("opacity", 0)
           this.d3.selectAll(".chartLine." + current_feature)
@@ -438,21 +445,32 @@ export default {
           }
 
           // Provide volume/rate estimate
-          let prefix = d.type==='flux' ? 'Rate ' : 'Volume '
-          this.cardFeatureSize = prefix + 'estimate: ' + this.d3.format(',')(d.value_km_3) + ' ' +  d.units
+          this.cardSizePrefix = d.type==='flux' ? 'Rate estimate: ' : 'Volume estimate: '
+          let unitsText = d.units==='cubic kilometers' ? 'km³' : 'km³ per year'
+          this.cardFeatureSize = this.d3.format(',')(d.value_km_3) + ' ' +  unitsText
 
-          // Provide range
+          // Provide range and data source, as applicable
           if (d.type != 'example') {
-            this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low) + ' - ' + this.d3.format(',')(d.range_high) + ' ' +  d.units
+            // Provide range
+            this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low) + ' - ' + this.d3.format(',')(d.range_high) + ' ' +  unitsText
+            // Data source already provided in caption text
+            this.cardFeatureDataSource = null
           } else {
+            // No range to provide
             this.cardFeatureRange = ''
+            // Provide data source
+            this.cardFeatureDataSource = d.data_source
           }
 
           // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
           this.cardImageSource = self.imagePath(d.image_file)
           this.cardImageSourceWebp = self.imagePath(d.image_file + '?webp')
           //this.cardImageSourceWebp = self.imagePath(d.image_file.substring(0, d.image_file.indexOf('.')) + '.webp')
+          this.cardImageSite = d.image_source
 
+          // Provide volume/rate estimate
+          let definitionPrefix = d.type==='example' ? 'Description: ' : 'Definition: '
+          this.cardFeatureDefinitionPrefix = definitionPrefix
           this.cardFeatureDefinition = d.definition
           this.showDialog = true;
           this.altText = d.alt_text;
@@ -581,6 +599,12 @@ export default {
     max-width: 1500px;
     margin-top: 1vh;
     margin-bottom: 1vh;
+    @media screen and (max-height: 770px) {
+        height: 85vh;
+    }
+    @media screen and (max-width: 600px) {
+        height: 75vh;
+    }
   }
   #caption-container {
     display: block;
