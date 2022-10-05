@@ -586,10 +586,13 @@ export default {
     display: block;
   }
   .poolText {
-    color: $poolColor;
+    color: $poolColorDark;
   }
   .fluxText {
-    color: $fluxColor;
+    color: $fluxColorDark;
+  }
+  .exampleText {
+    color: $darkGrey;
   }
   .button {
     --tw-bg-opacity: 1;
@@ -643,10 +646,13 @@ export default {
     stroke: $neutralGrey;
   }
   .poolText {
-    color: $poolColor;
+    color: $poolColorDark;
   }
   .fluxText {
-    color: $fluxColor;
+    color: $fluxColorDark;
+  }
+  .exampleText {
+    color: $darkGrey;
   }
   .chartLine {
     stroke-width: 1px;
