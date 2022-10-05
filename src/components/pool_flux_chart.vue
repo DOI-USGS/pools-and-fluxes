@@ -2,9 +2,31 @@
   <section>
     <div id="page-content">
       <h1><span class='poolText emph' >Pools</span> and <span class='fluxText emph'>fluxes</span> in the water cycle</h1>
-      <p><span class='poolText emph' >Pools</span> are places where water is stored, like the ocean. <span class='fluxText emph'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use.</p>
-      <p>Learn more about the water cycle and see the water cycle diagram on the <a href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></p>
-      <p class = "emph">Click on any row of the chart to pull up more information</p>
+      <p>This chart shows the size of key <span class='poolText emph' >pools</span> and <span class='fluxText emph'>fluxes</span> of water on Earth, and includes some <span class='exampleText emph'>example volumes</span> for context. <span class='poolText emph' >Pools</span> are places where water is stored, like the ocean. <span class='fluxText emph'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use. Learn more about the water cycle and see the water cycle diagram on the <a href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></p>
+      <br>
+      <hr>
+      <p>Showing <span class='poolText emph' >pool</span> and <span class='fluxText emph' >flux</span> estimates,
+        <span>        
+          <button
+            class="ui button toggle"
+            @click="toggle"
+            :text="currentUncertaintyStatus"
+          >{{ currentUncertaintyStatus }}
+          </button>
+        </span>
+        , in units of 
+        <span>
+          km3
+        </span>
+        , on a 
+        <span>
+          log 
+        </span>
+        scale.
+        <span class = 'emph'>
+          Click on any row of the chart to pull up more information
+        </span>
+      </p>
       <dialogCard 
         :show="showDialog" 
         :title="cardTitle" 
@@ -19,12 +41,7 @@
         :altText="altText"
       />
       <div class="ui buttons big">
-        <button
-          class="ui button toggle"
-          @click="toggle"
-          :class="[showUncertainty ? 'active' : '']"
-          :text="uncertaintyPrompt"
-        >{{ uncertaintyPrompt }}</button>
+
       </div>
       <div id="chart-container">
         <svg class="chart" />
@@ -35,7 +52,7 @@
           <label><input type="radio" name="x-scale" value="log" checked> log </label>
           <label><input type="radio" name="x-scale" value="linear"> linear </label>          
         </form>
-        <p :text="axisExplanation">Compare the magnitude of major pools and fluxes of water on Earth. Switch between a linear and log scale x-axis using the toggle. {{ axisExplanation }}</p>
+        <p :text="axisExplanation"> Switch between a linear and log scale x-axis using the toggle. {{ axisExplanation }}</p>
         <p>The data for this chart are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019)</a>. Abbott et al. note that the estimate for each pool or flux "represents the most recent or comprehensive individual estimate." The ranges for each estimate, if shown, "represent the range of reported values and their uncertainties."</p>
       </div>
     </div>
@@ -84,7 +101,7 @@ export default {
       cardColor: null,
       altText: null,
       showUncertainty: false,
-      uncertaintyPrompt: null,
+      currentUncertaintyStatus: null,
       axisExplanation: null
       }
   },
@@ -92,7 +109,7 @@ export default {
     this.d3 = Object.assign(d3Base);
     
     // Set starting value for uncertainty prompt
-    this.uncertaintyPrompt = "Show ranges for estimates"
+    this.currentUncertaintyStatus = "without ranges"
 
     // chart elements
     this.margin = this.mobileView ? { top: 10, right: 15, bottom: 50, left:  10 } : { top: 10, right: 15, bottom: 50, left: 250 }
@@ -130,13 +147,13 @@ export default {
           
           // Toggle on or off uncertainty bars
           if (this.showUncertainty) {
-            this.uncertaintyPrompt = 'Hide ranges for estimates'
+            this.currentUncertaintyStatus = 'with ranges'
             this.d3.selectAll('.chartBandBkgd')
               .style("opacity", 1)
             this.d3.selectAll('.chartBand')
               .style("opacity", 0.3)
           } else {
-            this.uncertaintyPrompt = 'Show ranges for estimates'
+            this.currentUncertaintyStatus = 'without ranges'
             this.d3.selectAll('.chartBandBkgd')
               .style("opacity", 0)
             this.d3.selectAll('.chartBand')
