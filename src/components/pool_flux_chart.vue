@@ -379,7 +379,7 @@ export default {
               })
           }
 
-          // On desktop, dadd additional interaction rectangles over y-axis text to trigger click and interaction
+          // On desktop, add additional interaction rectangles over y-axis text to trigger click and interaction
           if (this.mobileView===false) {
             let interactionRectanglesText = svgInteractionGroup.selectAll("interactionRectangleText")
               .data(data)
