@@ -95,6 +95,7 @@ export default {
       tooltip: null,
       showDialog: false,
       cardTitle: null,
+      cardSizePrefix: null,
       cardFeatureSize: null,
       cardFeatureRange:  null,
       cardFeatureDataSource: null,
