@@ -128,6 +128,9 @@ p {
     font-size: 0.9em;
   }
 }
+p a {
+  color: black;
+}
 form {
   padding: 0.1em 0 0 0; 
   font-family: $Assistant;
