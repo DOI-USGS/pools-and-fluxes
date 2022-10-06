@@ -81,6 +81,7 @@ export default {
       chartContainer: null,
       captionContainer: null,
       scales: null,
+      scaleLog: true,
       scaleType: null,
       customNumberFormat: null,
       xScale: null,
@@ -109,8 +110,11 @@ export default {
     // Set starting value for uncertainty prompt
     this.currentUncertaintyStatus = "without ranges"
 
+    // Set starting scale type
+    this.scaleType = "log"
+
     // chart elements
-    this.margin = this.mobileView ? { top: 10, right: 15, bottom: 50, left:  10 } : { top: 10, right: 15, bottom: 50, left: 250 }
+    this.margin = this.mobileView ? { top: 45, right: 15, bottom: 50, left:  10 } : { top: 45, right: 15, bottom: 50, left: 250 }
     this.w = document.getElementById("chart-container").offsetWidth;
     this.h = document.getElementById("chart-container").offsetHeight;
     this.chartWidth = this.w - this.margin.left - this.margin.right; 
@@ -137,7 +141,7 @@ export default {
     this.loadData();
     },
     methods:{
-        toggle() {
+        toggleUncertainty() {
           const self = this;
 
           // Update global value for show Uncertainty
@@ -165,6 +169,24 @@ export default {
               .duration(200)
               .attr("x", d => self.placeYAxisText(d, this.showUncertainty))
           }
+        },
+        toggleScale() {
+          const self = this;
+
+          // Update global value for whether or not scale is log
+          this.scaleLog = !this.scaleLog;
+          
+          // Update scale type
+          this.scaleType = this.scaleLog ? 'log' : 'linear' //this.d3.select('input[name="x-scale"]:checked').node().value;
+          
+          // set xScale to scale type
+          this.xScale = this.scales[this.scaleType];
+
+          // redraw X axis, with transition
+          this.redraw();
+
+          // update axis explanation
+          this.setAxisExplanation();
         },
         close() {
           this.showDialog = false;
@@ -200,49 +222,42 @@ export default {
           this.adaptScales(this.volume, 1);
 
           // set starting x scale
-          this.setXScale();
+          this.xScale = this.scales[this.scaleType];
 
           // set starting value for explanation of axis scale in figure caption
           this.setAxisExplanation();
           
           // draw chart
-          this.drawChart(this.volume, 1)
-
-          // set up radio button interaction
-          this.captionContainer.selectAll("input").on("click", this.changeXScale.bind(this));
-          
+          this.drawChart(this.volume, 1)          
         },
         adaptScales(data, xMin) {
           Object.keys(this.scales).forEach(function (scaleType) {
+            let dataMax = this.d3.max(data, d => d.range_high_km_3)
             if (this.mobileView) {
-              let axisExtension = scaleType==='log' ? 1000000000000 : 300000000
+              let axisExtension = scaleType==='log' ? 1000000000000 : 300000000;
               this.scales[scaleType]
-                .domain([xMin, this.d3.max(data, d => d.range_high_km_3)  + axisExtension]) // extend axis
+                .domain([xMin, dataMax  + axisExtension]) // extend axis
                 .range([0, this.chartWidth]);
             } else {
               this.scales[scaleType]
-                .domain([xMin, this.d3.max(data, d => d.range_high_km_3)])
+                .domain([xMin, dataMax])
                 .range([0, this.chartWidth]);
             }
           }, this);
-        },
-        setXScale() {          
-          this.scaleType = this.d3.select('input[name="x-scale"]:checked').node().value;
-          this.xScale = this.scales[this.scaleType];
         },
         drawChart(data, xMin) {
 
           const self = this;
 
           //// ADD AXES
-          this.xAxis = this.d3.axisBottom()
+          this.xAxis = this.d3.axisTop() //axisBottom()
             .scale(self.xScale)
 
           // Set x-axis number format, depending on scale type
           self.setXAxisNumberFormat(this.scaleType, this.mobileView)
 
           this.domXAxis = this.svgChart.append("g")
-            .attr("transform", "translate(0," + this.chartHeight + ")")
+            .attr("transform", "translate(0," + -3 + ")") //"translate(0," + this.chartHeight + ")"
             .call(this.xAxis)
             .attr("class", "x_axis")
 
@@ -250,7 +265,7 @@ export default {
           this.svgChart.append("foreignObject")
             .attr("id", "x-label-container")
             .attr("x", 0)
-            .attr("y", this.chartHeight+25)
+            .attr("y", -this.margin.top) // this.chartHeight+25
             .attr("width", this.chartWidth)
             .html("<p class='x_label'><span class='poolText emph'>Pool</span> volume (km³) or <span class='fluxText emph'>flux</span> rate (km³ per year)</p>")
 
