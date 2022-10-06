@@ -8,21 +8,24 @@
       <p>Showing <span class='poolText emph' >pool</span> and <span class='fluxText emph' >flux</span> estimates,
         <span>        
           <button
-            class="ui button toggle"
-            @click="toggle"
+            class="button"
+            @click="toggleUncertainty"
             :text="currentUncertaintyStatus"
-          >{{ currentUncertaintyStatus }}
+          >
+            {{ currentUncertaintyStatus }}
           </button>
-        </span>
-        , in units of 
-        <span>
-          km3
         </span>
         , on a 
         <span>
-          log 
+          <button
+            class="button"
+            @click="toggleScale"
+            :text="scaleType"
+          >
+            {{ scaleType }}
+          </button>
         </span>
-        scale.
+        scale. 
         <span class = 'emph'>
           Click on any row of the chart to pull up more information
         </span>
