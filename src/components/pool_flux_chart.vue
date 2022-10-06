@@ -50,12 +50,7 @@
         <svg class="chart" />
       </div>
       <div id="caption-container">
-        <form class="controls">
-          Scale:
-          <label><input type="radio" name="x-scale" value="log" checked> log </label>
-          <label><input type="radio" name="x-scale" value="linear"> linear </label>          
-        </form>
-        <p :text="axisExplanation"> Switch between a linear and log scale x-axis using the toggle. {{ axisExplanation }}</p>
+        <p :text="axisExplanation"> Right now the x-axis is on a <span class='emph'> {{ scaleType }} </span> scale. {{ axisExplanation }}</p>
         <p>The data for this chart are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019)</a>. Abbott et al. note that the estimate for each pool or flux "represents the most recent or comprehensive individual estimate." The ranges for each estimate, if shown, "represent the range of reported values and their uncertainties."</p>
       </div>
     </div>
@@ -478,15 +473,14 @@ export default {
           this.altText = d.alt_text;
 
         },
-        changeXScale() {
-          this.setXScale();
-          this.redraw();
-          this.setAxisExplanation();
-        },
         setAxisExplanation() {
+          const logDescription = 'Using a log scale is useful when values are distributed across many orders of magnitude.';
+          const logMovement = 'hen you move a fixed distance on a log axis, you multiply the starting value by a value of 10.'
+          const linearDescription = 'A linear scale is like counting the days of the year, where each interval (day 1 to day 2) is equal to all the other intervals.' 
+          const linearMovement = 'hen you move a fixed distance on a linear axis, you add a fixed value to the starting value.';
           this.axisExplanation = this.scaleType==='log' ? 
-                  'Right now, you\'re looking at the log scale x-axis. When you move a fixed distance on a log axis, you multiply the starting value by a value of 10. Using a log scale is useful when values are distributed across many orders of magnitude.' : 
-                  'Right now, you\'re looking at the linear scale x-axis. When you move a fixed distance on a linear axis, you add a fixed value to the starting value.'
+                  (logDescription + ' W' + logMovement + ' In contrast, w' + linearMovement + ' ' + linearDescription) : 
+                  (linearDescription + ' W' + linearMovement + ' In contrast, w'  + logMovement + ' ' + logDescription);
         },
         setXAxisNumberFormat(currentScale, currentlyMobile) {
           const self = this;
