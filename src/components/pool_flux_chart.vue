@@ -528,9 +528,9 @@ export default {
           let xBuffer = 10;
 
           // Set position of y axis label
-          if (featureType === 'example' || currentlyShowingUncertainty === false) {
+          if (featureType === 'example pool' || featureType === 'example flux' || currentlyShowingUncertainty === false) {
             return self.xScale(featureData.value_km_3) + xBuffer
-          } else if ((featureType != 'example') && (currentlyShowingUncertainty === true)) {
+          } else if ((featureType === 'pool' || featureType === 'flux') && (currentlyShowingUncertainty === true)) {
             return self.xScale(featureData.range_high_km_3) + xBuffer
           }
           
