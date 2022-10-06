@@ -447,7 +447,10 @@ export default {
             case 'flux':
               this.cardColor = "#06846A"; // 5:1 contrast (since text)
               break;
-            case 'example':
+            case 'example pool':
+              this.cardColor = "#6E6E6E"; // 5:1 contrast (since text)
+              break;
+            case 'example flux':
               this.cardColor = "#6E6E6E"; // 5:1 contrast (since text)
               break;
           }
@@ -457,7 +460,7 @@ export default {
           this.cardFeatureSize = prefix + 'estimate: ' + this.d3.format(',')(d.value_km_3) + ' ' +  d.units
 
           // Provide range
-          if (d.type != 'example') {
+          if (d.type === 'pool' || d.type === 'flux') {
             this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low_km_3) + ' - ' + this.d3.format(',')(d.range_high_km_3) + ' ' +  d.units
           } else {
             this.cardFeatureRange = ''
