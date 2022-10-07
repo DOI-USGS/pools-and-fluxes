@@ -653,7 +653,6 @@ export default {
           
           // If on mobile, shift y axis labels
           if (this.mobileView) {
-            console.log(self.yAxis)
             self.yAxis.selectAll("text")
               .transition()
               .duration(animationDuration)
@@ -788,22 +787,33 @@ export default {
   .chartBand {
     opacity: 0.3;
   }
+  .breakLine {
+    stroke: $neutralGrey;
+    stroke-width: 0.5px;
+  }
   .y_axis line {
     visibility:hidden;
   }
   .y_axis path {
     visibility:hidden;
   }
-  .y_axis text {
-    font-size: 1.4em;
+  .yAxisText {
+    stroke: None;
+    fill: #000000;
+    font-size: 1.6em;
     padding: 1em 0 0 0; 
     font-family: $Assistant;
     @media screen and (max-height: 770px) {
-        font-size: 1.2em;
+        font-size: 1.25em;
     }
     @media screen and (max-width: 600px) {
         font-size: 1em;
     }
+  }
+  .yAxisText.example {
+    stroke: None;
+    fill: $darkGrey;
+    font-style: italic;
   }
   .x_axis text {
     font-size: 1.4em;
