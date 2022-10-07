@@ -359,6 +359,22 @@ export default {
               .attr("class", d => "chartCircle " + d.type)
               .attr("id", d => d.feature_class)
 
+          // add single line to separate examples
+          let lineBreak = this.svgChart.selectAll("breakLine")
+            .data(data)
+            .enter()
+            .append("line")
+            .filter(function(d) { return d.feature_class === 'gap' })
+              .attr("x1",  -this.margin.left)
+              .attr("x2", this.margin.left + this.chartWidth + this.margin.right)
+              .attr("y1", d => yScale(d.feature_label))
+              .attr("y2", d => yScale(d.feature_label))
+              .attr("class", d => "breakLine " + d.type)
+              .attr("id", d => d.feature_class)
+              .style("stroke-linecap", "round")
+              .style("stroke-dasharray", "3,3")
+              .style("opacity", 1)
+
           //// SET UP DIFFERENT STYLING OF CHART ELEMENTS ON DESKTOP AND MOBILE
           // Set different sizing for points and uncetainty bands on mobile and desktop
           let pointSize = this.mobileView ? 5 : 6
@@ -394,7 +410,9 @@ export default {
               .attr("height", yScale.bandwidth())
               .style("fill", "white")
               .style("opacity", 0)
-              .on("click", d => self.populateCard(d)) //trigger click on desktop and mobile
+              .on("click", function(d) {
+                if (d.feature_class !='gap') {self.populateCard(d)}
+              }) //trigger click on desktop and mobile
 
           // Set different x placement and width for interaction rectangles on mobile and desktop
           // on mobile - cover full width of chart + left and right margins
@@ -409,11 +427,15 @@ export default {
             interactionRectangles
               .on("mouseover", function(d) {
                 let current_feature = d.feature_class;
-                self.mouseoverRect(current_feature)
+                if (current_feature != 'gap') {
+                  self.mouseoverRect(current_feature)
+                }
               })
               .on("mouseout", function(d) {
                 let current_feature = d.feature_class;
-                self.mouseoutRect(current_feature)
+                if (current_feature != 'gap') {
+                  self.mouseoutRect(current_feature)
+                }
               })
           }
 
@@ -433,11 +455,15 @@ export default {
                 .on("click", d => self.populateCard(d))
                 .on("mouseover", function(d) {
                   let current_feature = d.feature_class;
+                  if (current_feature != 'gap') {
                   self.mouseoverRect(current_feature)
+                }
                 })
                 .on("mouseout", function(d) {
                   let current_feature = d.feature_class;
-                  self.mouseoutRect(current_feature)
+                  if (current_feature != 'gap') {
+                    self.mouseoutRect(current_feature)
+                  }
                 })
           }
         },
@@ -448,6 +474,7 @@ export default {
             .style("opacity", 0.5)
           this.d3.selectAll('.yAxisText.' + current_feature)
             .style("opacity", 1)
+            .classed('pageText emph',true) // make bold and colored based on type
           // make interaction rectangles for all but mouseovered row slightly opaque to dim chart
           this.d3.selectAll('.interactionRectangle')
             .style("opacity", 0.5)
@@ -455,12 +482,15 @@ export default {
             .style("opacity", 0)
           this.d3.selectAll(".chartLine." + current_feature)
             .style("opacity", 1)
+          this.d3.selectAll(".breakLine")
+            .raise()
         },
         mouseoutRect(current_feature) {
           const self = this;
           // Make all y-axis text fully opaque
           this.d3.selectAll('.yAxisText')
             .style("opacity", 1)
+            .classed('pageText emph',false)
           // Make chart interaction rectangles fully transparent
           this.d3.selectAll('.interactionRectangle')
             .style("opacity", 0)
