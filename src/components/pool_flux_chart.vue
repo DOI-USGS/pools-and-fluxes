@@ -1,11 +1,11 @@
 <template>
   <section>
     <div id="page-content">
-      <h1><span class='poolText emph' >Pools</span> and <span class='fluxText emph'>fluxes</span> in the water cycle</h1>
-      <p>This chart shows the size of key <span class='poolText emph' >pools</span> and <span class='fluxText emph'>fluxes</span> of water on Earth, and includes some <span class='exampleText emph'>example volumes</span> for context. <span class='poolText emph' >Pools</span> are places where water is stored, like the ocean. <span class='fluxText emph'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use. Learn more about the water cycle and see the water cycle diagram on the <a href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></p>
+      <h1><span class='pool pageText emph' >Pools</span> and <span class='flux pageText emph'>fluxes</span> in the water cycle</h1>
+      <p>This chart shows the size of global <span class='pool pageText emph' >pools</span> and <span class='flux pageText emph'>fluxes</span> of water, and includes specific <span class='example pageText emph'>examples</span> of pools for context. <span class='pool pageText emph' >Pools</span> are places where water is stored, like the ocean. <span class='flux pageText emph'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use. Learn more about the water cycle and see the water cycle diagram on the <a href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></p>
       <br>
       <hr>
-      <p>Showing <span class='poolText emph' >pool</span> and <span class='fluxText emph' >flux</span> estimates,
+      <p>Showing <span class='pool pageText emph' >pool</span> and <span class='flux pageText emph' >flux</span> estimates,
         <span>        
           <button
             class="button"
