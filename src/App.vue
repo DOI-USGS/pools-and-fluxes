@@ -128,6 +128,14 @@ p {
     font-size: 0.9em;
   }
 }
+text {
+  font-size: 1.1em;
+  padding: 0.5em 0 0 0; 
+  font-family: $Assistant;
+  @media screen and (max-width: 600px) {
+    font-size: 0.9em;
+  }
+}
 p a {
   color: black;
 }
@@ -139,12 +147,12 @@ form {
     font-size: 0.9em;
   }
 }
-.button {
-  padding: 0.2em 0 0.2em 0; 
-  font-family: $Assistant;
-  font-size: 1.1em;
-  @media screen and (max-width: 600px) {
-    font-size: 0.9em;
-  }
-}
+// .button {
+//   padding: 0.2em 0 0.2em 0; 
+//   font-family: $Assistant;
+//   font-size: 1.1em;
+//   @media screen and (max-width: 600px) {
+//     font-size: 0.9em;
+//   }
+// }
 </style>
