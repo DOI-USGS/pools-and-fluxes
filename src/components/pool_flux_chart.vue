@@ -507,6 +507,12 @@ export default {
         populateCard(d){
           const self = this;
 
+          // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
+          this.cardImageSource = self.imagePath(d.image_file)
+          this.cardImageSourceWebp = self.imagePath(d.image_file + '?webp')
+          //this.cardImageSourceWebp = self.imagePath(d.image_file.substring(0, d.image_file.indexOf('.')) + '.webp')
+          this.cardImageSite = d.image_source
+
           // Populate card with information
           this.cardTitle = d.feature_title;
           this.cardType = d.type.charAt(0).toUpperCase() + d.type.slice(1);
@@ -542,12 +548,6 @@ export default {
             // Provide data source
             this.cardFeatureDataSource = d.data_source
           }
-
-          // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
-          this.cardImageSource = self.imagePath(d.image_file)
-          this.cardImageSourceWebp = self.imagePath(d.image_file + '?webp')
-          //this.cardImageSourceWebp = self.imagePath(d.image_file.substring(0, d.image_file.indexOf('.')) + '.webp')
-          this.cardImageSite = d.image_source
 
           // Provide volume/rate estimate
           let definitionPrefix = d.type==='example' ? 'Description: ' : 'Definition: '
