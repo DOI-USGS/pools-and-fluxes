@@ -386,13 +386,15 @@ export default {
           let textRectangleBuffer = 5
           let desktopTextAxisBuffer = pointSize + textRectangleBuffer
           let desktopRectangleAxisOffset = pointSize + textRectangleBuffer/2
+          // assign class for interaction on desktop and styling on both
+          this.yAxis.selectAll('text')
+            .attr("class", d => "yAxisText " + self.getLabelData(d).type + ' ' + self.getLabelData(d).feature_class) //assign class for desktop interaction
           if (this.mobileView===true) {
             this.yAxis.selectAll('text')
               .attr("text-anchor","start")
               .attr("x", d => self.placeYAxisText(d, this.showUncertainty))
           } else {
             this.yAxis.selectAll('text')
-              .attr("class", d => "yAxisText " + self.getLabelData(d).feature_class) //assign class for desktop interaction
               .attr("x", -desktopTextAxisBuffer)
           }
           
@@ -682,7 +684,7 @@ export default {
     margin-top: 1vh;
     margin-bottom: 1vh;
     @media screen and (max-height: 770px) {
-        height: 85vh;
+        height: 100vh;
     }
     @media screen and (max-width: 600px) {
         height: 75vh;
@@ -691,13 +693,13 @@ export default {
   #caption-container {
     display: block;
   }
-  .poolText {
+  .pool.pageText {
     color: $poolColorDark;
   }
-  .fluxText {
+  .flux.pageText {
     color: $fluxColorDark;
   }
-  .exampleText {
+  .example.pageText {
     color: $darkGrey;
   }
   .button {
@@ -743,22 +745,35 @@ export default {
     fill: $poolColor;
     stroke: $poolColor;
   }
+  // .pool.chartBand {
+  //   stroke: $poolColor;
+  // }
   .flux {
     fill: $fluxColor;
     stroke: $fluxColor;
   }
+  // .flux.chartBand {
+  //   stroke: $fluxColor;
+  // }
   .example {
     fill: $neutralGrey;
-    stroke: $neutralGrey;
+    // stroke: $neutralGrey;
   }
-  .poolText {
+  .header{
+    fill: #ffffff;
+    font-weight: 700;
+  }
+  .pool.pageText {
     color: $poolColorDark;
+    fill: $poolColorDark;
   }
-  .fluxText {
+  .flux.pageText {
     color: $fluxColorDark;
+    fill: $fluxColorDark;
   }
-  .exampleText {
+  .example.pageText {
     color: $darkGrey;
+    fill: $darkGrey;
   }
   .chartLine {
     stroke-width: 1px;
