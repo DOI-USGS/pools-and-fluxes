@@ -89,8 +89,10 @@ export default {
       scaleType: null,
       customNumberFormat: null,
       xScale: null,
-      xAxis: null,
-      domXAxis: null,
+      xAxisTop: null,
+      domxAxisTop: null,
+      xAxisBottom: null,
+      domxAxisBottom: null,
       yAxis: null,
       tooltip: null,
       showDialog: false,
@@ -122,7 +124,7 @@ export default {
     this.scaleType = "log"
 
     // chart elements
-    this.margin = this.mobileView ? { top: 45, right: 15, bottom: 50, left:  10 } : { top: 45, right: 15, bottom: 50, left: 250 }
+    this.margin = this.mobileView ? { top: 45, right: 15, bottom: 20, left:  15 } : { top: 45, right: 15, bottom: 20, left: 265 }
     this.w = document.getElementById("chart-container").offsetWidth;
     this.h = document.getElementById("chart-container").offsetHeight;
     this.chartWidth = this.w - this.margin.left - this.margin.right; 
@@ -258,24 +260,37 @@ export default {
           const self = this;
 
           //// ADD AXES
-          this.xAxis = this.d3.axisTop() //axisBottom()
+          this.xAxisTop = this.d3.axisTop()
+            .scale(self.xScale)
+          this.xAxisBottom = this.d3.axisBottom()
             .scale(self.xScale)
 
           // Set x-axis number format, depending on scale type
-          self.setXAxisNumberFormat(this.scaleType, this.mobileView)
+          self.setXAxisNumberFormat(this.xAxisTop, this.scaleType, this.mobileView)
+          self.setXAxisNumberFormat(this.xAxisBottom, this.scaleType, this.mobileView)
 
-          this.domXAxis = this.svgChart.append("g")
-            .attr("transform", "translate(0," + -3 + ")") //"translate(0," + this.chartHeight + ")"
-            .call(this.xAxis)
+          this.domxAxisTop = this.svgChart.append("g")
+            .attr("transform", "translate(0," + -3 + ")")
+            .call(this.xAxisTop)
+            .attr("class", "x_axis")
+          this.domxAxisBottom = this.svgChart.append("g")
+            .attr("transform", "translate(0," + this.chartHeight + ")")
+            .call(this.xAxisBottom)
             .attr("class", "x_axis")
 
-          // Add x axis title
+          // Add x axis titles
           this.svgChart.append("foreignObject")
             .attr("id", "x-label-container")
             .attr("x", 0)
-            .attr("y", -this.margin.top) // this.chartHeight+25
+            .attr("y", -this.margin.top)
             .attr("width", this.chartWidth)
-            .html("<p class='x_label'><span class='poolText emph'>Pool</span> volume (km³) or <span class='fluxText emph'>flux</span> rate (km³ per year)</p>")
+            .html("<p class='x_label top'><span class='pool pageText emph'>Pool</span> or <span class='example pageText emph'>example</span> volume (km³) or <span class='flux pageText emph'>flux</span> rate (km³ per year)</p>")
+          // this.svgChart.append("foreignObject")
+          //   .attr("id", "x-label-container")
+          //   .attr("x", 0)
+          //   .attr("y", this.chartHeight+25)
+          //   .attr("width", this.chartWidth)
+          //   .html("<p class='x_label bottom'><span class='pool pageText emph'>Pool</span> volume (km³) or <span class='flux pageText emph'>flux</span> rate (km³ per year)</p>")
 
           // y axis scale for lollipop chart
           const yScale = this.d3.scaleBand()
@@ -519,23 +534,23 @@ export default {
                   (logDescription + ' W' + logMovement + ' In contrast, w' + linearMovement + ' ' + linearDescription) : 
                   (linearDescription + ' W' + linearMovement + ' In contrast, w'  + logMovement + ' ' + logDescription);
         },
-        setXAxisNumberFormat(currentScale, currentlyMobile) {
+        setXAxisNumberFormat(currentXAxis, currentScale, currentlyMobile) {
           const self = this;
 
           if ((currentScale === 'log' ) && (currentlyMobile===false)) {
-            this.xAxis
+            currentXAxis
               .ticks(10)
               .tickFormat(d => this.xScale.tickFormat(0, self.d3.format(".1s"))(d).replace("G","B"))
           } else if ((currentScale === 'log' ) && (currentlyMobile===true)) {
-            this.xAxis
+            currentXAxis
               .ticks(10)
               .tickFormat(d => this.xScale.tickFormat(0, self.d3.format(".1s"))(d).replace("G","B"))
           } else if ((currentScale === 'linear') && (currentlyMobile===false)) {
-            this.xAxis
+            currentXAxis
               .ticks(10)
               .tickFormat(d =>this.customNumberFormat(d))
           }  else if (currentScale === 'linear' && currentlyMobile===true) {
-            this.xAxis
+            currentXAxis
               .ticks(6)
               .tickFormat(d =>this.customNumberFormat(d))
           }
@@ -574,13 +589,17 @@ export default {
           
           const animationDuration = 2000;
 
-          // Reset number format for x axis
-          self.setXAxisNumberFormat(this.scaleType, this.mobileView)
+          // Reset number format for x axes
+          self.setXAxisNumberFormat(this.xAxisTop, this.scaleType, this.mobileView)
+          self.setXAxisNumberFormat(this.xAxisBottom, this.scaleType, this.mobileView)
 
           // Shift chart elements
-          this.domXAxis.transition()
+          this.domxAxisTop.transition()
               .duration(animationDuration)
-              .call(self.xAxis.scale(this.xScale));
+              .call(self.xAxisTop.scale(this.xScale));
+          this.domxAxisBottom.transition()
+              .duration(animationDuration)
+              .call(self.xAxisBottom.scale(this.xScale));
           this.svgChart.selectAll(".chartBand")
             .transition()
             .duration(animationDuration)
