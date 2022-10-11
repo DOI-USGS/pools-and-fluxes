@@ -704,7 +704,7 @@ export default {
   .button {
     --tw-bg-opacity: 1;
     background-color: white;
-    border: 0.5px solid $lightestGrey;
+    border: 0.5px solid #D2D2D2;
     border-radius: 0.25rem;
     margin-left: auto;
     margin-right: 2px;
@@ -714,13 +714,19 @@ export default {
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
+    box-shadow:
+      1px 2px 2px hsl(0deg, 0%, 40% / 0.47);
   }
   .button:hover {
     background-color: $darkGrey;
     color: white;
+    box-shadow:
+      3px 6px 6px hsl(0deg, 0%, 35% / 0.41);
     @media screen and (max-width: 600px) {
       background-color: white;
       color: black;
+      box-shadow:
+      1px 2px 2px hsl(0deg, 0%, 35% / 0.47);
     }
   }
 </style>
