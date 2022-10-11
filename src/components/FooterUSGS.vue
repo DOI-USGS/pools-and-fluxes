@@ -22,13 +22,6 @@
             <li class="last leaf menu-links menu-level-1">
               <a href="https://answers.usgs.gov/">Contact USGS</a>
             </li>
-          </ul>
-          <!--/ footer nav links -->
-        </div>
-        <!-- /.footer-doi -->
-        <!-- .footer-utl-links -->
-        <div class="footer-doi">
-          <ul class="menu nav">
             <li class="first leaf menu-links menu-level-1">
               <a href="https://www.doi.gov/">U.S. Department of the Interior</a>
             </li>
@@ -129,6 +122,7 @@
     margin-left: auto;
     padding-left: 15px;
     padding-right: 15px;
+    background-color: #c2c4c5;
   }
   .tmp-container a {
     text-decoration: none;
@@ -195,7 +189,7 @@
 
   footer.footer .footer-doi ul.menu li:after {
     content: "|";
-    color: #ffffff;
+    color: #000000;
     float: left;
     padding-top: 5px;
     padding-left: 7px;
