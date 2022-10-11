@@ -123,7 +123,7 @@ export default {
     this.scaleType = "log"
 
     // chart elements
-    this.margin = this.mobileView ? { top: 45, right: 15, bottom: 20, left:  15 } : { top: 45, right: 15, bottom: 20, left: 265 }
+    this.margin = this.mobileView ? { top: 45, right: 15, bottom: 20, left:  15 } : { top: 45, right: 15, bottom: 20, left: 300 }
     this.w = document.getElementById("chart-container").offsetWidth;
     this.h = document.getElementById("chart-container").offsetHeight;
     this.chartWidth = this.w - this.margin.left - this.margin.right; 
@@ -301,6 +301,7 @@ export default {
             .data(data)
             .enter()
             .append("line")
+            .filter(function(d) { return d.type === 'pool' || d.type === 'flux' || d.type === 'example pool'  || d.type === 'example flux' })
               .attr("x1",  d => self.xScale(d.value_km_3))
               .attr("x2", self.xScale(xMin))
               .attr("y1", d => yScale(d.feature_label) + yScale.bandwidth()/2)
@@ -347,25 +348,24 @@ export default {
             .data(data)
             .enter()
             .append("circle")
+            .filter(function(d) { return d.type === 'pool' || d.type === 'flux' || d.type === 'example pool'  || d.type === 'example flux' })
               .attr("cx", d => self.xScale(d.value_km_3))
               .attr("cy", d => yScale(d.feature_label) + yScale.bandwidth()/2)
               .attr("class", d => "chartCircle " + d.type)
               .attr("id", d => d.feature_class)
 
-          // add single line to separate examples
+          // add lines to separate chart sections
           let lineBreak = this.svgChart.selectAll("breakLine")
             .data(data)
             .enter()
             .append("line")
-            .filter(function(d) { return d.feature_class === 'gap' })
-              .attr("x1",  -this.margin.left)
-              .attr("x2", this.margin.left + this.chartWidth + this.margin.right)
+            .filter(function(d) { return d.feature_class === 'gap' && d.type != 'pool header'})
               .attr("y1", d => yScale(d.feature_label))
               .attr("y2", d => yScale(d.feature_label))
               .attr("class", d => "breakLine " + d.type)
               .attr("id", d => d.feature_class)
               .style("stroke-linecap", "round")
-              .style("stroke-dasharray", "3,3")
+              // .style("stroke-dasharray", "3,3")
               .style("opacity", 1)
 
           //// SET UP DIFFERENT STYLING OF CHART ELEMENTS ON DESKTOP AND MOBILE
@@ -374,6 +374,10 @@ export default {
           dataPoints.attr("r", pointSize)
           dataBands.style("stroke-width", pointSize*2)
           dataBandBkgds.style("stroke-width", pointSize*2)
+          let lineBreakX1 = this.mobileView ? 1 : -this.chartWidth/9
+          let lineBreakX2 = this.mobileView ? this.chartWidth : this.chartWidth +10
+          lineBreak.attr("x1", lineBreakX1)
+          lineBreak.attr("x2", lineBreakX2)
 
           // Style y-axis text on mobile and desktop
           let textRectangleBuffer = 5
@@ -405,9 +409,7 @@ export default {
               .attr("height", yScale.bandwidth())
               .style("fill", "white")
               .style("opacity", 0)
-              .on("click", function(d) {
-                if (d.feature_class !='gap') {self.populateCard(d)}
-              }) //trigger click on desktop and mobile
+              .on("click", d => self.populateCard(d)) //trigger click on desktop and mobile
 
           // Set different x placement and width for interaction rectangles on mobile and desktop
           // on mobile - cover full width of chart + left and right margins
@@ -500,55 +502,56 @@ export default {
         populateCard(d){
           const self = this;
 
-          // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
-          this.cardImageSource = self.imagePath(d.image_file)
-          this.cardImageSourceWebp = self.imagePath(d.image_file + '?webp')
-          //this.cardImageSourceWebp = self.imagePath(d.image_file.substring(0, d.image_file.indexOf('.')) + '.webp')
-          this.cardImageSite = d.image_source
+          if (d.type.includes('header') === false) {
+            // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
+            this.cardImageSource = self.imagePath(d.image_file)
+            this.cardImageSourceWebp = self.imagePath(d.image_file + '?webp')
+            //this.cardImageSourceWebp = self.imagePath(d.image_file.substring(0, d.image_file.indexOf('.')) + '.webp')
+            this.cardImageSite = d.image_source
 
-          // Populate card with information
-          this.cardTitle = d.feature_title;
-          this.cardType = d.type.charAt(0).toUpperCase() + d.type.slice(1);
-          switch (d.type) {
-            case 'pool':
-              this.cardColor = '#9C6D07'; // 5:1 contrast (since text)
-              break;
-            case 'flux':
-              this.cardColor = "#06846A"; // 5:1 contrast (since text)
-              break;
-            case 'example pool':
-              this.cardColor = "#6E6E6E"; // 5:1 contrast (since text)
-              break;
-            case 'example flux':
-              this.cardColor = "#6E6E6E"; // 5:1 contrast (since text)
-              break;
+            // Populate card with information
+            this.cardTitle = d.feature_title;
+            this.cardType = d.type.charAt(0).toUpperCase() + d.type.slice(1);
+            switch (d.type) {
+              case 'pool':
+                this.cardColor = '#9C6D07'; // 5:1 contrast (since text)
+                break;
+              case 'flux':
+                this.cardColor = "#06846A"; // 5:1 contrast (since text)
+                break;
+              case 'example pool':
+                this.cardColor = "#6E6E6E"; // 5:1 contrast (since text)
+                break;
+              case 'example flux':
+                this.cardColor = "#6E6E6E"; // 5:1 contrast (since text)
+                break;
+            }
+
+            // Provide volume/rate estimate
+            this.cardSizePrefix = d.type==='flux' ? 'Rate estimate: ' : 'Volume estimate: '
+            let unitsText = d.units==='cubic kilometers' ? 'km³' : 'km³ per year'
+            this.cardFeatureSize = this.d3.format(',')(d.value_km_3) + ' ' +  unitsText
+            
+            // Provide range and data source, as applicable
+            if (d.type === 'pool' || d.type === 'flux') {
+              // Provide range
+              this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low_km_3) + ' - ' + this.d3.format(',')(d.range_high_km_3) + ' ' +  unitsText
+              // Data source already provided in caption text
+              this.cardFeatureDataSource = null
+            } else {
+              // No range to provide
+              this.cardFeatureRange = ''
+              // Provide data source
+              this.cardFeatureDataSource = d.data_source
+            }
+
+            // Provide volume/rate estimate
+            let definitionPrefix = d.type.includes('example') ? 'Description: ' : 'Definition: '
+            this.cardFeatureDefinitionPrefix = definitionPrefix
+            this.cardFeatureDefinition = d.definition
+            this.showDialog = true;
+            this.altText = d.alt_text;
           }
-
-          // Provide volume/rate estimate
-          this.cardSizePrefix = d.type==='flux' ? 'Rate estimate: ' : 'Volume estimate: '
-          let unitsText = d.units==='cubic kilometers' ? 'km³' : 'km³ per year'
-          this.cardFeatureSize = this.d3.format(',')(d.value_km_3) + ' ' +  unitsText
-          
-          // Provide range and data source, as applicable
-          if (d.type === 'pool' || d.type === 'flux') {
-            // Provide range
-            this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low_km_3) + ' - ' + this.d3.format(',')(d.range_high_km_3) + ' ' +  unitsText
-            // Data source already provided in caption text
-            this.cardFeatureDataSource = null
-          } else {
-            // No range to provide
-            this.cardFeatureRange = ''
-            // Provide data source
-            this.cardFeatureDataSource = d.data_source
-          }
-
-          // Provide volume/rate estimate
-          let definitionPrefix = d.type==='example' ? 'Description: ' : 'Definition: '
-          this.cardFeatureDefinitionPrefix = definitionPrefix
-          this.cardFeatureDefinition = d.definition
-          this.showDialog = true;
-          this.altText = d.alt_text;
-
         },
         setAxisExplanation() {
           const logDescription = 'Using a log scale is useful when values are distributed across many orders of magnitude.';
@@ -602,7 +605,9 @@ export default {
           let xBuffer = 10;
 
           // Set position of y axis label
-          if (featureType === 'example pool' || featureType === 'example flux' || currentlyShowingUncertainty === false) {
+          if (featureType.includes('header')) {
+            return self.xScale(1)
+          } else if (featureType === 'example pool' || featureType === 'example flux' || currentlyShowingUncertainty === false) {
             return self.xScale(featureData.value_km_3) + xBuffer
           } else if ((featureType === 'pool' || featureType === 'flux') && (currentlyShowingUncertainty === true)) {
             return self.xScale(featureData.range_high_km_3) + xBuffer
@@ -676,10 +681,10 @@ export default {
     margin-top: 1vh;
     margin-bottom: 1vh;
     @media screen and (max-height: 770px) {
-        height: 100vh;
+        height: 120vh;
     }
     @media screen and (max-width: 600px) {
-        height: 75vh;
+        height: 100vh;
     }
   }
   #caption-container {
@@ -702,13 +707,17 @@ export default {
     margin-left: auto;
     margin-right: 2px;
     margin-top: 0.5rem;
-    padding: 5px 8px 5px 8px;;
+    padding: 5px 8px 5px 8px;
     max-width: 24rem;
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
     box-shadow:
       1px 2px 2px hsl(0deg, 0%, 40% / 0.47);
+    @media screen and (max-width: 600px) {
+      margin-top: 0rem;
+      margin-bottom: 0.1rem;
+    }
   }
   .button:hover {
     background-color: $darkGrey;
@@ -743,22 +752,14 @@ export default {
     fill: $poolColor;
     stroke: $poolColor;
   }
-  // .pool.chartBand {
-  //   stroke: $poolColor;
-  // }
   .flux {
     fill: $fluxColor;
     stroke: $fluxColor;
   }
-  // .flux.chartBand {
-  //   stroke: $fluxColor;
-  // }
   .example {
     fill: $neutralGrey;
-    // stroke: $neutralGrey;
   }
   .header{
-    fill: #ffffff;
     font-weight: 700;
   }
   .pool.pageText {
@@ -788,7 +789,7 @@ export default {
   }
   .breakLine {
     stroke: $neutralGrey;
-    stroke-width: 0.5px;
+    stroke-width: 0.25px;
   }
   .y_axis line {
     visibility:hidden;
@@ -808,6 +809,12 @@ export default {
     @media screen and (max-width: 600px) {
         font-size: 1em;
     }
+  }
+  .yAxisText.pool.header {
+    fill: $poolColorDark;
+  }
+  .yAxisText.flux.header {
+    fill: $fluxColorDark;
   }
   .yAxisText.example {
     stroke: None;
