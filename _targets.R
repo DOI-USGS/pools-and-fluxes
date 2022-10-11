@@ -27,19 +27,25 @@ list(
   ),
   tar_target(
     # find images to put in s3
-    water_images,
+    water_image_basenames,
     water_volume_data %>%
       distinct(feature_label, feature_class, image_file, image_credit) %>%
       filter(!(is.na(image_file) | image_file == "NA")) |>
       pull(image_file)
+  ),
+  tar_target(
+    water_images,
+    file.path('Images', water_image_basenames),
+    pattern = map(water_image_basenames),
+    format = 'file'
   ),
 
   # compress images via rescaling size and reduce dpi (density) output
   tar_target(
     ## export as png
     image_scaled_png,{
-      out_file <- sprintf('tmp/%s', water_images)
-      image_read(sprintf('Images/%s', water_images)) |>
+      out_file <- sprintf('tmp/%s', basename(water_images))
+      image_read(water_images) |>
         image_scale("x300") |>
         image_write(out_file, density = 92)
       return(out_file)
@@ -50,9 +56,9 @@ list(
   tar_target(
     ## export as webp to optimize browser delivery
     image_scaled_webp,{
-      file_name <- str_extract(water_images, ".+\\.")
+      file_name <- str_extract(basename(water_images), ".+\\.")
       out_file <- sprintf('tmp/%swebp', file_name)
-      image_read(sprintf('Images/%s', water_images)) |>
+      image_read(water_images) |>
         image_scale("x200") |>
         image_write(out_file, density = 92, compression = "WebP")
       return(out_file)
