@@ -283,13 +283,7 @@ export default {
             .attr("x", 0)
             .attr("y", -this.margin.top)
             .attr("width", this.chartWidth)
-            .html("<p class='x_label top'><span class='pool pageText emph'>Pool</span> or <span class='example pageText emph'>example</span> volume (km³) or <span class='flux pageText emph'>flux</span> rate (km³ per year)</p>")
-          // this.svgChart.append("foreignObject")
-          //   .attr("id", "x-label-container")
-          //   .attr("x", 0)
-          //   .attr("y", this.chartHeight+25)
-          //   .attr("width", this.chartWidth)
-          //   .html("<p class='x_label bottom'><span class='pool pageText emph'>Pool</span> volume (km³) or <span class='flux pageText emph'>flux</span> rate (km³ per year)</p>")
+            .html("<p class='x_label top'><span class='pool pageText emph'>Pool</span> volume (km³) or <span class='flux pageText emph'>flux</span> rate (km³ per year)</p>")
 
           // y axis scale for lollipop chart
           const yScale = this.d3.scaleBand()
