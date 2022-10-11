@@ -709,9 +709,6 @@ export default {
     margin-top: 0.5rem;
     padding: 5px 8px 5px 8px;
     max-width: 24rem;
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none; /* IE 10 and IE 11 */
-    user-select: none; /* Standard syntax */
     box-shadow:
       1px 2px 2px hsl(0deg, 0%, 40% / 0.47);
     @media screen and (max-width: 600px) {
