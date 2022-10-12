@@ -123,7 +123,7 @@ export default {
     this.scaleType = "log"
 
     // chart elements
-    this.margin = this.mobileView ? { top: 45, right: 15, bottom: 20, left:  15 } : { top: 45, right: 15, bottom: 20, left: 300 }
+    this.margin = this.mobileView ? { top: 50, right: 15, bottom: 20, left:  15 } : { top: 45, right: 15, bottom: 20, left: 300 }
     this.w = document.getElementById("chart-container").offsetWidth;
     this.h = document.getElementById("chart-container").offsetHeight;
     this.chartWidth = this.w - this.margin.left - this.margin.right; 
@@ -278,10 +278,9 @@ export default {
             .attr("class", "x_axis")
 
           // Add x axis titles
-          this.svgChart.append("foreignObject")
+          let xAxisLabel = this.svgChart.append("foreignObject")
             .attr("id", "x-label-container")
             .attr("x", 0)
-            .attr("y", -this.margin.top)
             .attr("width", this.chartWidth)
             .html("<p class='x_label top'><span class='pool pageText emph'>Pool</span> volume (km³) or <span class='flux pageText emph'>flux</span> rate (km³ per year)</p>")
 
@@ -378,6 +377,10 @@ export default {
           let lineBreakX2 = this.mobileView ? this.chartWidth : this.chartWidth +10
           lineBreak.attr("x1", lineBreakX1)
           lineBreak.attr("x2", lineBreakX2)
+
+          // Vertically place x-axis label on mobile and desktop
+          let labelYOffset = this.mobileView ? -this.margin.top+5 : -this.margin.top
+          xAxisLabel.attr("y", labelYOffset)
 
           // Style y-axis text on mobile and desktop
           let textRectangleBuffer = 5
@@ -833,6 +836,10 @@ export default {
     text-align: center;
     height: 1.3em;
     line-height: 1em;
+    @media screen and (max-width: 600px) {
+        height: 1em;
+        line-height: 1em;
+    }
   }
   .x_label {
     font-size: 1em;
