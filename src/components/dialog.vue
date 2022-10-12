@@ -30,7 +30,7 @@
       <hr class="dialog__break"/>
 
       <div class="dialog__footer">
-        <button @click="close" class="button dialog__close">Close</button>
+        <button @click="close" class="button dialog__close"><p>Close</p></button>
       </div>
 
     </div>
