@@ -13,24 +13,33 @@
 
       gtag('config', 'UA-78530187-23');
     </script>
+    <!-- Google tag GA4 (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VF1WCN3Y71"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-VF1WCN3Y71');
+    </script>
     <%= process.env.VUE_APP_TIER !== '' ? '<meta name="robots" content="noindex,nofollow">' : '' %><!-- an empty string in this case means the 'prod' version of the application   -->
       <!-- Primary Meta Tags -->
       <title>
         <%= VUE_APP_TIER %>
           <%= VUE_APP_TITLE %>
       </title>
-      <meta name="title" content="Pools and Fluxes in the Water Cycle">
+      <meta name="title" content="Pools and fluxes in the water cycle">
       <meta name="description" content="">
       <!-- Open Graph / Facebook -->
       <meta property="og:type" content="website">
       <meta property="og:url" content="labs.waterdata.usgs.gov/visualizations/pools-and-fluxes">
-      <meta property="og:title" content="Pools and Fluxes in the Water Cycle">
+      <meta property="og:title" content="Pools and fluxes in the water cycle">
       <meta property="og:description" content="The magnitude of water on Earth">
       <meta property="og:image" content="">
       <!-- Twitter -->
       <meta property="twitter:card" content="summary_large_image">
       <meta property="twitter:url" content="labs.waterdata.usgs.gov/visualizations/pools-and-fluxes">
-      <meta property="twitter:title" content="Pools and Fluxes in the Water Cycle">
+      <meta property="twitter:title" content="Pools and fluxes in the water cycle">
       <meta property="twitter:description" content="The magnitude of water on Earth">
       <meta property="twitter:image" content="">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
@@ -54,11 +63,6 @@
           { "@type": "Person",
             "name": "Lindsay Platt",
             "email": "lplatt@usgs.gov",
-            "affiliation": { "@type": "Organization", "legalName": "U.S. Geological Survey" }
-          },
-          { "@type": "Person",
-            "name": "Bekah Redwine",
-            "email": "rredwine@contractor.usgs.gov",
             "affiliation": { "@type": "Organization", "legalName": "U.S. Geological Survey" }
           },
           { "@type": "Person",
