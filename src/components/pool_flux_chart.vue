@@ -528,7 +528,7 @@ export default {
             }
 
             // Provide volume/rate estimate
-            this.cardSizePrefix = d.type==='flux' ? 'Rate estimate: ' : 'Volume estimate: '
+            this.cardSizePrefix = d.type.includes('flux') ? 'Rate estimate: ' : 'Volume estimate: '
             let unitsText = d.units==='cubic kilometers' ? 'km³' : 'km³ per year'
             this.cardFeatureSize = this.d3.format(',')(d.value_km_3) + ' ' +  unitsText
             
