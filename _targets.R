@@ -66,21 +66,25 @@ list(
     pattern = map(water_images),
     format = 'file'
   ),
+  # Build list of png and webp version for each image
   tar_target(
     image_list,
-    c(image_scaled_png, image_scaled_webp)
+    c(image_scaled_png, image_scaled_webp),
+    format = 'file',
+    pattern = map(image_scaled_png, image_scaled_webp)
   ),
   # store compressed images in s3
   tar_target(
     image_upload_s3, {
-      file_local <- image_list
-      file_name <- gsub('tmp/', '', file_local)
-      file_s3 <- sprintf('visualizations/images/%s', file_name)
-      s3_upload(filepath_s3 = file_s3,
-                on_exists = "replace",
-                filepath_local = file_local
-      )
-      },
+      # upload png and webp files for each image
+      purrr::map_dfr(image_list, function(image_file) {
+        file_name <- basename(image_file)
+        file_s3 <- sprintf('visualizations/images/%s', file_name)
+        s3_upload(filepath_s3 = file_s3,
+                  on_exists = "replace",
+                  filepath_local = image_file)
+      })
+    },
     pattern = map(image_list)
   ),
   tar_target(
