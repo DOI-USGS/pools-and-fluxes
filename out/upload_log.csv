@@ -1,7 +1,7 @@
 local_filepath,s3_filepath,timestamp
-public/data/pools-fluxes-examples-limited.csv,visualizations/data/water_volumes.csv,2022-10-12T22:34:55Z
-tmp/deepOcean.png,visualizations/images/deepOcean.png,2022-10-12T22:47:14Z
-tmp/deepOcean.webp,visualizations/images/deepOcean.webp,2022-10-12T22:47:16Z
+public/data/pools-fluxes-examples-limited.csv,visualizations/data/water_volumes.csv,2022-10-12T22:56:44Z
+tmp/oceanDeepZone.png,visualizations/images/oceanDeepZone.png,2022-10-12T22:56:49Z
+tmp/oceanDeepZone.webp,visualizations/images/oceanDeepZone.webp,2022-10-12T22:56:52Z
 tmp/mixedOcean.png,visualizations/images/mixedOcean.png,2022-10-12T22:47:19Z
 tmp/mixedOcean.webp,visualizations/images/mixedOcean.webp,2022-10-12T22:47:21Z
 tmp/glacier.png,visualizations/images/glacier.png,2022-10-12T22:47:24Z
@@ -32,8 +32,8 @@ tmp/oceanCirculation.png,visualizations/images/oceanCirculation.png,2022-10-12T2
 tmp/oceanCirculation.webp,visualizations/images/oceanCirculation.webp,2022-10-12T22:48:21Z
 tmp/oceanEvaporation.png,visualizations/images/oceanEvaporation.png,2022-10-12T22:48:24Z
 tmp/oceanEvaporation.webp,visualizations/images/oceanEvaporation.webp,2022-10-12T22:48:26Z
-tmp/oceanPrecipitation.png,visualizations/images/oceanPrecipitation.png,2022-10-12T22:48:30Z
-tmp/oceanPrecipitation.webp,visualizations/images/oceanPrecipitation.webp,2022-10-12T22:48:32Z
+tmp/precipitationOverOcean.png,visualizations/images/precipitationOverOcean.png,2022-10-12T22:56:56Z
+tmp/precipitationOverOcean.webp,visualizations/images/precipitationOverOcean.webp,2022-10-12T22:56:58Z
 tmp/landPrecipitation.png,visualizations/images/landPrecipitation.png,2022-10-12T22:48:35Z
 tmp/landPrecipitation.webp,visualizations/images/landPrecipitation.webp,2022-10-12T22:48:39Z
 tmp/evapotranspiration.png,visualizations/images/evapotranspiration.png,2022-10-12T22:48:42Z
