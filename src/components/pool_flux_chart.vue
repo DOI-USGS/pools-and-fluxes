@@ -705,7 +705,7 @@ export default {
   .button {
     --tw-bg-opacity: 1;
     background-color: white;
-    border: 0.5px solid #D2D2D2;
+    border: 0.5px solid #A9A9A9;
     border-radius: 0.25rem;
     margin-left: auto;
     margin-right: 2px;
