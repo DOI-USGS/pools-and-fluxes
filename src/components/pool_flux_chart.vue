@@ -278,20 +278,12 @@ export default {
             .attr("class", "x_axis")
 
           // Add x-axis label on mobile and desktop
-          let XAxisLabelForeignObject = this.svgChart.append("foreignObject")
-              .attr("id", "x-label-container")
-              .attr("x", 0)
-              .attr("y", -this.margin.top)
-              .attr("width", this.chartWidth)
-
-          let XAxisLabelDiv = XAxisLabelForeignObject
-            .append("xhtml:div")
-              .append("div")
-          
-          let xAxisLabel = XAxisLabelDiv
-            .append("p")
-              .attr("class", 'x_label top')
-              .html("<span class='pool pageText emph'>Pool</span> volume (km³) or <span class='flux pageText emph'>flux</span> rate (km³ per year)")
+          this.svgChart.append("text")
+               .attr("class", "x_label")
+               .attr("text-anchor", "middle")
+               .attr("x", this.chartWidth/2)
+               .attr("y", -32)
+               .text("Pool volume (km³) or flux rate (km³ per year)")
 
           // y axis scale for lollipop chart
           const yScale = this.d3.scaleBand()
