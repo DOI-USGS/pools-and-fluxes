@@ -277,12 +277,21 @@ export default {
             .call(this.xAxisBottom)
             .attr("class", "x_axis")
 
-          // Add x axis titles
-          let xAxisLabel = this.svgChart.append("foreignObject")
-            .attr("id", "x-label-container")
-            .attr("x", 0)
-            .attr("width", this.chartWidth)
-            .html("<p class='x_label top'><span class='pool pageText emph'>Pool</span> volume (km³) or <span class='flux pageText emph'>flux</span> rate (km³ per year)</p>")
+          // Add x-axis label on mobile and desktop
+          let XAxisLabelForeignObject = this.svgChart.append("foreignObject")
+              .attr("id", "x-label-container")
+              .attr("x", 0)
+              .attr("y", -this.margin.top)
+              .attr("width", this.chartWidth)
+
+          let XAxisLabelDiv = XAxisLabelForeignObject
+            .append("xhtml:div")
+              .append("div")
+          
+          let xAxisLabel = XAxisLabelDiv
+            .append("p")
+              .attr("class", 'x_label top')
+              .html("<span class='pool pageText emph'>Pool</span> volume (km³) or <span class='flux pageText emph'>flux</span> rate (km³ per year)")
 
           // y axis scale for lollipop chart
           const yScale = this.d3.scaleBand()
@@ -377,11 +386,7 @@ export default {
           let lineBreakX2 = this.mobileView ? this.chartWidth : this.chartWidth +10
           lineBreak.attr("x1", lineBreakX1)
           lineBreak.attr("x2", lineBreakX2)
-
-          // Vertically place x-axis label on mobile and desktop
-          let labelYOffset = this.mobileView ? -this.margin.top+5 : -this.margin.top
-          xAxisLabel.attr("y", labelYOffset)
-
+          
           // Style y-axis text on mobile and desktop
           let textRectangleBuffer = 5
           let desktopTextAxisBuffer = pointSize + textRectangleBuffer
