@@ -54,7 +54,7 @@
       </div>
       <div id="caption-container">
         <p :text="axisExplanation"> Right now the x-axis is on a <span class='emph'> {{ scaleType }} </span> scale. {{ axisExplanation }}</p>
-        <p>The data for this chart are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019)</a>. Abbott et al. note that the estimate for each pool or flux "represents the most recent or comprehensive individual estimate." The ranges for each estimate, if shown, "represent the range of reported values and their uncertainties."</p>
+        <p>The data for this chart are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019)</a>. Abbott et al. note that the <span class='emph'>estimate</span> for each pool or flux "represents the most recent or comprehensive individual estimate." The <span class='emph'>range</span> for each estimate, if shown, "represent[s] the range of reported values and their uncertainties."</p>
       </div>
     </div>
   </section>
@@ -123,7 +123,7 @@ export default {
     this.scaleType = "log"
 
     // chart elements
-    this.margin = this.mobileView ? { top: 45, right: 15, bottom: 20, left:  15 } : { top: 45, right: 15, bottom: 20, left: 300 }
+    this.margin = this.mobileView ? { top: 50, right: 15, bottom: 20, left:  15 } : { top: 45, right: 15, bottom: 20, left: 300 }
     this.w = document.getElementById("chart-container").offsetWidth;
     this.h = document.getElementById("chart-container").offsetHeight;
     this.chartWidth = this.w - this.margin.left - this.margin.right; 
@@ -278,10 +278,9 @@ export default {
             .attr("class", "x_axis")
 
           // Add x axis titles
-          this.svgChart.append("foreignObject")
+          let xAxisLabel = this.svgChart.append("foreignObject")
             .attr("id", "x-label-container")
             .attr("x", 0)
-            .attr("y", -this.margin.top)
             .attr("width", this.chartWidth)
             .html("<p class='x_label top'><span class='pool pageText emph'>Pool</span> volume (km³) or <span class='flux pageText emph'>flux</span> rate (km³ per year)</p>")
 
@@ -378,6 +377,10 @@ export default {
           let lineBreakX2 = this.mobileView ? this.chartWidth : this.chartWidth +10
           lineBreak.attr("x1", lineBreakX1)
           lineBreak.attr("x2", lineBreakX2)
+
+          // Vertically place x-axis label on mobile and desktop
+          let labelYOffset = this.mobileView ? -this.margin.top+5 : -this.margin.top
+          xAxisLabel.attr("y", labelYOffset)
 
           // Style y-axis text on mobile and desktop
           let textRectangleBuffer = 5
@@ -528,7 +531,7 @@ export default {
             }
 
             // Provide volume/rate estimate
-            this.cardSizePrefix = d.type==='flux' ? 'Rate estimate: ' : 'Volume estimate: '
+            this.cardSizePrefix = d.type.includes('flux') ? 'Rate estimate: ' : 'Volume estimate: '
             let unitsText = d.units==='cubic kilometers' ? 'km³' : 'km³ per year'
             this.cardFeatureSize = this.d3.format(',')(d.value_km_3) + ' ' +  unitsText
             
@@ -702,7 +705,7 @@ export default {
   .button {
     --tw-bg-opacity: 1;
     background-color: white;
-    border: 0.5px solid #D2D2D2;
+    border: 0.5px solid #A9A9A9;
     border-radius: 0.25rem;
     margin-left: auto;
     margin-right: 2px;
@@ -804,7 +807,7 @@ export default {
         font-size: 1.25em;
     }
     @media screen and (max-width: 600px) {
-        font-size: 1em;
+        font-size: 1.1em;
     }
   }
   .yAxisText.pool.header {
@@ -833,6 +836,10 @@ export default {
     text-align: center;
     height: 1.3em;
     line-height: 1em;
+    @media screen and (max-width: 600px) {
+        height: 1em;
+        line-height: 1em;
+    }
   }
   .x_label {
     font-size: 1em;

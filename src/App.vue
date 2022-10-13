@@ -125,7 +125,7 @@ p {
   padding: 0.5em 0 0 0; 
   font-family: $Assistant;
   @media screen and (max-width: 600px) {
-    font-size: 0.9em;
+    font-size: 1em;
   }
 }
 text {
