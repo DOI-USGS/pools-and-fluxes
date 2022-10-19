@@ -477,6 +477,12 @@ export default {
             let itemTitle = d.feature_title + ". " + itemDefinitionPrefix + d.definition + " " + itemSizePrefix + (d.feature_title.charAt(0).toLowerCase() + d.feature_title.slice(1)) + " is " + d.value_km_3 + " " + d.units + ".";
             return itemTitle
           })
+          dataBands.append('title').text(d => {
+            let itemRangeDescription = d.type.includes('flux') ? "The range of the rate estimate for " : "The range of the volume estimate for ";
+            let itemDefinitionPrefix = d.type.includes('example') ? '' : 'Definition: ';
+            let itemTitle = d.feature_title + ". " + itemDefinitionPrefix + d.definition + " " + itemRangeDescription + (d.feature_title.charAt(0).toLowerCase() + d.feature_title.slice(1)) + " is " + d.range_low_km_3 + " to " + d.range_high_km_3 + " " + d.units + ".";
+            return itemTitle
+          })
         },
         mouseoverRect(current_feature) {
           const self = this;
