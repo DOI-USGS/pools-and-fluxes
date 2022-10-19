@@ -49,9 +49,7 @@
         :close="close"
         :altText="altText"
       />
-      <div id="chart-container">
-        <svg class="chart" />
-      </div>
+      <div id="chart-container" />
       <div id="caption-container">
         <p :text="axisExplanation"> Right now the x-axis is on a <span class='emph'> {{ scaleType }} </span> scale. {{ axisExplanation }}</p>
         <p>The data for this chart are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019)</a>. Abbott et al. note that the <span class='emph'>estimate</span> for each pool or flux "represents the most recent or comprehensive individual estimate." The <span class='emph'>range</span> for each estimate, if shown, "represent[s] the range of reported values and their uncertainties."</p>
@@ -137,12 +135,20 @@ export default {
       linear: this.d3.scaleLinear()            
     },
 
-    // create svg that will hold chart
-    this.svg = this.chartContainer.select('.chart')
+    // create svg for chart
+    this.svg = this.chartContainer.append("svg")
+        .attr("class", 'chart')
         .attr("viewBox", "0 0 " + (this.chartWidth + this.margin.left + this.margin.right) + " " + (this.chartHeight + this.margin.top + this.margin.bottom))
         .attr("preserveAspectRatio", "xMidYMid meet")
         .attr("width", '100%')
         .attr("height", '100%')
+        .attr('role', 'img'); //screen reader identifies whole svg as an image
+    
+    // Add svg title
+    var title = this.svg.append('title'); //screen reader will read aloud title (must be first child of svg!)
+    title.text("Chart of global pools and fluxes of water that includes examples of specific pools and fluxes for context. The volume of the world's oceans far exceeds the volumes of all other global pools of water");
+
+    // append group to hold d3 chart
     this.svgChart = this.svg.append("g")
         .attr("transform","translate(" + this.margin.left + "," + this.margin.top + ")")
         .attr("id", "pool-flux-chart");
