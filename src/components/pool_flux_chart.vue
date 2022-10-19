@@ -142,11 +142,6 @@ export default {
         .attr("preserveAspectRatio", "xMidYMid meet")
         .attr("width", '100%')
         .attr("height", '100%')
-        .attr('role', 'img'); //screen reader identifies whole svg as an image
-    
-    // Add svg title
-    var title = this.svg.append('title'); //screen reader will read aloud title (must be first child of svg!)
-    title.text("Chart of global pools and fluxes of water that includes examples of specific pools and fluxes for context. The volume of the world's oceans far exceeds the volumes of all other global pools of water");
 
     // append group to hold d3 chart
     this.svgChart = this.svg.append("g")
