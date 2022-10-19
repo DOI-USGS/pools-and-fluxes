@@ -469,6 +469,14 @@ export default {
                   }
                 })
           }
+          
+          // Add element titles for screenreader (must be added at end of element creation)
+          dataPoints.append('title').text(d => {
+            let itemSizePrefix = d.type.includes('flux') ? "The rate estimate for " : "The volume estimate for ";
+            let itemDefinitionPrefix = d.type.includes('example') ? '' : 'Definition: ';
+            let itemTitle = d.feature_title + ". " + itemDefinitionPrefix + d.definition + " " + itemSizePrefix + (d.feature_title.charAt(0).toLowerCase() + d.feature_title.slice(1)) + " is " + d.value_km_3 + " " + d.units + ".";
+            return itemTitle
+          })
         },
         mouseoverRect(current_feature) {
           const self = this;
