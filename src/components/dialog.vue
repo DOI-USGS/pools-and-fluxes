@@ -3,13 +3,13 @@
 
 
     <div class="dialog">
-      <div class="dialog__header" :style="{'background-color': color}">
+      <header class="dialog__header" :style="{'background-color': color}">
         <h3 class="dialog__type" v-text="type"></h3>
-      </div>
+      </header>
 
       <hr class="dialog__break"/>
 
-      <div class="dialog__content">
+      <section class="dialog__content">
         <h2 class="dialog__title" v-text="title"></h2>
         <p><span class="dialog__size_prefix" v-text="sizePrefix"></span>
         <span class="dialog__size"><a v-bind:href="dataSource" target="_blank" v-text="size"></a></span></p>
@@ -25,13 +25,13 @@
           </picture>
           <p class="dialog__definition" v-text="definition"></p>
         </div>
-      </div>
+      </section>
     
       <hr class="dialog__break"/>
 
-      <div class="dialog__footer">
+      <footer class="dialog__footer">
         <button @click="close" class="button dialog__close"><p>Close</p></button>
-      </div>
+      </footer>
 
     </div>
 

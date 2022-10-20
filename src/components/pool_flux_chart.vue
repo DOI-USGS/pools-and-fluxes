@@ -1,59 +1,62 @@
 <template>
   <section>
     <div id="page-content">
-      <h1><span class='pool pageText emph' >Pools</span> and <span class='flux pageText emph'>fluxes</span> in the water cycle</h1>
-      <p>This chart shows the size of global <span class='pool pageText emph' >pools</span> and <span class='flux pageText emph'>fluxes</span> of water, and includes <span class='example pageText emph'>examples</span> of specific pools and fluxes for context. <span class='pool pageText emph' >Pools</span> are places where water is stored, like the ocean. <span class='flux pageText emph'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use. Learn more about the water cycle and see the water cycle diagram on the <a href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></p>
-      <br>
-      <hr>
-      <div id = "chart-title-container">
-        <p>Showing <span class='pool pageText emph' >pool</span> and <span class='flux pageText emph' >flux</span> estimates,
-          <span>        
-            <button
-              class="button"
-              @click="toggleUncertainty"
-              :text="currentUncertaintyStatus"
-            >
-              {{ currentUncertaintyStatus }}
-            </button>
-          </span>
-          , on a 
-          <span>
-            <button
-              class="button"
-              @click="toggleScale"
-              :text="scaleType"
-            >
-              {{ scaleType }}
-            </button>
-          </span>
-          scale. 
-          <span class = 'emph'>
-            Click on any row of the chart to pull up more information
-          </span>
-        </p>
-      </div>
-      <dialogCard 
-        :show="showDialog" 
-        :title="cardTitle" 
-        :type="cardType" 
-        :color="cardColor" 
-        :source="cardImageSource" 
-        :sourceWebp="cardImageSourceWebp"
-        :imageSite="cardImageSite"
-        :sizePrefix = "cardSizePrefix"
-        :size="cardFeatureSize" 
-        :range="cardFeatureRange"
-        :dataSource="cardFeatureDataSource" 
-        :definitionPrefix="cardFeatureDefinitionPrefix"
-        :definition="cardFeatureDefinition" 
-        :close="close"
-        :altText="altText"
-      />
-      <div id="chart-container" />
-      <div id="caption-container">
+      <header>
+        <h1><span class='pool pageText emph' >Pools</span> and <span class='flux pageText emph'>fluxes</span> in the water cycle</h1>
+        <p>This chart shows the size of global <span class='pool pageText emph' >pools</span> and <span class='flux pageText emph'>fluxes</span> of water, and includes <span class='example pageText emph'>examples</span> of specific pools and fluxes for context. <span class='pool pageText emph' >Pools</span> are places where water is stored, like the ocean. <span class='flux pageText emph'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use. Learn more about the water cycle and see the water cycle diagram on the <a href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></p>
+        <br>
+        <hr>      
+        <div id = "chart-title-container">
+          <p>Showing <span class='pool pageText emph' >pool</span> and <span class='flux pageText emph' >flux</span> estimates,
+            <span>        
+              <button
+                class="button"
+                @click="toggleUncertainty"
+                :text="currentUncertaintyStatus"
+              >
+                {{ currentUncertaintyStatus }}
+              </button>
+            </span>
+            , on a 
+            <span>
+              <button
+                class="button"
+                @click="toggleScale"
+                :text="scaleType"
+              >
+                {{ scaleType }}
+              </button>
+            </span>
+            scale. 
+            <span class = 'emph'>
+              Click on any row of the chart to pull up more information
+            </span>
+          </p>
+        </div>
+      </header>
+      <figure id="chart-container" >
+        <dialogCard 
+          :show="showDialog" 
+          :title="cardTitle" 
+          :type="cardType" 
+          :color="cardColor" 
+          :source="cardImageSource" 
+          :sourceWebp="cardImageSourceWebp"
+          :imageSite="cardImageSite"
+          :sizePrefix = "cardSizePrefix"
+          :size="cardFeatureSize" 
+          :range="cardFeatureRange"
+          :dataSource="cardFeatureDataSource" 
+          :definitionPrefix="cardFeatureDefinitionPrefix"
+          :definition="cardFeatureDefinition" 
+          :close="close"
+          :altText="altText"
+        />
+      </figure>
+      <figcaption id="caption-container">
         <p :text="axisExplanation"> Right now the x-axis is on a <span class='emph'> {{ scaleType }} </span> scale. {{ axisExplanation }}</p>
         <p>The data for this chart are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019)</a>. Abbott et al. note that the <span class='emph'>estimate</span> for each pool or flux "represents the most recent or comprehensive individual estimate." The <span class='emph'>range</span> for each estimate, if shown, "represent[s] the range of reported values and their uncertainties."</p>
-      </div>
+      </figcaption>
     </div>
   </section>
 </template>
