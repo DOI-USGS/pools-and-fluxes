@@ -432,7 +432,10 @@ export default {
           }
           // Add title for screenreader
           interactionRectangles.append('title')
-            .text(d => "Click to learn more about " + d.feature_title + ".")
+            .text(d => {
+              let featureName = d.type.includes('example') ? d.feature_title : (d.feature_title.charAt(0).toLowerCase() + d.feature_title.slice(1))
+              return "Click to learn more about " + featureName + "."
+            })
 
           // On desktop, add additional interaction rectangles over y-axis text to trigger click and interaction
           if (this.mobileView===false) {
@@ -452,7 +455,10 @@ export default {
                 .on("mouseover", d => self.mouseoverRect(d.feature_class))
                 .on("mouseout", d => self.mouseoutRect(d.feature_class))
                 .append('title') //add title for screenreader
-                  .text(d => "Click to learn more about " + d.feature_title + ".")
+                  .text(d => {
+                    let featureName = d.type.includes('example') ? d.feature_title : (d.feature_title.charAt(0).toLowerCase() + d.feature_title.slice(1))
+                    return "Click to learn more about " + featureName + "."
+                  })
           }
           
           // Add element titles for screenreader (must be added at end of element creation)
