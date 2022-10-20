@@ -407,6 +407,7 @@ export default {
           let interactionRectangles = svgInteractionGroup.selectAll("interactionRectangle")
             .data(data)
             .enter()
+            .filter(function(d) { return d.type === 'pool' || d.type === 'flux' || d.type === 'example pool'  || d.type === 'example flux' })
             .append("rect")
               .attr("class", d => "interactionRectangle " + d.feature_class)
               .attr("y", d => yScale(d.feature_label))
@@ -426,25 +427,19 @@ export default {
           // On desktop, add mouseover to interaction rectangles that overlay chart
           if (this.mobileView===false) {
             interactionRectangles
-              .on("mouseover", function(d) {
-                let current_feature = d.feature_class;
-                if (current_feature != 'gap') {
-                  self.mouseoverRect(current_feature)
-                }
-              })
-              .on("mouseout", function(d) {
-                let current_feature = d.feature_class;
-                if (current_feature != 'gap') {
-                  self.mouseoutRect(current_feature)
-                }
-              })
+              .on("mouseover", d => self.mouseoverRect(d.feature_class))
+              .on("mouseout", d => self.mouseoutRect(d.feature_class))
           }
+          // Add title for screenreader
+          interactionRectangles.append('title')
+            .text(d => "Click to learn more about " + d.feature_title + ".")
 
           // On desktop, add additional interaction rectangles over y-axis text to trigger click and interaction
           if (this.mobileView===false) {
             let interactionRectanglesText = svgInteractionGroup.selectAll("interactionRectangleText")
               .data(data)
               .enter()
+              .filter(function(d) { return d.type === 'pool' || d.type === 'flux' || d.type === 'example pool'  || d.type === 'example flux' })
               .append("rect")
                 .attr("class", d => "interactionRectangleText " + d.feature_class)
                 .attr("x", -this.margin.left)
@@ -454,18 +449,10 @@ export default {
                 .style("fill", "white")
                 .style("opacity", 0)
                 .on("click", d => self.populateCard(d))
-                .on("mouseover", function(d) {
-                  let current_feature = d.feature_class;
-                  if (current_feature != 'gap') {
-                  self.mouseoverRect(current_feature)
-                }
-                })
-                .on("mouseout", function(d) {
-                  let current_feature = d.feature_class;
-                  if (current_feature != 'gap') {
-                    self.mouseoutRect(current_feature)
-                  }
-                })
+                .on("mouseover", d => self.mouseoverRect(d.feature_class))
+                .on("mouseout", d => self.mouseoutRect(d.feature_class))
+                .append('title') //add title for screenreader
+                  .text(d => "Click to learn more about " + d.feature_title + ".")
           }
           
           // Add element titles for screenreader (must be added at end of element creation)
@@ -520,56 +507,54 @@ export default {
         populateCard(d){
           const self = this;
 
-          if (d.type.includes('header') === false) {
-            // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
-            this.cardImageSource = self.imagePath(d.image_file)
-            this.cardImageSourceWebp = self.imagePath(d.image_file + '?webp')
-            //this.cardImageSourceWebp = self.imagePath(d.image_file.substring(0, d.image_file.indexOf('.')) + '.webp')
-            this.cardImageSite = d.image_source
+          // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
+          this.cardImageSource = self.imagePath(d.image_file)
+          this.cardImageSourceWebp = self.imagePath(d.image_file + '?webp')
+          //this.cardImageSourceWebp = self.imagePath(d.image_file.substring(0, d.image_file.indexOf('.')) + '.webp')
+          this.cardImageSite = d.image_source
+          this.altText = d.alt_text;
 
-            // Populate card with information
-            this.cardTitle = d.feature_title;
-            this.cardType = d.type.charAt(0).toUpperCase() + d.type.slice(1);
-            switch (d.type) {
-              case 'pool':
-                this.cardColor = '#9C6D07'; // 5:1 contrast (since text)
-                break;
-              case 'flux':
-                this.cardColor = "#06846A"; // 5:1 contrast (since text)
-                break;
-              case 'example pool':
-                this.cardColor = "#6E6E6E"; // 5:1 contrast (since text)
-                break;
-              case 'example flux':
-                this.cardColor = "#6E6E6E"; // 5:1 contrast (since text)
-                break;
-            }
-
-            // Provide volume/rate estimate
-            this.cardSizePrefix = d.type.includes('flux') ? 'Rate estimate: ' : 'Volume estimate: '
-            let unitsText = d.units==='cubic kilometers' ? 'km³' : 'km³ per year'
-            this.cardFeatureSize = this.d3.format(',')(d.value_km_3) + ' ' +  unitsText
-            
-            // Provide range and data source, as applicable
-            if (d.type === 'pool' || d.type === 'flux') {
-              // Provide range
-              this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low_km_3) + ' - ' + this.d3.format(',')(d.range_high_km_3) + ' ' +  unitsText
-              // Data source already provided in caption text
-              this.cardFeatureDataSource = null
-            } else {
-              // No range to provide
-              this.cardFeatureRange = ''
-              // Provide data source
-              this.cardFeatureDataSource = d.data_source
-            }
-
-            // Provide volume/rate estimate
-            let definitionPrefix = d.type.includes('example') ? 'Description: ' : 'Definition: '
-            this.cardFeatureDefinitionPrefix = definitionPrefix
-            this.cardFeatureDefinition = d.definition
-            this.showDialog = true;
-            this.altText = d.alt_text;
+          // Populate card with information
+          this.cardTitle = d.feature_title;
+          this.cardType = d.type.charAt(0).toUpperCase() + d.type.slice(1);
+          switch (d.type) {
+            case 'pool':
+              this.cardColor = '#9C6D07'; // 5:1 contrast (since text)
+              break;
+            case 'flux':
+              this.cardColor = "#06846A"; // 5:1 contrast (since text)
+              break;
+            case 'example pool':
+              this.cardColor = "#6E6E6E"; // 5:1 contrast (since text)
+              break;
+            case 'example flux':
+              this.cardColor = "#6E6E6E"; // 5:1 contrast (since text)
+              break;
           }
+
+          // Provide volume/rate estimate
+          this.cardSizePrefix = d.type.includes('flux') ? 'Rate estimate: ' : 'Volume estimate: '
+          let unitsText = d.units==='cubic kilometers' ? 'km³' : 'km³ per year'
+          this.cardFeatureSize = this.d3.format(',')(d.value_km_3) + ' ' +  unitsText
+          
+          // Provide range and data source, as applicable
+          if (d.type === 'pool' || d.type === 'flux') {
+            // Provide range
+            this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low_km_3) + ' - ' + this.d3.format(',')(d.range_high_km_3) + ' ' +  unitsText
+            // Data source already provided in caption text
+            this.cardFeatureDataSource = null
+          } else {
+            // No range to provide
+            this.cardFeatureRange = ''
+            // Provide data source
+            this.cardFeatureDataSource = d.data_source
+          }
+
+          // Provide volume/rate estimate
+          let definitionPrefix = d.type.includes('example') ? 'Description: ' : 'Definition: '
+          this.cardFeatureDefinitionPrefix = definitionPrefix
+          this.cardFeatureDefinition = d.definition
+          this.showDialog = true;
         },
         setAxisExplanation() {
           const logDescription = 'Using a log scale is useful when values are distributed across many orders of magnitude.';
