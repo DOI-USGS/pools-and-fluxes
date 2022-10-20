@@ -262,6 +262,14 @@ export default {
 
           const self = this;
 
+          // Add x-axis label on mobile and desktop - add first so that screen reader reads first
+          this.svgChart.append("text")
+               .attr("class", "x_label")
+               .attr("text-anchor", "middle")
+               .attr("x", this.chartWidth/2)
+               .attr("y", -32)
+               .text("Pool volume (km³) or flux rate (km³ per year)")
+
           //// ADD AXES
           this.xAxisTop = this.d3.axisTop()
             .scale(self.xScale)
@@ -280,14 +288,6 @@ export default {
             .attr("transform", "translate(0," + this.chartHeight + ")")
             .call(this.xAxisBottom)
             .attr("class", "x_axis")
-
-          // Add x-axis label on mobile and desktop
-          this.svgChart.append("text")
-               .attr("class", "x_label")
-               .attr("text-anchor", "middle")
-               .attr("x", this.chartWidth/2)
-               .attr("y", -32)
-               .text("Pool volume (km³) or flux rate (km³ per year)")
 
           // y axis scale for lollipop chart
           const yScale = this.d3.scaleBand()
