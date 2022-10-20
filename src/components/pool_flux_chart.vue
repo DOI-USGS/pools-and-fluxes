@@ -412,9 +412,25 @@ export default {
               .attr("class", d => "interactionRectangle " + d.feature_class)
               .attr("y", d => yScale(d.feature_label))
               .attr("height", yScale.bandwidth())
+              .attr('tabindex',"0")
+              .attr('role',"button")
               .style("fill", "white")
               .style("opacity", 0)
               .on("click", d => self.populateCard(d)) //trigger click on desktop and mobile
+          
+          // Populate card when user hits 'Enter' while tabbed over an interaction rectangle
+          interactionRectangles.each(function() {
+            this.addEventListener("keypress", function(event) {
+                if (event.key === 'Enter' | event.keyCode === 13) {
+                                  let itemFeatureClass = this.classList[1]
+                let featureData = self.volume.filter(function(dataRow) {
+                  return dataRow.feature_class === itemFeatureClass
+                })[0]
+                self.populateCard(featureData)
+                }
+
+            })
+          })
 
           // Set different x placement and width for interaction rectangles on mobile and desktop
           // on mobile - cover full width of chart + left and right margins
