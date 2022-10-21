@@ -2,7 +2,7 @@
   <div v-show="show" class="overlay">
 
 
-    <div class="dialog">
+    <div class="dialog" role="dialog">
       <header class="dialog__header" :style="{'background-color': color}">
         <h3 class="dialog__type" v-text="type"></h3>
       </header>
@@ -30,7 +30,7 @@
       <hr class="dialog__break"/>
 
       <footer class="dialog__footer">
-        <button @click="close" class="button dialog__close"><p>Close</p></button>
+        <button @click="close" class="button dialog__close" role="button"><p>Close</p></button>
       </footer>
 
     </div>

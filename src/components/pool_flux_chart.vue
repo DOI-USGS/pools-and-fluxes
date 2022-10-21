@@ -10,6 +10,7 @@
           <p>Showing <span class='pool pageText emph' >pool</span> and <span class='flux pageText emph' >flux</span> estimates,
             <span>        
               <button
+                role="button"
                 class="button"
                 @click="toggleUncertainty"
                 :text="currentUncertaintyStatus"
@@ -20,6 +21,7 @@
             , on a 
             <span>
               <button
+                role="button"
                 class="button"
                 @click="toggleScale"
                 :text="scaleType"
