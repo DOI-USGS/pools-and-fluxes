@@ -4,7 +4,7 @@
       <div class="tmp-container">
         <!-- .footer-wrap -->
         <!-- .footer-doi -->
-        <div class="footer-doi">
+        <nav class="footer-doi">
           <!-- footer nav links -->
           <ul class="menu nav">
             <li class="first leaf menu-links menu-level-1">
@@ -41,10 +41,10 @@
               <a href="https://www2.usgs.gov/foia">FOIA</a>
             </li>
           </ul>
-        </div>
+        </nav>
         <!-- /.footer-utl-links -->
         <!-- .footer-social-links -->
-        <div class="footer-social-links">
+        <nav class="footer-social-links">
           <ul class="social">
             <li class="follow">
               Follow
@@ -86,7 +86,7 @@
               </a>
             </li>
           </ul>
-        </div>
+        </nav>
         <!-- /.footer-social-links -->
       </div>
       <!-- /.footer-wrap -->
