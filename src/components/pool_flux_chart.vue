@@ -11,6 +11,7 @@
             <span>        
               <button
                 role="button"
+                aria-pressed="!scaleLog"
                 class="button"
                 @click="toggleUncertainty"
                 :text="currentUncertaintyStatus"
@@ -22,6 +23,7 @@
             <span>
               <button
                 role="button"
+                aria-pressed="showUncertainty"
                 class="button"
                 @click="toggleScale"
                 :text="scaleType"
