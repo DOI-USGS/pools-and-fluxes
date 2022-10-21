@@ -51,7 +51,7 @@
             </li>
             <li class="twitter">
               <a
-                href="https://twitter.com/usgs_datasci"
+                href="https://twitter.com/usgs_water"
                 target="_blank"
                 aria-label="twitter link"
               >
@@ -60,7 +60,7 @@
             </li>
             <li class="facebook">
               <a
-                href="https://facebook.com/usgeologicalsurvey"
+                href="https://facebook.com/USGSWater"
                 target="_blank"
                 aria-label="facebook link"
               >
@@ -78,7 +78,7 @@
             </li>
             <li class="instagram">
               <a
-                href="https://instagram.com/usgs_streamgages"
+                href="https://instagram.com/usgs_water"
                 target="_blank"
                 aria-label="instagram link"
               >
