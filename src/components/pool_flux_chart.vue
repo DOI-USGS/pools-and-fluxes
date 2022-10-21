@@ -701,7 +701,7 @@ export default {
     margin: 0 auto;
   }
   #chart-container {
-    min-height: 400px;
+    min-height: 700px;
     height: 75vh;
     width: 90vw;
     max-width: 1500px;
@@ -828,7 +828,7 @@ export default {
     padding: 1em 0 0 0; 
     font-family: $Assistant;
     @media screen and (max-height: 770px) {
-        font-size: 1.25em;
+        font-size: 1.4em;
     }
     @media screen and (max-width: 600px) {
         font-size: 1.1em;
