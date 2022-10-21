@@ -1,5 +1,5 @@
 <template>
-  <div v-show="show" class="overlay" role="none presentation">
+  <div tabindex="0" v-show="show" class="overlay" role="none presentation" @keydown.esc="close">
 
     <div class="dialog" role="dialog" aria-labelledby="dialogTitle">
       <header class="dialog__header" :style="{'background-color': color}">
