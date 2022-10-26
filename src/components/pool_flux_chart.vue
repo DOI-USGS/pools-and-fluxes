@@ -301,6 +301,11 @@ export default {
             .call(this.xAxisBottom)
             .attr("class", "x_axis")
 
+          this.domxAxisTop.selectAll('text')
+            .attr("aria-hidden", "true")
+          this.domxAxisBottom.selectAll('text')
+            .attr("aria-hidden", "true")
+
           // y axis scale for lollipop chart
           const yScale = this.d3.scaleBand()
             .range([0, this.chartHeight])
@@ -403,11 +408,7 @@ export default {
           // assign class for interaction on desktop and styling on both
           let yAxisText = this.yAxis.selectAll('text')
             .attr("class", d => "yAxisText " + self.getLabelData(d).type + ' ' + self.getLabelData(d).feature_class) //assign class for desktop interaction
-
-          // Make only chart section headers tab navigable
-          yAxisText
-            .filter(function(d) { return self.getLabelData(d).feature_class === 'gap' })
-              .attr('tabindex',"0")
+            .attr("aria-hidden", "true")
 
           if (this.mobileView===true) {
             this.yAxis.selectAll('text')
