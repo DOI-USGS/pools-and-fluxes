@@ -370,6 +370,7 @@ export default {
               .attr("cy", d => yScale(d.feature_label) + yScale.bandwidth()/2)
               .attr("class", d => "chartCircle " + d.type)
               .attr("id", d => d.feature_class)
+              .attr('tabindex',"0") // to make accessible w/ tab navigation
 
           // add lines to separate chart sections
           let lineBreak = this.svgChart.selectAll("breakLine")
