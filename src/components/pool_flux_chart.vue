@@ -436,7 +436,7 @@ export default {
               .attr("class", d => "interactionRectangle " + d.feature_class)
               .attr("y", d => yScale(d.feature_label))
               .attr("height", yScale.bandwidth())
-              .attr('tabindex',"0")
+              .attr('tabindex',"0") // to make accessible w/ tab navigation
               .attr('role',"button")
               .style("fill", "white")
               .style("opacity", 0)
