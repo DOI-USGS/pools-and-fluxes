@@ -324,7 +324,6 @@ export default {
               .attr("y2", d => yScale(d.feature_label) + yScale.bandwidth()/2)
               .attr("class", d => "chartLine " + d.type + " " + d.feature_class)
               .attr("id", d => d.feature_class)
-              .attr("role", "none presentation")
               .style("stroke-dasharray", ("1, 3"))
 
           // Set default opacity for lollipop lines to 1 on mobile, 0 on desktop
@@ -343,7 +342,6 @@ export default {
               .attr("y2", d => yScale(d.feature_label) + yScale.bandwidth()/2)
               .attr("class", d => "chartBandBkgd " + d.type)
               .attr("id", d => d.feature_class)
-              .attr("role", "none presentation")
               .style("stroke-linecap", "round")
               .style("visibility", "hidden")
           // colored partially transparent band
@@ -384,7 +382,6 @@ export default {
               .attr("y2", d => yScale(d.feature_label))
               .attr("class", d => "breakLine " + d.type)
               .attr("id", d => d.feature_class)
-              .attr("role", "none presentation")
               .style("stroke-linecap", "round")
               .style("opacity", 1)
 
