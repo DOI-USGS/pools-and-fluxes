@@ -278,7 +278,10 @@ export default {
                .attr("text-anchor", "middle")
                .attr("x", this.chartWidth/2)
                .attr("y", -32)
+               .attr('tabindex',"0") // to make accessible w/ tab navigation
                .text("Pool volume (km³) or flux rate (km³ per year)")
+               .append('title') //add title for screenreader
+                  .text("X axis label: Pool volume (km³) or flux rate (km³ per year)")
 
           //// ADD AXES
           this.xAxisTop = this.d3.axisTop()
