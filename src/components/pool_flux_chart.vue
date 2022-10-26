@@ -60,11 +60,11 @@
       />
       <figure id="chart-container" aria-label="interactive chart" />
       <figcaption id="caption-container" aria-label="chart caption">
-        <section aria-label="axis explanation">
-          <p :text="axisExplanation" tabindex="0" > Right now the x-axis is on a <span class='emph'> {{ scaleType }} </span> scale. {{ axisExplanation }}</p>
+        <section aria-hidden="true">
+          <p :text="axisExplanation" > Right now the x-axis is on a <span class='emph'> {{ scaleType }} </span> scale. {{ axisExplanation }}</p>
         </section>
         <section aria-label="data citation">
-          <p tabindex="0">The data for this chart are adapted from <a role="link" href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019)</a>. Abbott et al. note that the <span class='emph'>estimate</span> for each pool or flux "represents the most recent or comprehensive individual estimate." The <span class='emph'>range</span> for each estimate, if shown, "represent[s] the range of reported values and their uncertainties."</p>
+          <p >The data for this chart are adapted from <a role="link" href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019)</a>. Abbott et al. note that the <span class='emph'>estimate</span> for each pool or flux "represents the most recent or comprehensive individual estimate." The <span class='emph'>range</span> for each estimate, if shown, "represent[s] the range of reported values and their uncertainties."</p>
         </section>
       </figcaption>
     </div>
