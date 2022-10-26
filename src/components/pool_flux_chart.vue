@@ -486,16 +486,12 @@ export default {
                 .attr("y", d => yScale(d.feature_label))
                 .attr("width", this.margin.left-desktopRectangleAxisOffset)
                 .attr("height", yScale.bandwidth())
+                .attr("aria-hidden", "true")
                 .style("fill", "white")
                 .style("opacity", 0)
                 .on("click", d => self.populateCard(d))
                 .on("mouseover", d => self.mouseoverRect(d.feature_class))
                 .on("mouseout", d => self.mouseoutRect(d.feature_class))
-                .append('title') //add title for screenreader
-                  .text(d => {
-                    let featureName = d.type.includes('example') ? d.feature_title : (d.feature_title.charAt(0).toLowerCase() + d.feature_title.slice(1))
-                    return "Click to learn more about " + featureName + "."
-                  })
           }
           
           // Add element titles for screenreader (must be added at end of element creation)
