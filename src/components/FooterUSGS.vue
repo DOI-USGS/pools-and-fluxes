@@ -4,7 +4,7 @@
       <div class="tmp-container">
         <!-- .footer-wrap -->
         <!-- .footer-doi -->
-        <div class="footer-doi">
+        <nav class="footer-doi">
           <!-- footer nav links -->
           <ul class="menu nav">
             <li class="first leaf menu-links menu-level-1">
@@ -41,17 +41,17 @@
               <a href="https://www2.usgs.gov/foia">FOIA</a>
             </li>
           </ul>
-        </div>
+        </nav>
         <!-- /.footer-utl-links -->
         <!-- .footer-social-links -->
-        <div class="footer-social-links">
+        <nav class="footer-social-links">
           <ul class="social">
             <li class="follow">
               Follow
             </li>
             <li class="twitter">
               <a
-                href="https://twitter.com/usgs_datasci"
+                href="https://twitter.com/usgs_water"
                 target="_blank"
                 aria-label="twitter link"
               >
@@ -60,7 +60,7 @@
             </li>
             <li class="facebook">
               <a
-                href="https://facebook.com/usgeologicalsurvey"
+                href="https://facebook.com/USGSWater"
                 target="_blank"
                 aria-label="facebook link"
               >
@@ -78,7 +78,7 @@
             </li>
             <li class="instagram">
               <a
-                href="https://instagram.com/usgs_streamgages"
+                href="https://instagram.com/usgs_water"
                 target="_blank"
                 aria-label="instagram link"
               >
@@ -86,7 +86,7 @@
               </a>
             </li>
           </ul>
-        </div>
+        </nav>
         <!-- /.footer-social-links -->
       </div>
       <!-- /.footer-wrap -->

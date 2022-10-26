@@ -9,6 +9,9 @@ export default new Router({
       path: "/",
       name: "Visualization",
       component: () => import("@/views/Visualization.vue"),
+      meta: {
+        title: 'Pools and fluxes in the water cycle'
+      }
     },
     {
       path: "/404",

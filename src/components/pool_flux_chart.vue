@@ -1,38 +1,47 @@
 <template>
   <section>
-    <div id="page-content">
-      <h1><span class='pool pageText emph' >Pools</span> and <span class='flux pageText emph'>fluxes</span> in the water cycle</h1>
-      <p>This chart shows the size of global <span class='pool pageText emph' >pools</span> and <span class='flux pageText emph'>fluxes</span> of water, and includes <span class='example pageText emph'>examples</span> of specific pools and fluxes for context. <span class='pool pageText emph' >Pools</span> are places where water is stored, like the ocean. <span class='flux pageText emph'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use. Learn more about the water cycle and see the water cycle diagram on the <a href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></p>
-      <br>
-      <hr>
-      <div id = "chart-title-container">
-        <p>Showing <span class='pool pageText emph' >pool</span> and <span class='flux pageText emph' >flux</span> estimates,
-          <span>        
-            <button
-              class="button"
-              @click="toggleUncertainty"
-              :text="currentUncertaintyStatus"
-            >
-              {{ currentUncertaintyStatus }}
-            </button>
-          </span>
-          , on a 
-          <span>
-            <button
-              class="button"
-              @click="toggleScale"
-              :text="scaleType"
-            >
-              {{ scaleType }}
-            </button>
-          </span>
-          scale. 
-          <span class = 'emph'>
-            Click on any row of the chart to pull up more information
-          </span>
-        </p>
-      </div>
-      <dialogCard 
+    <div id="page-content" role="main">
+      <header aria-level="1" aria-label="page title" >
+        <h1 role="none presentation"><span class='pool pageText emph' >Pools</span> and <span class='flux pageText emph'>fluxes</span> in the water cycle</h1>
+      </header >
+      <section aria-label="page description">
+        <p >This chart shows the size of global <span class='pool pageText emph' >pools</span> and <span class='flux pageText emph'>fluxes</span> of water, and includes <span class='example pageText emph'>examples</span> of specific pools and fluxes for context. <span class='pool pageText emph' >Pools</span> are places where water is stored, like the ocean. <span class='flux pageText emph'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use. Learn more about the water cycle and see the water cycle diagram on the <a role="link" href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></p>
+        <br aria-hidden="true">
+      </section>
+      <hr role="none presentation">
+      <section>      
+        <div id = "chart-title-container" aria-level="2" >
+          <p ><span aria-hidden="true">Showing <span class='pool pageText emph' >pool</span> and <span class='flux pageText emph' >flux</span> estimates,
+            <span>        
+              <button
+                aria-pressed="!scaleLog"
+                class="button"
+                @click="toggleUncertainty"
+                :text="currentUncertaintyStatus"
+              >
+                {{ currentUncertaintyStatus }}
+              </button>
+            </span>
+            , on a 
+            <span>
+              <button
+                aria-pressed="showUncertainty"
+                class="button"
+                @click="toggleScale"
+                :text="scaleType"
+              >
+                {{ scaleType }}
+              </button>
+            </span>
+            scale.</span> 
+            <span class = 'emph'>
+              Click on any row of the chart to pull up more information
+            </span>
+          </p>
+        </div>
+      </section >
+      <dialogCard
+        :aria-hidden="!showDialog"
         :show="showDialog" 
         :title="cardTitle" 
         :type="cardType" 
@@ -49,13 +58,15 @@
         :close="close"
         :altText="altText"
       />
-      <div id="chart-container">
-        <svg class="chart" />
-      </div>
-      <div id="caption-container">
-        <p :text="axisExplanation"> Right now the x-axis is on a <span class='emph'> {{ scaleType }} </span> scale. {{ axisExplanation }}</p>
-        <p>The data for this chart are adapted from <a href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019)</a>. Abbott et al. note that the <span class='emph'>estimate</span> for each pool or flux "represents the most recent or comprehensive individual estimate." The <span class='emph'>range</span> for each estimate, if shown, "represent[s] the range of reported values and their uncertainties."</p>
-      </div>
+      <figure id="chart-container" aria-label="interactive chart" />
+      <figcaption id="caption-container" aria-label="chart caption">
+        <section aria-hidden="true">
+          <p :text="axisExplanation" > Right now the x-axis is on a <span class='emph'> {{ scaleType }} </span> scale. {{ axisExplanation }}</p>
+        </section>
+        <section aria-label="data citation">
+          <p >The data for this chart are adapted from <a role="link" href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019)</a>. Abbott et al. note that the <span class='emph'>estimate</span> for each pool or flux "represents the most recent or comprehensive individual estimate." The <span class='emph'>range</span> for each estimate, if shown, "represent[s] the range of reported values and their uncertainties."</p>
+        </section>
+      </figcaption>
     </div>
   </section>
 </template>
@@ -137,12 +148,15 @@ export default {
       linear: this.d3.scaleLinear()            
     },
 
-    // create svg that will hold chart
-    this.svg = this.chartContainer.select('.chart')
+    // create svg for chart
+    this.svg = this.chartContainer.append("svg")
+        .attr("class", 'chart')
         .attr("viewBox", "0 0 " + (this.chartWidth + this.margin.left + this.margin.right) + " " + (this.chartHeight + this.margin.top + this.margin.bottom))
         .attr("preserveAspectRatio", "xMidYMid meet")
         .attr("width", '100%')
         .attr("height", '100%')
+
+    // append group to hold d3 chart
     this.svgChart = this.svg.append("g")
         .attr("transform","translate(" + this.margin.left + "," + this.margin.top + ")")
         .attr("id", "pool-flux-chart");
@@ -160,15 +174,15 @@ export default {
           if (this.showUncertainty) {
             this.currentUncertaintyStatus = 'with ranges'
             this.d3.selectAll('.chartBandBkgd')
-              .style("opacity", 1)
+              .style("visibility", "visible")
             this.d3.selectAll('.chartBand')
-              .style("opacity", 0.3)
+              .style("visibility", "visible")
           } else {
             this.currentUncertaintyStatus = 'without ranges'
             this.d3.selectAll('.chartBandBkgd')
-              .style("opacity", 0)
+              .style("visibility", "hidden")
             this.d3.selectAll('.chartBand')
-              .style("opacity", 0)
+              .style("visibility", "hidden")
           }
 
           // Adjust y-axis label placement on mobile
@@ -258,6 +272,17 @@ export default {
 
           const self = this;
 
+          // Add x-axis label on mobile and desktop 
+          this.svgChart.append("text")
+               .attr("class", "x_label")
+               .attr("text-anchor", "middle")
+               .attr("x", this.chartWidth/2)
+               .attr("y", -32)
+               .attr("aria-hidden", "true")
+               .text("Pool volume (km³) or flux rate (km³ per year)")
+               .append('title') //add title for screenreader
+                  .text("X axis label: Pool volume (km³) or flux rate (km³ per year)")
+
           //// ADD AXES
           this.xAxisTop = this.d3.axisTop()
             .scale(self.xScale)
@@ -277,13 +302,10 @@ export default {
             .call(this.xAxisBottom)
             .attr("class", "x_axis")
 
-          // Add x-axis label on mobile and desktop
-          this.svgChart.append("text")
-               .attr("class", "x_label")
-               .attr("text-anchor", "middle")
-               .attr("x", this.chartWidth/2)
-               .attr("y", -32)
-               .text("Pool volume (km³) or flux rate (km³ per year)")
+          this.domxAxisTop.selectAll('text')
+            .attr("aria-hidden", "true")
+          this.domxAxisBottom.selectAll('text')
+            .attr("aria-hidden", "true")
 
           // y axis scale for lollipop chart
           const yScale = this.d3.scaleBand()
@@ -300,8 +322,8 @@ export default {
           let dataLines = this.svgChart.selectAll("chartLine")
             .data(data)
             .enter()
-            .append("line")
             .filter(function(d) { return d.type === 'pool' || d.type === 'flux' || d.type === 'example pool'  || d.type === 'example flux' })
+            .append("line")
               .attr("x1",  d => self.xScale(d.value_km_3))
               .attr("x2", self.xScale(xMin))
               .attr("y1", d => yScale(d.feature_label) + yScale.bandwidth()/2)
@@ -318,8 +340,8 @@ export default {
           let dataBandBkgds = this.svgChart.selectAll("chartBandBkgd")
             .data(data)
             .enter()
-            .append("line")
             .filter(function(d) { return d.type === 'pool' || d.type === 'flux' })
+            .append("line")
               .attr("x1",  d => self.xScale(d.range_high_km_3))
               .attr("x2", d => self.xScale(d.range_low_km_3))
               .attr("y1", d => yScale(d.feature_label) + yScale.bandwidth()/2)
@@ -327,13 +349,13 @@ export default {
               .attr("class", d => "chartBandBkgd " + d.type)
               .attr("id", d => d.feature_class)
               .style("stroke-linecap", "round")
-              .style("opacity", 0)
+              .style("visibility", "hidden")
           // colored partially transparent band
           let dataBands = this.svgChart.selectAll("chartBand")
             .data(data)
             .enter()
-            .append("line")
             .filter(function(d) { return d.type === 'pool' || d.type === 'flux' })
+            .append("line")
               .attr("x1",  d => self.xScale(d.range_high_km_3))
               .attr("x2", d => self.xScale(d.range_low_km_3))
               .attr("y1", d => yScale(d.feature_label) + yScale.bandwidth()/2)
@@ -341,14 +363,15 @@ export default {
               .attr("class", d => "chartBand " + d.type)
               .attr("id", d => d.feature_class)
               .style("stroke-linecap", "round")
-              .style("opacity", 0)
+              .style("opacity", 0.3)
+              .style("visibility", "hidden")
 
           // Add lollipop circles
           let dataPoints = this.svgChart.selectAll("chartCircle")
             .data(data)
             .enter()
-            .append("circle")
             .filter(function(d) { return d.type === 'pool' || d.type === 'flux' || d.type === 'example pool'  || d.type === 'example flux' })
+            .append("circle")
               .attr("cx", d => self.xScale(d.value_km_3))
               .attr("cy", d => yScale(d.feature_label) + yScale.bandwidth()/2)
               .attr("class", d => "chartCircle " + d.type)
@@ -358,14 +381,13 @@ export default {
           let lineBreak = this.svgChart.selectAll("breakLine")
             .data(data)
             .enter()
-            .append("line")
             .filter(function(d) { return d.feature_class === 'gap' && d.type != 'pool header'})
+            .append("line")
               .attr("y1", d => yScale(d.feature_label))
               .attr("y2", d => yScale(d.feature_label))
               .attr("class", d => "breakLine " + d.type)
               .attr("id", d => d.feature_class)
               .style("stroke-linecap", "round")
-              // .style("stroke-dasharray", "3,3")
               .style("opacity", 1)
 
           //// SET UP DIFFERENT STYLING OF CHART ELEMENTS ON DESKTOP AND MOBILE
@@ -384,8 +406,10 @@ export default {
           let desktopTextAxisBuffer = pointSize + textRectangleBuffer
           let desktopRectangleAxisOffset = pointSize + textRectangleBuffer/2
           // assign class for interaction on desktop and styling on both
-          this.yAxis.selectAll('text')
+          let yAxisText = this.yAxis.selectAll('text')
             .attr("class", d => "yAxisText " + self.getLabelData(d).type + ' ' + self.getLabelData(d).feature_class) //assign class for desktop interaction
+            .attr("aria-hidden", "true")
+
           if (this.mobileView===true) {
             this.yAxis.selectAll('text')
               .attr("text-anchor","start")
@@ -403,13 +427,30 @@ export default {
           let interactionRectangles = svgInteractionGroup.selectAll("interactionRectangle")
             .data(data)
             .enter()
+            .filter(function(d) { return d.type === 'pool' || d.type === 'flux' || d.type === 'example pool'  || d.type === 'example flux' })
             .append("rect")
               .attr("class", d => "interactionRectangle " + d.feature_class)
               .attr("y", d => yScale(d.feature_label))
               .attr("height", yScale.bandwidth())
+              .attr('tabindex',"0") // to make accessible w/ tab navigation
+              .attr('role',"button")
               .style("fill", "white")
               .style("opacity", 0)
               .on("click", d => self.populateCard(d)) //trigger click on desktop and mobile
+          
+          // Populate card when user hits 'Enter' while tabbed over an interaction rectangle
+          interactionRectangles.each(function() {
+            this.addEventListener("keypress", function(event) {
+                if (event.key === 'Enter' | event.keyCode === 13) {
+                                  let itemFeatureClass = this.classList[1]
+                let featureData = self.volume.filter(function(dataRow) {
+                  return dataRow.feature_class === itemFeatureClass
+                })[0]
+                self.populateCard(featureData)
+                }
+
+            })
+          })
 
           // Set different x placement and width for interaction rectangles on mobile and desktop
           // on mobile - cover full width of chart + left and right margins
@@ -422,47 +463,51 @@ export default {
           // On desktop, add mouseover to interaction rectangles that overlay chart
           if (this.mobileView===false) {
             interactionRectangles
-              .on("mouseover", function(d) {
-                let current_feature = d.feature_class;
-                if (current_feature != 'gap') {
-                  self.mouseoverRect(current_feature)
-                }
-              })
-              .on("mouseout", function(d) {
-                let current_feature = d.feature_class;
-                if (current_feature != 'gap') {
-                  self.mouseoutRect(current_feature)
-                }
-              })
+              .on("mouseover", d => self.mouseoverRect(d.feature_class))
+              .on("mouseout", d => self.mouseoutRect(d.feature_class))
           }
+          // Add title for screenreader
+          interactionRectangles.append('title')
+            .text(d => {
+              let featureName = d.type.includes('example') ? d.feature_title : (d.feature_title.charAt(0).toLowerCase() + d.feature_title.slice(1))
+              return "Click to learn more about " + featureName + "."
+            })
 
           // On desktop, add additional interaction rectangles over y-axis text to trigger click and interaction
           if (this.mobileView===false) {
             let interactionRectanglesText = svgInteractionGroup.selectAll("interactionRectangleText")
               .data(data)
               .enter()
+              .filter(function(d) { return d.type === 'pool' || d.type === 'flux' || d.type === 'example pool'  || d.type === 'example flux' })
               .append("rect")
                 .attr("class", d => "interactionRectangleText " + d.feature_class)
                 .attr("x", -this.margin.left)
                 .attr("y", d => yScale(d.feature_label))
                 .attr("width", this.margin.left-desktopRectangleAxisOffset)
                 .attr("height", yScale.bandwidth())
+                .attr("aria-hidden", "true")
                 .style("fill", "white")
                 .style("opacity", 0)
                 .on("click", d => self.populateCard(d))
-                .on("mouseover", function(d) {
-                  let current_feature = d.feature_class;
-                  if (current_feature != 'gap') {
-                  self.mouseoverRect(current_feature)
-                }
-                })
-                .on("mouseout", function(d) {
-                  let current_feature = d.feature_class;
-                  if (current_feature != 'gap') {
-                    self.mouseoutRect(current_feature)
-                  }
-                })
+                .on("mouseover", d => self.mouseoverRect(d.feature_class))
+                .on("mouseout", d => self.mouseoutRect(d.feature_class))
           }
+          
+          // Add element titles for screenreader (must be added at end of element creation)
+          dataPoints.append('title').text(d => {
+            let itemName = d.type.includes('example') ? d.feature_title : (d.feature_title.charAt(0).toLowerCase() + d.feature_title.slice(1));
+            let itemSizePrefix = d.type.includes('flux') ? "The rate estimate for " : "The volume estimate for ";
+            let itemDefinitionPrefix = d.type.includes( 'example') ? '' : 'Definition: ';
+            let itemTitle = d.feature_title + ". " + (d.type.charAt(0).toUpperCase() + d.type.slice(1)) + ". " + itemSizePrefix + itemName + " is " + this.d3.format(',')(d.value_km_3) + " " + d.units + ".";
+            return itemTitle
+          })
+          dataBands.append('title').text(d => {
+            let itemName = d.type.includes('example') ? d.feature_title : (d.feature_title.charAt(0).toLowerCase() + d.feature_title.slice(1));
+            let itemRangeDescription = d.type.includes('flux') ? "The range of the rate estimate for " : "The range of the volume estimate for ";
+            let itemDefinitionPrefix = d.type.includes('example') ? '' : 'Definition: ';
+            let itemTitle = d.feature_title + ". " + d.type + ". " + itemRangeDescription + itemName + " is " + this.d3.format(',')(d.range_low_km_3) + " to " + this.d3.format(',')(d.range_high_km_3) + " " + d.units + ".";
+            return itemTitle
+          })
         },
         mouseoverRect(current_feature) {
           const self = this;
@@ -502,56 +547,54 @@ export default {
         populateCard(d){
           const self = this;
 
-          if (d.type.includes('header') === false) {
-            // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
-            this.cardImageSource = self.imagePath(d.image_file)
-            this.cardImageSourceWebp = self.imagePath(d.image_file + '?webp')
-            //this.cardImageSourceWebp = self.imagePath(d.image_file.substring(0, d.image_file.indexOf('.')) + '.webp')
-            this.cardImageSite = d.image_source
+          // use image_file from this.volume as ending to https://labs.waterdata.usgs.gov/visualizations/images/
+          this.cardImageSource = self.imagePath(d.image_file)
+          this.cardImageSourceWebp = self.imagePath(d.image_file + '?webp')
+          //this.cardImageSourceWebp = self.imagePath(d.image_file.substring(0, d.image_file.indexOf('.')) + '.webp')
+          this.cardImageSite = d.image_source
+          this.altText = d.alt_text;
 
-            // Populate card with information
-            this.cardTitle = d.feature_title;
-            this.cardType = d.type.charAt(0).toUpperCase() + d.type.slice(1);
-            switch (d.type) {
-              case 'pool':
-                this.cardColor = '#9C6D07'; // 5:1 contrast (since text)
-                break;
-              case 'flux':
-                this.cardColor = "#06846A"; // 5:1 contrast (since text)
-                break;
-              case 'example pool':
-                this.cardColor = "#6E6E6E"; // 5:1 contrast (since text)
-                break;
-              case 'example flux':
-                this.cardColor = "#6E6E6E"; // 5:1 contrast (since text)
-                break;
-            }
-
-            // Provide volume/rate estimate
-            this.cardSizePrefix = d.type.includes('flux') ? 'Rate estimate: ' : 'Volume estimate: '
-            let unitsText = d.units==='cubic kilometers' ? 'km³' : 'km³ per year'
-            this.cardFeatureSize = this.d3.format(',')(d.value_km_3) + ' ' +  unitsText
-            
-            // Provide range and data source, as applicable
-            if (d.type === 'pool' || d.type === 'flux') {
-              // Provide range
-              this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low_km_3) + ' - ' + this.d3.format(',')(d.range_high_km_3) + ' ' +  unitsText
-              // Data source already provided in caption text
-              this.cardFeatureDataSource = null
-            } else {
-              // No range to provide
-              this.cardFeatureRange = ''
-              // Provide data source
-              this.cardFeatureDataSource = d.data_source
-            }
-
-            // Provide volume/rate estimate
-            let definitionPrefix = d.type.includes('example') ? 'Description: ' : 'Definition: '
-            this.cardFeatureDefinitionPrefix = definitionPrefix
-            this.cardFeatureDefinition = d.definition
-            this.showDialog = true;
-            this.altText = d.alt_text;
+          // Populate card with information
+          this.cardTitle = d.feature_title;
+          this.cardType = d.type.charAt(0).toUpperCase() + d.type.slice(1);
+          switch (d.type) {
+            case 'pool':
+              this.cardColor = '#9C6D07'; // 5:1 contrast (since text)
+              break;
+            case 'flux':
+              this.cardColor = "#06846A"; // 5:1 contrast (since text)
+              break;
+            case 'example pool':
+              this.cardColor = "#6E6E6E"; // 5:1 contrast (since text)
+              break;
+            case 'example flux':
+              this.cardColor = "#6E6E6E"; // 5:1 contrast (since text)
+              break;
           }
+
+          // Provide volume/rate estimate
+          this.cardSizePrefix = d.type.includes('flux') ? 'Rate estimate: ' : 'Volume estimate: '
+          let unitsText = d.units==='cubic kilometers' ? 'km³' : 'km³ per year'
+          this.cardFeatureSize = this.d3.format(',')(d.value_km_3) + ' ' +  unitsText
+          
+          // Provide range and data source, as applicable
+          if (d.type === 'pool' || d.type === 'flux') {
+            // Provide range
+            this.cardFeatureRange = 'Range: ' + this.d3.format(',')(d.range_low_km_3) + ' - ' + this.d3.format(',')(d.range_high_km_3) + ' ' +  unitsText
+            // Data source already provided in caption text
+            this.cardFeatureDataSource = null
+          } else {
+            // No range to provide
+            this.cardFeatureRange = ''
+            // Provide data source
+            this.cardFeatureDataSource = d.data_source
+          }
+
+          // Provide volume/rate estimate
+          let definitionPrefix = d.type.includes('example') ? 'Description: ' : 'Definition: '
+          this.cardFeatureDefinitionPrefix = definitionPrefix
+          this.cardFeatureDefinition = d.definition
+          this.showDialog = true;
         },
         setAxisExplanation() {
           const logDescription = 'Using a log scale is useful when values are distributed across many orders of magnitude.';
@@ -674,7 +717,7 @@ export default {
     margin: 0 auto;
   }
   #chart-container {
-    min-height: 400px;
+    min-height: 700px;
     height: 75vh;
     width: 90vw;
     max-width: 1500px;
@@ -801,7 +844,7 @@ export default {
     padding: 1em 0 0 0; 
     font-family: $Assistant;
     @media screen and (max-height: 770px) {
-        font-size: 1.25em;
+        font-size: 1.4em;
     }
     @media screen and (max-width: 600px) {
         font-size: 1.1em;

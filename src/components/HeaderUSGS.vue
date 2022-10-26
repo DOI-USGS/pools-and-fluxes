@@ -9,13 +9,13 @@
         <a
           class="logo-header"
           href="https://www.usgs.gov/mission-areas/water-resources/science/water-data-visualizations?qt-science_center_objects=0#qt-science_center_objects"
-          title="Home"
+          title="USGS Water Data Visualizations homepage"
           target="_blank"
         >
           <img
             class="img"
             src="@/assets/usgsHeaderAndFooter/images/usgsLogo_white-01.png"
-            alt="Home"
+            alt="USGS logo"
           >
         </a>
       </div>
