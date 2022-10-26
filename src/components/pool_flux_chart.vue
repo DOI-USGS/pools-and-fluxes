@@ -2,16 +2,16 @@
   <section>
     <div id="page-content" role="main">
       <header aria-level="1" aria-label="page title" >
-        <h1 tabindex="0" ><span class='pool pageText emph' >Pools</span> and <span class='flux pageText emph'>fluxes</span> in the water cycle</h1>
+        <h1 role="none presentation"><span class='pool pageText emph' >Pools</span> and <span class='flux pageText emph'>fluxes</span> in the water cycle</h1>
       </header >
       <section aria-label="page description">
-        <p tabindex="0">This chart shows the size of global <span class='pool pageText emph' >pools</span> and <span class='flux pageText emph'>fluxes</span> of water, and includes <span class='example pageText emph'>examples</span> of specific pools and fluxes for context. <span class='pool pageText emph' >Pools</span> are places where water is stored, like the ocean. <span class='flux pageText emph'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use. Learn more about the water cycle and see the water cycle diagram on the <a role="link" href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></p>
-        <br role="none presentation">
+        <p >This chart shows the size of global <span class='pool pageText emph' >pools</span> and <span class='flux pageText emph'>fluxes</span> of water, and includes <span class='example pageText emph'>examples</span> of specific pools and fluxes for context. <span class='pool pageText emph' >Pools</span> are places where water is stored, like the ocean. <span class='flux pageText emph'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use. Learn more about the water cycle and see the water cycle diagram on the <a role="link" href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></p>
+        <br aria-hidden="true">
       </section>
-      <hr >
+      <hr role="none presentation">
       <section>      
-        <div id = "chart-title-container" aria-level="2" aria-label="chart title">
-          <p tabindex="0">Showing <span class='pool pageText emph' >pool</span> and <span class='flux pageText emph' >flux</span> estimates,
+        <div id = "chart-title-container" aria-level="2" aria-hidden="true">
+          <p >Showing <span class='pool pageText emph' >pool</span> and <span class='flux pageText emph' >flux</span> estimates,
             <span>        
               <button
                 aria-pressed="!scaleLog"
@@ -272,13 +272,12 @@ export default {
 
           const self = this;
 
-          // Add x-axis label on mobile and desktop - add first so that screen reader reads first
+          // Add x-axis label on mobile and desktop 
           this.svgChart.append("text")
                .attr("class", "x_label")
                .attr("text-anchor", "middle")
                .attr("x", this.chartWidth/2)
                .attr("y", -32)
-               .attr('tabindex',"0") // to make accessible w/ tab navigation
                .text("Pool volume (km³) or flux rate (km³ per year)")
                .append('title') //add title for screenreader
                   .text("X axis label: Pool volume (km³) or flux rate (km³ per year)")
@@ -359,7 +358,6 @@ export default {
               .attr("y2", d => yScale(d.feature_label) + yScale.bandwidth()/2)
               .attr("class", d => "chartBand " + d.type)
               .attr("id", d => d.feature_class)
-              .attr('tabindex',"0") // to make accessible w/ tab navigation
               .style("stroke-linecap", "round")
               .style("opacity", 0.3)
               .style("visibility", "hidden")
