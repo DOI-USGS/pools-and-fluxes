@@ -503,15 +503,17 @@ export default {
           
           // Add element titles for screenreader (must be added at end of element creation)
           dataPoints.append('title').text(d => {
+            let itemName = d.type.includes('example') ? d.feature_title : (d.feature_title.charAt(0).toLowerCase() + d.feature_title.slice(1));
             let itemSizePrefix = d.type.includes('flux') ? "The rate estimate for " : "The volume estimate for ";
-            let itemDefinitionPrefix = d.type.includes('example') ? '' : 'Definition: ';
-            let itemTitle = d.feature_title + ". " + itemDefinitionPrefix + d.definition + " " + itemSizePrefix + (d.feature_title.charAt(0).toLowerCase() + d.feature_title.slice(1)) + " is " + d.value_km_3 + " " + d.units + ".";
+            let itemDefinitionPrefix = d.type.includes( 'example') ? '' : 'Definition: ';
+            let itemTitle = d.feature_title + ". " + (d.type.charAt(0).toUpperCase() + d.type.slice(1)) + ". " + itemSizePrefix + itemName + " is " + this.d3.format(',')(d.value_km_3) + " " + d.units + ".";
             return itemTitle
           })
           dataBands.append('title').text(d => {
+            let itemName = d.type.includes('example') ? d.feature_title : (d.feature_title.charAt(0).toLowerCase() + d.feature_title.slice(1));
             let itemRangeDescription = d.type.includes('flux') ? "The range of the rate estimate for " : "The range of the volume estimate for ";
             let itemDefinitionPrefix = d.type.includes('example') ? '' : 'Definition: ';
-            let itemTitle = d.feature_title + ". " + itemDefinitionPrefix + d.definition + " " + itemRangeDescription + (d.feature_title.charAt(0).toLowerCase() + d.feature_title.slice(1)) + " is " + d.range_low_km_3 + " to " + d.range_high_km_3 + " " + d.units + ".";
+            let itemTitle = d.feature_title + ". " + d.type + ". " + itemRangeDescription + itemName + " is " + this.d3.format(',')(d.range_low_km_3) + " to " + this.d3.format(',')(d.range_high_km_3) + " " + d.units + ".";
             return itemTitle
           })
         },
