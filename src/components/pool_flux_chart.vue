@@ -174,15 +174,15 @@ export default {
           if (this.showUncertainty) {
             this.currentUncertaintyStatus = 'with ranges'
             this.d3.selectAll('.chartBandBkgd')
-              .style("opacity", 1)
+              .style("visibility", "visible")
             this.d3.selectAll('.chartBand')
-              .style("opacity", 0.3)
+              .style("visibility", "visible")
           } else {
             this.currentUncertaintyStatus = 'without ranges'
             this.d3.selectAll('.chartBandBkgd')
-              .style("opacity", 0)
+              .style("visibility", "hidden")
             this.d3.selectAll('.chartBand')
-              .style("opacity", 0)
+              .style("visibility", "hidden")
           }
 
           // Adjust y-axis label placement on mobile
@@ -340,8 +340,9 @@ export default {
               .attr("y2", d => yScale(d.feature_label) + yScale.bandwidth()/2)
               .attr("class", d => "chartBandBkgd " + d.type)
               .attr("id", d => d.feature_class)
+              .attr("role", "none presentation")
               .style("stroke-linecap", "round")
-              .style("opacity", 0)
+              .style("visibility", "hidden")
           // colored partially transparent band
           let dataBands = this.svgChart.selectAll("chartBand")
             .data(data)
@@ -354,8 +355,10 @@ export default {
               .attr("y2", d => yScale(d.feature_label) + yScale.bandwidth()/2)
               .attr("class", d => "chartBand " + d.type)
               .attr("id", d => d.feature_class)
+              .attr('tabindex',"0") // to make accessible w/ tab navigation
               .style("stroke-linecap", "round")
-              .style("opacity", 0)
+              .style("opacity", 0.3)
+              .style("visibility", "hidden")
 
           // Add lollipop circles
           let dataPoints = this.svgChart.selectAll("chartCircle")
