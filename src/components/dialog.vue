@@ -3,16 +3,16 @@
 
     <div class="dialog" role="dialog" aria-labelledby="dialogTitle">
       <header class="dialog__header" :style="{'background-color': color}">
-        <h3 tabindex="0" class="dialog__type" v-text="type"></h3>
+        <h3 role="none presentation" class="dialog__type" v-text="type"></h3>
       </header>
 
       <hr class="dialog__break" />
 
       <section class="dialog__content">
-        <h2 tabindex="0" id="dialogTitle" class="dialog__title" v-text="title"></h2>
-        <p tabindex="0" ><span class="dialog__size_prefix" v-text="sizePrefix" role="none presentation"></span>
+        <h2 role="none presentation" id="dialogTitle" class="dialog__title" v-text="title"></h2>
+        <p ><span class="dialog__size_prefix" v-text="sizePrefix" role="none presentation"></span>
           <span class="dialog__size" role="none presentation"><a role="link" v-bind:href="dataSource" target="_blank" v-text="size"></a></span></p>
-        <p tabindex="0" class="dialog__range" v-text="range"></p>
+        <p class="dialog__range" v-text="range"></p>
         <p id="dialogDefPrefix" class="dialog__def_prefix" v-text="definitionPrefix" role="none presentation"></p>
         <section class="dialog__def_content">
           <picture>
@@ -23,7 +23,7 @@
             </a>
           </picture>
           <section aria-labelledby="dialogDefPrefix">
-            <p tabindex="0" class="dialog__definition" v-text="definition"></p>
+            <p class="dialog__definition" v-text="definition"></p>
           </section>
         </section>
       </section>
