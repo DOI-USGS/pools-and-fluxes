@@ -406,8 +406,14 @@ export default {
           let desktopTextAxisBuffer = pointSize + textRectangleBuffer
           let desktopRectangleAxisOffset = pointSize + textRectangleBuffer/2
           // assign class for interaction on desktop and styling on both
-          this.yAxis.selectAll('text')
+          let yAxisText = this.yAxis.selectAll('text')
             .attr("class", d => "yAxisText " + self.getLabelData(d).type + ' ' + self.getLabelData(d).feature_class) //assign class for desktop interaction
+
+          // Make only chart section headers tab navigable
+          yAxisText
+            .filter(function(d) { return self.getLabelData(d).feature_class === 'gap' })
+              .attr('tabindex',"0")
+
           if (this.mobileView===true) {
             this.yAxis.selectAll('text')
               .attr("text-anchor","start")
