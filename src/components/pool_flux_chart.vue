@@ -10,8 +10,8 @@
       </section>
       <hr role="none presentation">
       <section>      
-        <div id = "chart-title-container" aria-level="2" aria-hidden="true">
-          <p >Showing <span class='pool pageText emph' >pool</span> and <span class='flux pageText emph' >flux</span> estimates,
+        <div id = "chart-title-container" aria-level="2" >
+          <p ><span aria-hidden="true">Showing <span class='pool pageText emph' >pool</span> and <span class='flux pageText emph' >flux</span> estimates,
             <span>        
               <button
                 aria-pressed="!scaleLog"
@@ -33,7 +33,7 @@
                 {{ scaleType }}
               </button>
             </span>
-            scale. 
+            scale.</span> 
             <span class = 'emph'>
               Click on any row of the chart to pull up more information
             </span>
