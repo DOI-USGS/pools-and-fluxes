@@ -1,17 +1,17 @@
 <template>
   <section>
     <div id="page-content" role="main">
-      <header >
-        <h1 aria-level="1" aria-label="page title" ><span class='pool pageText emph' >Pools</span> and <span class='flux pageText emph'>fluxes</span> in the water cycle</h1>
+      <header aria-level="1" aria-label="page title" >
+        <h1 tabindex="0" ><span class='pool pageText emph' >Pools</span> and <span class='flux pageText emph'>fluxes</span> in the water cycle</h1>
       </header >
       <section aria-label="page description">
-        <p>This chart shows the size of global <span class='pool pageText emph' >pools</span> and <span class='flux pageText emph'>fluxes</span> of water, and includes <span class='example pageText emph'>examples</span> of specific pools and fluxes for context. <span class='pool pageText emph' >Pools</span> are places where water is stored, like the ocean. <span class='flux pageText emph'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use. Learn more about the water cycle and see the water cycle diagram on the <a role="link" href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></p>
+        <p tabindex="0">This chart shows the size of global <span class='pool pageText emph' >pools</span> and <span class='flux pageText emph'>fluxes</span> of water, and includes <span class='example pageText emph'>examples</span> of specific pools and fluxes for context. <span class='pool pageText emph' >Pools</span> are places where water is stored, like the ocean. <span class='flux pageText emph'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use. Learn more about the water cycle and see the water cycle diagram on the <a role="link" href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></p>
         <br role="none presentation">
       </section>
       <hr >
       <section>      
         <div id = "chart-title-container" aria-level="2" aria-label="chart title">
-          <p>Showing <span class='pool pageText emph' >pool</span> and <span class='flux pageText emph' >flux</span> estimates,
+          <p tabindex="0">Showing <span class='pool pageText emph' >pool</span> and <span class='flux pageText emph' >flux</span> estimates,
             <span>        
               <button
                 aria-pressed="!scaleLog"
