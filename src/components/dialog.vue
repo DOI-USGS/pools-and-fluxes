@@ -1,29 +1,31 @@
 <template>
-  <div tabindex="0" v-show="show" class="overlay" role="none presentation" @keydown.esc="close">
+  <div tabindex="-1" v-show="show" class="overlay" role="none presentation" @keydown.esc="close">
 
     <div class="dialog" role="dialog" aria-labelledby="dialogTitle">
       <header class="dialog__header" :style="{'background-color': color}">
-        <h3 class="dialog__type" v-text="type"></h3>
+        <h3 tabindex="0" class="dialog__type" v-text="type"></h3>
       </header>
 
       <hr class="dialog__break" />
 
       <section class="dialog__content">
-        <h2 id="dialogTitle" class="dialog__title" v-text="title"></h2>
-        <p><span class="dialog__size_prefix" v-text="sizePrefix"></span>
-        <span class="dialog__size"><a role="link" v-bind:href="dataSource" target="_blank" v-text="size"></a></span></p>
-        <p class="dialog__range" v-text="range"></p>
-        <p class="dialog__def_prefix" v-text="definitionPrefix"></p>
-        <div class="dialog__def_content">
+        <h2 tabindex="0" id="dialogTitle" class="dialog__title" v-text="title"></h2>
+        <p tabindex="0" ><span class="dialog__size_prefix" v-text="sizePrefix" role="none presentation"></span>
+          <span class="dialog__size" role="none presentation"><a role="link" v-bind:href="dataSource" target="_blank" v-text="size"></a></span></p>
+        <p tabindex="0" class="dialog__range" v-text="range"></p>
+        <p id="dialogDefPrefix" class="dialog__def_prefix" v-text="definitionPrefix" role="none presentation"></p>
+        <section class="dialog__def_content">
           <picture>
             <source v-bind:srcset="sourceWebp" type="image/webp" role="none presentation">
             <source v-bind:srcset="source" type="image/png" role="none presentation">
-            <a role="link" aria-label="link to image source" v-bind:href="imageSite" target="_blank">
-            <img class="dialog__image" role="image" v-bind:src="sourceWebp" width="200px" height="200px" v-bind:alt="altText">
+            <a role="link" v-bind:href="imageSite" target="_blank">
+              <img class="dialog__image" role="image" v-bind:src="sourceWebp" width="200px" height="200px" v-bind:alt="altText">
             </a>
           </picture>
-          <p class="dialog__definition" v-text="definition" aria-label="definition"></p>
-        </div>
+          <section aria-labelledby="dialogDefPrefix">
+            <p tabindex="0" class="dialog__definition" v-text="definition"></p>
+          </section>
+        </section>
       </section>
     
       <hr class="dialog__break" role="separator" />
