@@ -41,8 +41,9 @@
         </div>
       </section >
       <dialogCard
+        v-if = "showDialog"
+        ref = "featureDialog"
         :aria-hidden="!showDialog"
-        :show="showDialog" 
         :title="cardTitle" 
         :type="cardType" 
         :color="cardColor" 
@@ -122,7 +123,7 @@ export default {
       showUncertainty: false,
       currentUncertaintyStatus: null,
       axisExplanation: null
-      }
+      }       
   },
   mounted(){      
     this.d3 = Object.assign(d3Base);
@@ -594,6 +595,8 @@ export default {
           let definitionPrefix = d.type.includes('example') ? 'Description: ' : 'Definition: '
           this.cardFeatureDefinitionPrefix = definitionPrefix
           this.cardFeatureDefinition = d.definition
+          
+          // open up dialog
           this.showDialog = true;
         },
         setAxisExplanation() {
