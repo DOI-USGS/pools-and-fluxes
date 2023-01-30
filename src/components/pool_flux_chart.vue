@@ -279,10 +279,10 @@ export default {
                .attr("text-anchor", "middle")
                .attr("x", this.chartWidth/2)
                .attr("y", -32)
-               .attr("aria-hidden", "true")
+               .attr("aria-hidden", "true") // HIDES TITLE
                .text("Pool volume (km³) or flux rate (km³ per year)")
-               .append('title') //add title for screenreader
-                  .text("X axis label: Pool volume (km³) or flux rate (km³ per year)")
+              //  .append('title') //add title for screenreader
+              //     .text("X axis label: Pool volume (km³) or flux rate (km³ per year)")
 
           //// ADD AXES
           this.xAxisTop = this.d3.axisTop()
@@ -443,11 +443,11 @@ export default {
           interactionRectangles.each(function() {
             this.addEventListener("keypress", function(event) {
                 if (event.key === 'Enter' | event.keyCode === 13) {
-                                  let itemFeatureClass = this.classList[1]
-                let featureData = self.volume.filter(function(dataRow) {
-                  return dataRow.feature_class === itemFeatureClass
-                })[0]
-                self.populateCard(featureData)
+                  let itemFeatureClass = this.classList[1]
+                  let featureData = self.volume.filter(function(dataRow) {
+                    return dataRow.feature_class === itemFeatureClass
+                  })[0]
+                  self.populateCard(featureData)
                 }
 
             })
@@ -494,21 +494,22 @@ export default {
                 .on("mouseout", d => self.mouseoutRect(d.feature_class))
           }
           
-          // Add element titles for screenreader (must be added at end of element creation)
-          dataPoints.append('title').text(d => {
-            let itemName = d.type.includes('example') ? d.feature_title : (d.feature_title.charAt(0).toLowerCase() + d.feature_title.slice(1));
-            let itemSizePrefix = d.type.includes('flux') ? "The rate estimate for " : "The volume estimate for ";
-            let itemDefinitionPrefix = d.type.includes( 'example') ? '' : 'Definition: ';
-            let itemTitle = d.feature_title + ". " + (d.type.charAt(0).toUpperCase() + d.type.slice(1)) + ". " + itemSizePrefix + itemName + " is " + this.d3.format(',')(d.value_km_3) + " " + d.units + ".";
-            return itemTitle
-          })
-          dataBands.append('title').text(d => {
-            let itemName = d.type.includes('example') ? d.feature_title : (d.feature_title.charAt(0).toLowerCase() + d.feature_title.slice(1));
-            let itemRangeDescription = d.type.includes('flux') ? "The range of the rate estimate for " : "The range of the volume estimate for ";
-            let itemDefinitionPrefix = d.type.includes('example') ? '' : 'Definition: ';
-            let itemTitle = d.feature_title + ". " + d.type + ". " + itemRangeDescription + itemName + " is " + this.d3.format(',')(d.range_low_km_3) + " to " + this.d3.format(',')(d.range_high_km_3) + " " + d.units + ".";
-            return itemTitle
-          })
+          // // Add element titles for screenreader (must be added at end of element creation)
+          // dataPoints.append('title').text(d => {
+          //   let itemName = d.type.includes('example') ? d.feature_title : (d.feature_title.charAt(0).toLowerCase() + d.feature_title.slice(1));
+          //   let itemSizePrefix = d.type.includes('flux') ? "The rate estimate for " : "The volume estimate for ";
+          //   let itemDefinitionPrefix = d.type.includes( 'example') ? '' : 'Definition: ';
+          //   let itemTitle = d.feature_title + ". " + (d.type.charAt(0).toUpperCase() + d.type.slice(1)) + ". " + itemSizePrefix + itemName + " is " + this.d3.format(',')(d.value_km_3) + " " + d.units + ".";
+          //   return itemTitle
+          // })
+          // // CURRENTLY HIDDEN, b/c aria-hidden = TRUE on button, so can't be turned on
+          // dataBands.append('title').text(d => {
+          //   let itemName = d.type.includes('example') ? d.feature_title : (d.feature_title.charAt(0).toLowerCase() + d.feature_title.slice(1));
+          //   let itemRangeDescription = d.type.includes('flux') ? "The range of the rate estimate for " : "The range of the volume estimate for ";
+          //   let itemDefinitionPrefix = d.type.includes('example') ? '' : 'Definition: ';
+          //   let itemTitle = d.feature_title + ". " + d.type + ". " + itemRangeDescription + itemName + " is " + this.d3.format(',')(d.range_low_km_3) + " to " + this.d3.format(',')(d.range_high_km_3) + " " + d.units + ".";
+          //   return itemTitle
+          // })
         },
         mouseoverRect(current_feature) {
           const self = this;
