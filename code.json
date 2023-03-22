@@ -4,7 +4,7 @@
     "organization": "U.S. Geological Survey",
     "description": "An interactive chart of the major pools and fluxes in the water cycle.",
     "version": "main",
-    "status": "Development",
+    "status": "Production",
     "permissions": {
       "usageType": "openSource",
       "licenses": [
@@ -29,47 +29,11 @@
       "Vue"
     ],
     "contact": {
-      "name": "hcorson-dosch-usgs",
+      "name": "Hayley Corson-Dosch",
       "email": "hcorson-dosch@usgs.gov"
     },
     "date": {
-      "metadataLastUpdated": "2023-03-03"
-    }
-  },
-  {
-    "name": "",
-    "organization": "U.S. Geological Survey",
-    "description": "",
-    "version": "v1.0.1",
-    "status": "Production",
-    "permissions": {
-      "usageType": "openSource",
-      "licenses": [
-        {
-          "name": "Public Domain, CC0-1.0",
-          "URL": "LICENSE.md"
-        }
-      ]
-    },
-    "homepageURL": "",
-    "downloadURL": "",
-    "disclaimerURL": "",
-    "repositoryURL": "",
-    "vcs": "git",
-    "laborHours": 1,
-    "tags": [
-      "R",
-      "USGS"
-    ],
-    "languages": [
-      "R"
-    ],
-    "contact": {
-      "name": "",
-      "email": ""
-    },
-    "date": {
-      "metadataLastUpdated": "2022-10-16"
+      "metadataLastUpdated": "2023-03-22"
     }
   }
 ]
