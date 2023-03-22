@@ -19,7 +19,7 @@
     "disclaimerURL": "https://github.com/USGS-VIZLAB/pools-and-fluxes/blob/main/DISCLAIMER.md",
     "repositoryURL": "https://github.com/USGS-VIZLAB/pools-and-fluxes.git",
     "vcs": "git",
-    "laborHours": -1,
+    "laborHours": 80,
     "tags": [
       "R",
       "USGS"
@@ -30,7 +30,7 @@
     ],
     "contact": {
       "name": "hcorson-dosch-usgs",
-      "email": "FILL ME IN"
+      "email": "hcorson-dosch@usgs.gov"
     },
     "date": {
       "metadataLastUpdated": "2023-03-03"
@@ -40,8 +40,8 @@
     "name": "",
     "organization": "U.S. Geological Survey",
     "description": "",
-    "version": "v0.0.0",
-    "status": "Ideation",
+    "version": "v1.0.1",
+    "status": "Production",
     "permissions": {
       "usageType": "openSource",
       "licenses": [
