@@ -1,45 +1,63 @@
 <template>
   <section>
-    <div id="page-content" role="main">
-      <header aria-level="1" aria-label="page title" >
-        <h1 role="none presentation"><span class='pool pageText emph' >Pools</span> and <span class='flux pageText emph'>fluxes</span> in the water cycle</h1>
-      </header >
+    <div
+      id="page-content"
+      role="main"
+    >
+      <header
+        aria-level="1"
+        aria-label="page title"
+      >
+        <h1 role="none presentation">
+          <span class="pool pageText emph">Pools</span> and <span class="flux pageText emph">fluxes</span> in the water cycle
+        </h1>
+      </header>
       <section aria-label="page description">
-        <p >This chart shows the size of global <span class='pool pageText emph' >pools</span> and <span class='flux pageText emph'>fluxes</span> of water, and includes <span class='example pageText emph'>examples</span> of specific pools and fluxes for context. <span class='pool pageText emph' >Pools</span> are places where water is stored, like the ocean. <span class='flux pageText emph'>Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use. Learn more about the water cycle and see the water cycle diagram on the <a role="link" href="https://www.usgs.gov/water-cycle" target="_blank">USGS Water Science School website.</a></p>
+        <p>
+          This chart shows the size of global <span class="pool pageText emph">pools</span> and <span class="flux pageText emph">fluxes</span> of water, and includes <span class="example pageText emph">examples</span> of specific pools and fluxes for context. <span class="pool pageText emph">Pools</span> are places where water is stored, like the ocean. <span class="flux pageText emph">Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use. Learn more about the water cycle and see the water cycle diagram on the <a
+            role="link"
+            href="https://www.usgs.gov/water-cycle"
+            target="_blank"
+          >USGS Water Science School website.</a>
+        </p>
         <br aria-hidden="true">
       </section>
       <hr role="none presentation">
       <section>      
-        <div id = "chart-title-container" aria-level="2" >
-          <p ><span aria-hidden="true">Showing <span class='pool pageText emph' >pool</span> and <span class='flux pageText emph' >flux</span> estimates,
-            <span>        
-              <button
-                aria-pressed="!scaleLog"
-                class="button"
-                @click="toggleUncertainty"
-                :text="currentUncertaintyStatus"
-              >
-                {{ currentUncertaintyStatus }}
-              </button>
-            </span>
-            , on a 
-            <span>
-              <button
-                aria-pressed="showUncertainty"
-                class="button"
-                @click="toggleScale"
-                :text="scaleType"
-              >
-                {{ scaleType }}
-              </button>
-            </span>
-            scale.</span> 
-            <span class = 'emph'>
+        <div
+          id="chart-title-container"
+          aria-level="2"
+        >
+          <p>
+            <span aria-hidden="true">Showing <span class="pool pageText emph">pool</span> and <span class="flux pageText emph">flux</span> estimates,
+              <span>        
+                <button
+                  aria-pressed="!scaleLog"
+                  class="button"
+                  :text="currentUncertaintyStatus"
+                  @click="toggleUncertainty"
+                >
+                  {{ currentUncertaintyStatus }}
+                </button>
+              </span>
+              , on a 
+              <span>
+                <button
+                  aria-pressed="showUncertainty"
+                  class="button"
+                  :text="scaleType"
+                  @click="toggleScale"
+                >
+                  {{ scaleType }}
+                </button>
+              </span>
+              scale.</span> 
+            <span class="emph">
               Click on any row of the chart to pull up more information
             </span>
           </p>
         </div>
-      </section >
+      </section>
       <dialogCard
         :aria-hidden="!showDialog"
         :show="showDialog" 
@@ -47,24 +65,38 @@
         :type="cardType" 
         :color="cardColor" 
         :source="cardImageSource" 
-        :sourceWebp="cardImageSourceWebp"
-        :imageSite="cardImageSite"
-        :sizePrefix = "cardSizePrefix"
+        :source-webp="cardImageSourceWebp"
+        :image-site="cardImageSite"
+        :size-prefix="cardSizePrefix"
         :size="cardFeatureSize" 
         :range="cardFeatureRange"
-        :dataSource="cardFeatureDataSource" 
-        :definitionPrefix="cardFeatureDefinitionPrefix"
+        :data-source="cardFeatureDataSource" 
+        :definition-prefix="cardFeatureDefinitionPrefix"
         :definition="cardFeatureDefinition" 
         :close="close"
-        :altText="altText"
+        :alt-text="altText"
       />
-      <figure id="chart-container" aria-label="interactive chart" />
-      <figcaption id="caption-container" aria-label="chart caption">
+      <figure
+        id="chart-container"
+        aria-label="interactive chart"
+      />
+      <figcaption
+        id="caption-container"
+        aria-label="chart caption"
+      >
         <section aria-hidden="true">
-          <p :text="axisExplanation" > Right now the x-axis is on a <span class='emph'> {{ scaleType }} </span> scale. {{ axisExplanation }}</p>
+          <p :text="axisExplanation">
+            Right now the x-axis is on a <span class="emph"> {{ scaleType }} </span> scale. {{ axisExplanation }}
+          </p>
         </section>
         <section aria-label="data citation">
-          <p >The data for this chart are adapted from <a role="link" href="https://www.nature.com/articles/s41561-019-0374-y" target="_blank">Abbott et al. (2019)</a>. Abbott et al. note that the <span class='emph'>estimate</span> for each pool or flux "represents the most recent or comprehensive individual estimate." The <span class='emph'>range</span> for each estimate, if shown, "represent[s] the range of reported values and their uncertainties."</p>
+          <p>
+            The data for this chart are adapted from <a
+              role="link"
+              href="https://www.nature.com/articles/s41561-019-0374-y"
+              target="_blank"
+            >Abbott et al. (2019)</a>. Abbott et al. note that the <span class="emph">estimate</span> for each pool or flux "represents the most recent or comprehensive individual estimate." The <span class="emph">range</span> for each estimate, if shown, "represent[s] the range of reported values and their uncertainties."
+          </p>
         </section>
       </figcaption>
       <br>
