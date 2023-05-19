@@ -1,41 +1,112 @@
 <template>
-  <div tabindex="-1" v-show="show" class="overlay" role="none presentation" @keydown.esc="close">
-
-    <div class="dialog" role="dialog" aria-labelledby="dialogTitle">
-      <header class="dialog__header" :style="{'background-color': color}">
-        <h3 role="none presentation" class="dialog__type" v-text="type"></h3>
+  <div
+    v-show="show"
+    tabindex="-1"
+    class="overlay"
+    role="none presentation"
+    @keydown.esc="close"
+  >
+    <div
+      class="dialog"
+      role="dialog"
+      aria-labelledby="dialogTitle"
+    >
+      <header
+        class="dialog__header"
+        :style="{'background-color': color}"
+      >
+        <h3
+          role="none presentation"
+          class="dialog__type"
+          v-text="type"
+        />
       </header>
 
-      <hr class="dialog__break" />
+      <hr class="dialog__break">
 
       <section class="dialog__content">
-        <h2 role="none presentation" id="dialogTitle" class="dialog__title" v-text="title"></h2>
-        <p ><span class="dialog__size_prefix" v-text="sizePrefix" role="none presentation"></span>
-          <span class="dialog__size" role="none presentation"><a role="link" v-bind:href="dataSource" target="_blank" v-text="size"></a></span></p>
-        <p class="dialog__range" v-text="range"></p>
-        <p id="dialogDefPrefix" class="dialog__def_prefix" v-text="definitionPrefix" role="none presentation"></p>
+        <h2
+          id="dialogTitle"
+          role="none presentation"
+          class="dialog__title"
+          v-text="title"
+        />
+        <p>
+          <span
+            class="dialog__size_prefix"
+            role="none presentation"
+            v-text="sizePrefix"
+          />
+          <span
+            class="dialog__size"
+            role="none presentation"
+          ><a
+            role="link"
+            :href="dataSource"
+            target="_blank"
+            v-text="size"
+          /></span>
+        </p>
+        <p
+          class="dialog__range"
+          v-text="range"
+        />
+        <p
+          id="dialogDefPrefix"
+          class="dialog__def_prefix"
+          role="none presentation"
+          v-text="definitionPrefix"
+        />
         <section class="dialog__def_content">
           <picture>
-            <source v-bind:srcset="sourceWebp" type="image/webp" role="none presentation">
-            <source v-bind:srcset="source" type="image/png" role="none presentation">
-            <a role="link" v-bind:href="imageSite" target="_blank">
-              <img class="dialog__image" role="image" v-bind:src="sourceWebp" width="200px" height="200px" v-bind:alt="altText">
+            <source
+              :srcset="sourceWebp"
+              type="image/webp"
+              role="none presentation"
+            >
+            <source
+              :srcset="source"
+              type="image/png"
+              role="none presentation"
+            >
+            <a
+              role="link"
+              :href="imageSite"
+              target="_blank"
+            >
+              <img
+                class="dialog__image"
+                role="image"
+                :src="sourceWebp"
+                width="200px"
+                height="200px"
+                :alt="altText"
+              >
             </a>
           </picture>
           <section aria-labelledby="dialogDefPrefix">
-            <p class="dialog__definition" v-text="definition"></p>
+            <p
+              class="dialog__definition"
+              v-text="definition"
+            />
           </section>
         </section>
       </section>
     
-      <hr class="dialog__break" role="separator" />
+      <hr
+        class="dialog__break"
+        role="separator"
+      >
 
       <footer class="dialog__footer">
-        <button @click="close" class="button dialog__close" ><p>Close</p></button>
+        <button
+          class="button dialog__close"
+          @click="close"
+        >
+          <p>Close</p>
+        </button>
       </footer>
-
     </div>
-
   </div>
 </template>
 
