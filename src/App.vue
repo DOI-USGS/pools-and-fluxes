@@ -4,6 +4,7 @@
     <HeaderUSGS />
     <InternetExplorerPage v-if="isInternetExplorer" />
     <!-- an empty string in this case means the 'prod' version of the application   -->
+     <ShutdownBanner />
     <router-view
       v-if="!isInternetExplorer"
     />
@@ -15,12 +16,14 @@
 <script>
     // import WindowSize from "./components/WindowSize";
     import HeaderUSGS from './components/HeaderUSGS';
+    import ShutdownBanner from './components/ShutdownBanner'; 
     import { isMobile } from 'mobile-device-detect';
     export default {
         name: 'App',
         components: {
             // WindowSize,
             HeaderUSGS,
+            ShutdownBanner,
             InternetExplorerPage: () => import( /* webpackPrefetch: true */ /*webpackChunkName: "internet-explorer-page"*/ "./components/InternetExplorerPage"),
             //WorkInProgressWarning: () => import( /* webpackPrefetch: true */ /*webpackChunkName: "work-in-progress-warning"*/ "./components/WorkInProgressWarning"),
             //PreFooterVisualizationsLinks: () => import( /* webpackPrefetch: true */ /*webpackChunkName: "pre-footer-links-visualizations"*/ "./components/PreFooterVisualizationsLinks"),
