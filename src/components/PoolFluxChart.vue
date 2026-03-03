@@ -20,7 +20,7 @@
             target="_blank"
           >USGS Water Science School website.</a>
         </p>
-        <br aria-hidden="true">
+        <br>
       </section>
       <hr role="none presentation">
       <section>      
@@ -503,7 +503,7 @@ const publicPath = import.meta.env.BASE_URL;
     }
 
     function imagePath(file) {
-      return `https://labs.waterdata.usgs.gov/visualizations/images/${file}`;
+      return `${import.meta.env.VITE_APP_S3_PROD_URL}${file}`;
     }
 
     function populateCard(datum) {
