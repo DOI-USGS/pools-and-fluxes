@@ -4,21 +4,9 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import PoolFluxChart from '@/components/PoolFluxChart.vue';
 
-export default {
-    name: 'Visualization',
-    components: {
-      PoolFluxChart: () => import( /* webpackPreload: true */ /*webpackChunkName: "section"*/ "./../components/pool_flux_chart")
-    },
-    computed: {
-    },
-    mounted(){
-      
-    },
-    methods:{
-    }
-} 
 </script>
 
 <style lang="scss">
