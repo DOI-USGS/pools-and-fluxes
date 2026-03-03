@@ -79,7 +79,7 @@
       <figure
         id="chart-container"
         aria-label="interactive chart"
-      />
+      >
       <figcaption
         id="caption-container"
         aria-label="chart caption"
@@ -99,6 +99,7 @@
           </p>
         </section>
       </figcaption>
+      </figure>
       <br>
       <hr>
       <Authorship />
