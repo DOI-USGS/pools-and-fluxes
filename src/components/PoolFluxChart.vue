@@ -104,6 +104,7 @@
           </section>
         </figcaption>
       </figure>
+      <RelatedResources :in-english="inEnglish" />
       <br>
       <hr class="section-divider">
       <Authorship :authors="authors" />
@@ -115,6 +116,7 @@ import { defineAsyncComponent, onMounted, ref } from 'vue';
 import * as d3Base from 'd3';
 import { isMobile } from 'mobile-device-detect';
 import authors from '@/assets/text/authors';
+import RelatedResources from '@/components/RelatedResources.vue'; 
 
 defineOptions({ name: 'PoolFluxChart' });
 
