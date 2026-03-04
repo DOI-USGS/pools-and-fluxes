@@ -14,11 +14,7 @@
       </header>
       <section aria-label="page description">
         <p>
-          This chart shows the size of global <span class="pool pageText emph">pools</span> and <span class="flux pageText emph">fluxes</span> of water, and includes <span class="example pageText emph">examples</span> of specific pools and fluxes for context. <span class="pool pageText emph">Pools</span> are places where water is stored, like the ocean. <span class="flux pageText emph">Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use. Learn more about the water cycle and see the water cycle diagram on the <a
-            role="link"
-            href="https://www.usgs.gov/water-cycle"
-            target="_blank"
-          >USGS Water Science School website.</a>
+          This chart shows the size of global <span class="pool pageText emph">pools</span> and <span class="flux pageText emph">fluxes</span> of water, and includes <span class="example pageText emph">examples</span> of specific pools and fluxes for context. <span class="pool pageText emph">Pools</span> are places where water is stored, like the ocean. <span class="flux pageText emph">Fluxes</span> are the ways that water moves between pools, such as evaporation, precipitation, discharge, recharge, or human use. 
         </p>
         <br>
       </section>
@@ -104,7 +100,7 @@
           </section>
         </figcaption>
       </figure>
-      <RelatedResources :in-english="inEnglish" />
+      <RelatedResources :in-english="true" />
       <br>
       <hr class="section-divider">
       <Authorship :authors="authors" />

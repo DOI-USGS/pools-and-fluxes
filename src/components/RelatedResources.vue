@@ -6,37 +6,31 @@
   >
     <h2
       id="related-resources-heading"
-      class="only"
+      class="only emph"
     >
       {{ relatedResourcesHeading }}
     </h2>
-    <ul class="control-list no-separators">
-      <li class="control-item">
-        <span class="control-prefix">{{ relatedResourcesHeading }}:</span>
-      </li>
-      <li class="control-item">
-        <a
-          class="button control-action"
-          href="https://www.usgs.gov/special-topics/water-science-school/science/water-cycle"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {{ waterScienceSchoolLabel }}
-          <span class="only">{{ opensInNewTabText }}</span>
-        </a>
-      </li>
-      <li class="control-item">
-        <a
-          class="button control-action"
-          href="https://water.usgs.gov/vizlab/water-cycle"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {{ waterCycleDiagramLabel }}
-          <span class="only">{{ opensInNewTabText }}</span>
-        </a>
-      </li>
-    </ul>
+    <div class="related-resources-row">
+      <span class="related-resources-prefix emph">{{ relatedResourcesHeading }}: </span>
+      <a
+        class="button control-action"
+        href="https://www.usgs.gov/special-topics/water-science-school/science/water-cycle"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {{ waterScienceSchoolLabel }}
+        <span class="only">{{ opensInNewTabText }}</span>
+      </a>
+      <a
+        class="button control-action"
+        href="https://water.usgs.gov/vizlab/water-cycle"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {{ waterCycleDiagramLabel }}
+        <span class="only">{{ opensInNewTabText }}</span>
+      </a>
+    </div>
   </section>
 </template>
 
@@ -57,6 +51,17 @@ const opensInNewTabText = computed(() => (props.inEnglish ? 'opens in new tab' :
 </script>
 
 <style scoped lang="scss">
+.related-resources-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.85rem;
+}
+
+.related-resources-prefix {
+  white-space: nowrap;
+}
+
 .control-action {
   --tw-bg-opacity: 1;
   background-color: white;
@@ -66,7 +71,11 @@ const opensInNewTabText = computed(() => (props.inEnglish ? 'opens in new tab' :
   max-width: 24rem;
   box-shadow: 1px 2px 2px hsl(0deg 0% 40% / 0.47);
   text-decoration: none;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  white-space: nowrap;
 }
 
 .control-action:hover,
@@ -77,6 +86,11 @@ const opensInNewTabText = computed(() => (props.inEnglish ? 'opens in new tab' :
 }
 
 @media screen and (max-width: 600px) {
+  .related-resources-row {
+    overflow-x: auto;
+    padding-bottom: 0.2rem;
+  }
+
   .control-action:hover,
   .control-action:focus-visible {
     background-color: white;

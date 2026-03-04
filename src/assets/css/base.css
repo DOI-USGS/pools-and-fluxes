@@ -112,3 +112,42 @@ p, text, li {
 .emph {
   font-weight: 700;
 }
+#related-resources {
+  padding: 0 1.5rem 0.5rem;
+  margin-top: 0.35rem;
+}
+
+#quick-controls {
+    padding: 0 1rem;
+    margin-top: 0.25rem;
+  }
+  #related-resources {
+    padding: 0 1rem 0.35rem;
+    margin-top: 0.2rem;
+  }
+  #content-container > #related-resources {
+    margin-top: auto;
+  }
+  #related-resources .control-list {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+  #related-resources .control-item {
+    width: 100%;
+  }
+  #quick-controls .button,
+  #related-resources .button {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+  .button {
+    border: 1px solid #949494;
+  }
+  .button:hover {
+    background-color: white;
+    color: black;
+  }
+
