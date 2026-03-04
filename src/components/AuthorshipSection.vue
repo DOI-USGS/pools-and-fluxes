@@ -8,14 +8,17 @@
     <template #heading>
       <h1
         v-if="titleLevel === '1'"
+        class="authors-heading emph"
         v-html="authors.title"
       />
       <h2
         v-if="titleLevel === '2'"
+        class="authors-heading emph"
         v-html="authors.title"
       />
       <h3
         v-if="titleLevel === '3'"
+        class="authors-heading emph"
         v-html="authors.title"
       />
     </template>
@@ -84,5 +87,17 @@
 
 </script>
 
-<style>
+<style lang="scss">
+#authors .text-container {
+  max-width: 100%;
+}
+
+#authors .authors-heading {
+  font-family: var(--default-font);
+  font-size: 1em;
+  line-height: 1.2;
+  font-weight: 700;
+  margin: 0 0 0.35rem 0;
+  padding: 0;
+}
 </style>

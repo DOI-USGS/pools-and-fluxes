@@ -51,6 +51,10 @@ const opensInNewTabText = computed(() => (props.inEnglish ? 'opens in new tab' :
 </script>
 
 <style scoped lang="scss">
+#related-resources {
+  padding: 0;
+}
+
 .related-resources-row {
   display: flex;
   align-items: center;

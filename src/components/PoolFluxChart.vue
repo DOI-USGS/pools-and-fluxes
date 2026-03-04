@@ -704,10 +704,25 @@ onMounted(() => {
     display: block;
     max-width: 1500px;
     margin: 0 auto;
+    --content-width: 95%;
+  }
+  #page-content > header,
+  #page-content > section[aria-label="page description"],
+  #chart-title-container,
+  #chart-figure {
+    width: var(--content-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  :deep(#related-resources),
+  :deep(#authors) {
+    width: var(--content-width);
+    margin-left: auto;
+    margin-right: auto;
   }
   #chart-figure {
     display: block;
-    width: 90vw;
+    width: var(--content-width);
     max-width: 1500px;
     margin-top: 1vh;
     margin-bottom: 1vh;
