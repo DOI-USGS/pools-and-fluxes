@@ -22,7 +22,10 @@
         </p>
         <br>
       </section>
-      <hr role="none presentation">
+      <hr
+        class="section-divider"
+        role="none presentation"
+      >
       <section>      
         <div
           id="chart-title-container"
@@ -102,7 +105,7 @@
         </figcaption>
       </figure>
       <br>
-      <hr>
+      <hr class="section-divider">
       <Authorship :authors="authors" />
     </div>
   </section>

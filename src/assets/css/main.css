@@ -13,6 +13,16 @@
 #visualization-container {
   margin: 5rem 0 5rem 0;
 }
+
+/* shared divider style used across content, pre-footer, and footer */
+.section-divider {
+  border: 0;
+  border-top: 1px solid #d4d8dd;
+  width: 95%;
+  margin: 0 auto 1.5rem;
+  clear: none;
+}
+
 .title {
   font-family: sans-serif; /* This is fallback font for old browsers */
   font-family: var(--title-font);

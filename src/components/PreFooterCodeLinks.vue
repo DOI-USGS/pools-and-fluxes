@@ -1,6 +1,6 @@
 <template>
   <div class="pre-footer-links">
-    <div class="pre-footer-links__divider" />
+    <div class="pre-footer-links__divider section-divider" />
     <div class="pre-footer-links__content">
       <a
         class="pre-footer-links__item"
@@ -43,18 +43,12 @@
   font-size: 1.5rem;
   color: #1e1e1e;
 
-  &__divider {
-    border-top: 1px solid #d4d8dd;
-    margin: 0 auto 1.5rem;
-    width: min(90%, 700px);
-  }
-
   &__content {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 0.75rem;
-    width: min(90%, 700px);
+    width: 95%;
     margin: 0 auto;
   }
 
