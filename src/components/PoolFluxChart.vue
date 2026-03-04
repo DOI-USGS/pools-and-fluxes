@@ -408,11 +408,11 @@ const publicPath = import.meta.env.BASE_URL;
         .attr('role', 'button')
         .style('fill', 'white')
         .style('opacity', 0)
-        .on('click', (datum) => populateCard(datum));
+        .on('click', (_event, datum) => populateCard(datum));
 
       interactionRectangles.each(function () {
         this.addEventListener('keypress', function (event) {
-          if (event.key === 'Enter' | event.keyCode === 13) {
+          if (event.key === 'Enter' || event.keyCode === 13) {
             const itemFeatureClass = this.classList[1];
             const featureData = volume.filter((dataRow) => dataRow.feature_class === itemFeatureClass)[0];
             populateCard(featureData);
@@ -429,8 +429,8 @@ const publicPath = import.meta.env.BASE_URL;
 
       if (mobileView === false) {
         interactionRectangles
-          .on('mouseover', (datum) => mouseoverRect(datum.feature_class))
-          .on('mouseout', (datum) => mouseoutRect(datum.feature_class));
+          .on('mouseover', (_event, datum) => mouseoverRect(datum.feature_class))
+          .on('mouseout', (_event, datum) => mouseoutRect(datum.feature_class));
       }
 
       interactionRectangles.append('title').text((datum) => {
@@ -461,9 +461,9 @@ const publicPath = import.meta.env.BASE_URL;
           .attr('aria-hidden', 'true')
           .style('fill', 'white')
           .style('opacity', 0)
-          .on('click', (datum) => populateCard(datum))
-          .on('mouseover', (datum) => mouseoverRect(datum.feature_class))
-          .on('mouseout', (datum) => mouseoutRect(datum.feature_class));
+          .on('click', (_event, datum) => populateCard(datum))
+          .on('mouseover', (_event, datum) => mouseoverRect(datum.feature_class))
+          .on('mouseout', (_event, datum) => mouseoutRect(datum.feature_class));
       }
 
       dataPoints.append('title').text((datum) => {
