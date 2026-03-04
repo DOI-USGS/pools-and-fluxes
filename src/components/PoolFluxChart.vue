@@ -64,7 +64,6 @@
         :type="cardType" 
         :color="cardColor" 
         :source="cardImageSource" 
-        :source-webp="cardImageSourceWebp"
         :image-site="cardImageSite"
         :size-prefix="cardSizePrefix"
         :size="cardFeatureSize" 
@@ -150,7 +149,6 @@ const publicPath = import.meta.env.BASE_URL;
     const cardFeatureRange = ref(null);
     const cardFeatureDataSource = ref(null);
     const cardImageSource = ref(null);
-    const cardImageSourceWebp = ref(null);
     const cardImageSite = ref(null);
     const cardFeatureDefinitionPrefix = ref(null);
     const cardFeatureDefinition = ref(null);
@@ -506,12 +504,14 @@ const publicPath = import.meta.env.BASE_URL;
     }
 
     function imagePath(file) {
-      return `${import.meta.env.VITE_APP_S3_PROD_URL}${file}`;
+      const basePath = import.meta.env.VITE_APP_S3_PROD_URL || '';
+      const normalizedBasePath = basePath.replace(/\/+$/, '');
+      const normalizedFile = String(file || '').replace(/^\/+/, '');
+      return `${normalizedBasePath}/images/${normalizedFile}`;
     }
 
     function populateCard(datum) {
       cardImageSource.value = imagePath(datum.image_file);
-      cardImageSourceWebp.value = imagePath(`${datum.image_file}?webp`);
       cardImageSite.value = datum.image_source;
       altText.value = datum.alt_text;
 

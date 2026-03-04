@@ -60,11 +60,6 @@
         <section class="dialog__def_content">
           <picture>
             <source
-              :srcset="sourceWebp"
-              type="image/webp"
-              role="none presentation"
-            >
-            <source
               :srcset="source"
               type="image/png"
               role="none presentation"
@@ -77,7 +72,7 @@
               <img
                 class="dialog__image"
                 role="image"
-                :src="sourceWebp"
+                :src="source"
                 width="200px"
                 height="200px"
                 :alt="altText"
@@ -112,7 +107,7 @@
 
 <script>
 export default {
-    props: ['show', 'title', 'type', 'color', 'sizePrefix', 'size', 'range', 'dataSource', 'source', 'sourceWebp', 'imageSite', 'definitionPrefix', 'definition', 'close', 'altText']
+    props: ['show', 'title', 'type', 'color', 'sizePrefix', 'size', 'range', 'dataSource', 'source', 'imageSite', 'definitionPrefix', 'definition', 'close', 'altText']
 }
 </script>
 <style>
@@ -138,8 +133,8 @@ export default {
   margin-left: auto;
   margin-right: auto;
   margin-top: 2.5rem;
-  width: 35rem;
-  max-width: 90%;
+  width: 48rem;
+  max-width: 94%;
   max-height: 90%;
 }
 .dialog__break {
