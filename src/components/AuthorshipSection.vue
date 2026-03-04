@@ -53,20 +53,31 @@
 
 
   function createLink(data) {
-    return data.link ? `<a href="${data.link}" target="_blank">${data.name}</a>` : data.name;
+    if (!data || !data.name) {
+      return '';
+    }
+    return data.link
+      ? `<a href="${data.link}" target="_blank" rel="noopener noreferrer">${data.name}</a>`
+      : data.name;
   }
 
   function formatAuthorText(data) {
+    const projectTeam = Array.isArray(data?.projectTeam) ? data.projectTeam : [];
+    const leadAuthors = Array.isArray(data?.leadAuthors) ? data.leadAuthors : [];
+    const additionalAuthors = Array.isArray(data?.additionalAuthors) ? data.additionalAuthors : [];
+    const lastAuthor = Array.isArray(data?.lastAuthor) ? data.lastAuthor : [];
+    const authorText = typeof data?.authorText === 'string' ? data.authorText : '';
+
     // Map placeholders to their replacement text
     const replacements = {
-      "{projectTeam}": createLink(data.projectTeam[0]),
-      "{leadAuthors}": data.leadAuthors.length > 2 ? `${data.leadAuthors.slice(0, data.leadAuthors.length - 1).map(createLink).join(', ')}, and ${data.leadAuthors.slice(-1).map(createLink)}` : data.leadAuthors.map(createLink).join(' and '),
-      "{additionalAuthors}": data.additionalAuthors.map(createLink).join(', '),
-      "{lastAuthor}": createLink(data.lastAuthor[0])
+      "{projectTeam}": createLink(projectTeam[0]),
+      "{leadAuthors}": leadAuthors.length > 2 ? `${leadAuthors.slice(0, leadAuthors.length - 1).map(createLink).join(', ')}, and ${leadAuthors.slice(-1).map(createLink)}` : leadAuthors.map(createLink).join(' and '),
+      "{additionalAuthors}": additionalAuthors.map(createLink).join(', '),
+      "{lastAuthor}": createLink(lastAuthor[0])
     };
     
     // Replace placeholders in the authorText
-    return data.authorText.replace(/{\w+}/g, (match) => {
+    return authorText.replace(/{\w+}/g, (match) => {
       return replacements[match] || match; // Return the replacement or the original text if not found
     });
   }

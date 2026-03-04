@@ -76,33 +76,34 @@
         :close="close"
         :alt-text="altText"
       />
-      <figure
-        id="chart-container"
-        aria-label="interactive chart"
-      >
-      <figcaption
-        id="caption-container"
-        aria-label="chart caption"
-      >
-        <section aria-hidden="true">
-          <p :text="axisExplanation">
-            Right now the x-axis is on a <span class="emph"> {{ scaleType }} </span> scale. {{ axisExplanation }}
-          </p>
-        </section>
-        <section aria-label="data citation">
-          <p>
-            The data for this chart are adapted from <a
-              role="link"
-              href="https://www.nature.com/articles/s41561-019-0374-y"
-              target="_blank"
-            >Abbott et al. (2019)</a>. Abbott et al. note that the <span class="emph">estimate</span> for each pool or flux "represents the most recent or comprehensive individual estimate." The <span class="emph">range</span> for each estimate, if shown, "represent[s] the range of reported values and their uncertainties."
-          </p>
-        </section>
-      </figcaption>
+      <figure id="chart-figure">
+        <div
+          id="chart-container"
+          aria-label="interactive chart"
+        />
+        <figcaption
+          id="caption-container"
+          aria-label="chart caption"
+        >
+          <section aria-hidden="true">
+            <p :text="axisExplanation">
+              Right now the x-axis is on a <span class="emph"> {{ scaleType }} </span> scale. {{ axisExplanation }}
+            </p>
+          </section>
+          <section aria-label="data citation">
+            <p>
+              The data for this chart are adapted from <a
+                role="link"
+                href="https://www.nature.com/articles/s41561-019-0374-y"
+                target="_blank"
+              >Abbott et al. (2019)</a>. Abbott et al. note that the <span class="emph">estimate</span> for each pool or flux "represents the most recent or comprehensive individual estimate." The <span class="emph">range</span> for each estimate, if shown, "represent[s] the range of reported values and their uncertainties."
+            </p>
+          </section>
+        </figcaption>
       </figure>
       <br>
       <hr>
-      <Authorship />
+      <Authorship :authors="authors" />
     </div>
   </section>
 </template>
@@ -110,6 +111,7 @@
 import { defineAsyncComponent, onMounted, ref } from 'vue';
 import * as d3Base from 'd3';
 import { isMobile } from 'mobile-device-detect';
+import authors from '@/assets/text/authors';
 
 defineOptions({ name: 'PoolFluxChart' });
 
@@ -702,13 +704,17 @@ onMounted(() => {
     max-width: 1500px;
     margin: 0 auto;
   }
-  #chart-container {
-    min-height: 700px;
-    height: 75vh;
+  #chart-figure {
+    display: block;
     width: 90vw;
     max-width: 1500px;
     margin-top: 1vh;
     margin-bottom: 1vh;
+  }
+  #chart-container {
+    min-height: 700px;
+    height: 75vh;
+    width: 100%;
     @media screen and (max-height: 770px) {
         height: 120vh;
     }
@@ -718,6 +724,7 @@ onMounted(() => {
   }
   #caption-container {
     display: block;
+    margin-top: 1rem;
   }
   .pool.pageText {
     color: $poolColorDark;
