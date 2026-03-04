@@ -739,7 +739,7 @@ onMounted(() => {
     padding: 5px 8px 5px 8px;
     max-width: 24rem;
     box-shadow:
-      1px 2px 2px hsl(0deg, 0%, 40% / 0.47);
+      1px 2px 2px hsl(0deg 0% 40% / 0.47);
     @media screen and (max-width: 600px) {
       margin-top: 0rem;
       margin-bottom: 0.1rem;
@@ -749,12 +749,12 @@ onMounted(() => {
     background-color: $darkGrey;
     color: white;
     box-shadow:
-      3px 6px 6px hsl(0deg, 0%, 35% / 0.41);
+      3px 6px 6px hsl(0deg 0% 35% / 0.41);
     @media screen and (max-width: 600px) {
       background-color: white;
       color: black;
       box-shadow:
-      1px 2px 2px hsl(0deg, 0%, 35% / 0.47);
+      1px 2px 2px hsl(0deg 0% 35% / 0.47);
     }
   }
 </style>
