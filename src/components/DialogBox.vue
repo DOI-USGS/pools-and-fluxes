@@ -98,7 +98,7 @@
           class="button dialog__close"
           @click="close"
         >
-          <p>Close</p>
+          Close
         </button>
       </footer>
     </div>
@@ -133,8 +133,8 @@ export default {
   margin-left: auto;
   margin-right: auto;
   margin-top: 2.5rem;
-  width: 35rem;
-  max-width: 90%;
+  width: 48rem;
+  max-width: 94%;
   max-height: 90%;
   font-size: 14px;
 }
@@ -203,13 +203,16 @@ export default {
 .dialog__footer {
   display: flex;
   justify-content: flex-end;
-  padding-top: 0.05rem;
-  padding-bottom: 0.05rem;
+  padding: 0.75rem 1rem;
 }
 .dialog__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
   border-radius: 0.75rem;
   font-weight: 400;
-  margin-right: 1rem;
+  margin: 0;
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   padding-left: 1rem;
