@@ -133,9 +133,10 @@ export default {
   margin-left: auto;
   margin-right: auto;
   margin-top: 2.5rem;
-  width: 48rem;
-  max-width: 94%;
+  width: 35rem;
+  max-width: 90%;
   max-height: 90%;
+  font-size: 14px;
 }
 .dialog__break {
   border: 0.5px solid white;
@@ -155,11 +156,13 @@ export default {
   padding-bottom: 1rem;
 }
 .dialog__title {
+  font-size: 1.5em;
   font-weight: 700;
   line-height: 1.75rem;
   margin-bottom: 0.5rem;
 }
 .dialog__type {
+  font-size: 1.17em;
   font-weight: 500;
   line-height: 1.75rem;
   margin-bottom: 0.5rem;
