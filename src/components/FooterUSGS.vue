@@ -41,7 +41,7 @@
       </div>
       <!-- /.footer-doi -->
 
-      <hr class="section-divider">
+      <hr>
 
       <!-- .footer-utl-links -->
       <div class="footer-doi">

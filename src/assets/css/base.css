@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;500;600;700;800&display=swap');
 
 /* semantic color variables for this project */
 /* Define colors */
@@ -18,7 +19,7 @@
 
   font-size: 62.5%;
 
-  --title-font: Roboto Slab;
+  --title-font: Assistant;
   --default-font: Source Sans Pro;
 }
 
@@ -54,33 +55,60 @@
   /* font-weight: normal; */
 }
 
+html,
 body {
-  min-height: 100vh;
-  color: var(--color-text);
-  fill: var(--color-text); /* Needed for text added w/ d3 */
-  background: var(--color-background);
-  transition:
-    color 0.5s,
-    background-color 0.5s;
+      height:100%;
+      background-color: white;
+      margin: 0;
+      padding: 0;
+      line-height: 1.2;
+      font-size: 20px;
+      font-weight: 400;
+      font-family: var(--default-font);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      width: 100%;
+      @media screen and (max-width: 600px) {
+        font-size: 16px;
+      }
+  }
+h1{
+  font-size: 2.8em;
+  font-weight: 300;
+  font-family: var(--title-font);
+  line-height: 1;
+  text-align: left;
+  padding-bottom: .25em;
+  @media screen and (max-width: 600px) {
+    font-size: 1.5em;
+  }
+}
+h2{
+  font-weight: 300;
+  text-align: left;
+  font-family: var(--title-font);
+  font-size: 2em;
+  margin-top: 5px;
   line-height: 1.2;
-  font-family: sans-serif; /* This is fallback font for old browsers */
-  font-family: var(--default-font);
-  font-size: 2rem;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overscroll-behavior: none;
+  @media screen and (max-width: 600px) {
+    font-size: 1.1em;
+  }
 }
-h1 {
-  font-size: 5rem;
-  font-weight: 800;
-  padding: 0rem 0 1rem 0;
-}
-h2 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  padding: 3rem 0 1rem 0;
+h3{
+  font-size: 1.2em;
+  padding-top: .25em;
+  font-family: var(--title-font);
+  font-weight: 300;
+  @media screen and (max-height: 770px) {
+    font-size: 1.2em;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 1em;
+  }  
 }
 p, text, li {
   padding: 0 0 1rem 0;
+}
+.emph {
+  font-weight: 700;
 }
