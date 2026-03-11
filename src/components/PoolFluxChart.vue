@@ -107,9 +107,8 @@
   </section>
 </template>
 <script setup>
-import { defineAsyncComponent, onMounted, ref } from 'vue';
+import { defineAsyncComponent, onMounted, onUnmounted, ref } from 'vue';
 import * as d3Base from 'd3';
-import { isMobile } from 'mobile-device-detect';
 import authors from '@/assets/text/authors';
 import RelatedResources from '@/components/RelatedResources.vue'; 
 
@@ -120,7 +119,7 @@ const Authorship = defineAsyncComponent(() => import('@/components/AuthorshipSec
 
 const publicPath = import.meta.env.BASE_URL;
     const d3 = ref(null);
-    const mobileView = isMobile;
+    const mobileBreakpoint = 600;
 
     let volume = [];
     let w = null;
@@ -139,6 +138,10 @@ const publicPath = import.meta.env.BASE_URL;
     let xAxisBottom = null;
     let domxAxisBottom = null;
     let yAxis = null;
+    let mobileView = false;
+    let chartContainerElement = null;
+    let resizeObserver = null;
+    let resizeFrame = null;
 
     const scaleLog = ref(true);
     const scaleType = ref(null);
@@ -212,10 +215,7 @@ const publicPath = import.meta.env.BASE_URL;
         return (v >= 0.9995e9 ? formatBillion : v >= 0.9995e6 ? formatMillion : formatThousand)(x);
       };
 
-      adaptScales(volume, 1);
-      xScale = scales[scaleType.value];
-      setAxisExplanation();
-      drawChart(volume, 1);
+      renderChart();
     }
 
     function adaptScales(data, xMin) {
@@ -648,48 +648,125 @@ const publicPath = import.meta.env.BASE_URL;
       }
     }
 
+    function updateChartDimensions() {
+      if (!chartContainerElement) {
+        return false;
+      }
+
+      mobileView = window.innerWidth <= mobileBreakpoint;
+      margin = mobileView
+        ? { top: 50, right: 15, bottom: 20, left: 15 }
+        : { top: 45, right: 15, bottom: 20, left: 300 };
+
+      const nextWidth = chartContainerElement.offsetWidth;
+      const nextHeight = chartContainerElement.offsetHeight;
+      const nextChartWidth = nextWidth - margin.left - margin.right;
+      const nextChartHeight = nextHeight - margin.top - margin.bottom;
+
+      if (nextChartWidth <= 0 || nextChartHeight <= 0) {
+        return false;
+      }
+
+      const dimensionsChanged =
+        nextWidth !== w ||
+        nextHeight !== h ||
+        nextChartWidth !== chartWidth ||
+        nextChartHeight !== chartHeight;
+
+      w = nextWidth;
+      h = nextHeight;
+      chartWidth = nextChartWidth;
+      chartHeight = nextChartHeight;
+      return dimensionsChanged;
+    }
+
+    function applyUncertaintyVisibility() {
+      if (!svgChart) {
+        return;
+      }
+
+      const visibility = showUncertainty.value ? 'visible' : 'hidden';
+      d3.value.selectAll('.chartBandBkgd').style('visibility', visibility);
+      d3.value.selectAll('.chartBand').style('visibility', visibility);
+    }
+
+    function renderChart() {
+      if (!chartContainerElement || volume.length === 0) {
+        return;
+      }
+
+      if (!updateChartDimensions()) {
+        return;
+      }
+
+      chartContainer.selectAll('svg').remove();
+
+      scales = {
+        log: d3.value.scaleLog().base(10),
+        linear: d3.value.scaleLinear()
+      };
+
+      adaptScales(volume, 1);
+      xScale = scales[scaleType.value];
+      setAxisExplanation();
+
+      svg = chartContainer
+        .append('svg')
+        .attr('class', 'chart')
+        .attr(
+          'viewBox',
+          `0 0 ${chartWidth + margin.left + margin.right} ${chartHeight + margin.top + margin.bottom}`
+        )
+        .attr('preserveAspectRatio', 'xMidYMid meet')
+        .attr('width', '100%')
+        .attr('height', '100%');
+
+      svgChart = svg
+        .append('g')
+        .attr('transform', `translate(${margin.left},${margin.top})`)
+        .attr('id', 'pool-flux-chart');
+
+      drawChart(volume, 1);
+      applyUncertaintyVisibility();
+    }
+
+    function scheduleRenderChart() {
+      if (resizeFrame !== null) {
+        window.cancelAnimationFrame(resizeFrame);
+      }
+
+      resizeFrame = window.requestAnimationFrame(() => {
+        resizeFrame = null;
+        renderChart();
+      });
+    }
+
 onMounted(() => {
   d3.value = Object.assign(d3Base);
   currentUncertaintyStatus.value = 'without ranges';
   scaleType.value = 'log';
-
-  margin = mobileView
-    ? { top: 50, right: 15, bottom: 20, left: 15 }
-    : { top: 45, right: 15, bottom: 20, left: 300 };
-
-  const chartContainerElement = document.getElementById('chart-container');
+  chartContainerElement = document.getElementById('chart-container');
   if (!chartContainerElement) {
     return;
   }
 
-  w = chartContainerElement.offsetWidth;
-  h = chartContainerElement.offsetHeight;
-  chartWidth = w - margin.left - margin.right;
-  chartHeight = h - margin.top - margin.bottom;
   chartContainer = d3.value.select('#chart-container');
-
-  scales = {
-    log: d3.value.scaleLog().base(10),
-    linear: d3.value.scaleLinear()
-  };
-
-  svg = chartContainer
-    .append('svg')
-    .attr('class', 'chart')
-    .attr(
-      'viewBox',
-      `0 0 ${chartWidth + margin.left + margin.right} ${chartHeight + margin.top + margin.bottom}`
-    )
-    .attr('preserveAspectRatio', 'xMidYMid meet')
-    .attr('width', '100%')
-    .attr('height', '100%');
-
-  svgChart = svg
-    .append('g')
-    .attr('transform', `translate(${margin.left},${margin.top})`)
-    .attr('id', 'pool-flux-chart');
+  resizeObserver = new ResizeObserver(() => {
+    scheduleRenderChart();
+  });
+  resizeObserver.observe(chartContainerElement);
 
   loadData();
+});
+
+onUnmounted(() => {
+  if (resizeObserver) {
+    resizeObserver.disconnect();
+  }
+
+  if (resizeFrame !== null) {
+    window.cancelAnimationFrame(resizeFrame);
+  }
 });
 </script>
 <style scoped lang="scss">
