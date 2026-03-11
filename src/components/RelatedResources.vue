@@ -91,8 +91,14 @@ const opensInNewTabText = computed(() => (props.inEnglish ? 'opens in new tab' :
 
 @media screen and (max-width: 600px) {
   .related-resources-row {
-    overflow-x: auto;
-    padding-bottom: 0.2rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    overflow-x: visible;
+    padding-bottom: 0;
+  }
+
+  .related-resources-prefix {
+    flex-basis: 100%;
   }
 
   .control-action:hover,
