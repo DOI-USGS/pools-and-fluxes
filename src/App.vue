@@ -1,161 +1,44 @@
 <template>
-  <div id="app">
-    <!-- <WindowSize v-if="checkTypeOfEnv === '-test build-'" /> -->
+  <div>
+    <WindowSize v-if="typeOfEnv === '-test build-'" />
+    <HeaderUSWDSBanner v-if="typeOfEnv !== '-test build-'" />
     <HeaderUSGS />
-    <InternetExplorerPage v-if="isInternetExplorer" />
-    <!-- an empty string in this case means the 'prod' version of the application   -->
-     <!-- <ShutdownBanner /> -->
-    <router-view
-      v-if="!isInternetExplorer"
-    />
-    <PreFooterCodeLinks v-if="!isInternetExplorer" />
+    <WorkInProgressWarning v-if="typeOfEnv !== ''" />
+    <RouterView />
+    <PreFooterCodeLinks />
     <FooterUSGS />
   </div>
 </template>
 
-<script>
-    // import WindowSize from "./components/WindowSize";
-    import HeaderUSGS from './components/HeaderUSGS';
-    // import ShutdownBanner from './components/ShutdownBanner'; 
-    import { isMobile } from 'mobile-device-detect';
-    export default {
-        name: 'App',
-        components: {
-            // WindowSize,
-            HeaderUSGS,
-            // ShutdownBanner,
-            InternetExplorerPage: () => import( /* webpackPrefetch: true */ /*webpackChunkName: "internet-explorer-page"*/ "./components/InternetExplorerPage"),
-            //WorkInProgressWarning: () => import( /* webpackPrefetch: true */ /*webpackChunkName: "work-in-progress-warning"*/ "./components/WorkInProgressWarning"),
-            //PreFooterVisualizationsLinks: () => import( /* webpackPrefetch: true */ /*webpackChunkName: "pre-footer-links-visualizations"*/ "./components/PreFooterVisualizationsLinks"),
-            PreFooterCodeLinks: () => import( /* webpackPrefetch: true */ /*webpackChunkName: "pre-footer-links-code"*/ "./components/PreFooterCodeLinks"),
-            FooterUSGS: () => import( /* webpackPrefetch: true */ /*webpackChunkName: "usgs-footer"*/ "./components/FooterUSGS") // Have Webpack put the footer in a separate chunk so we can load it conditionally (with a v-if) if we desire
-        },
-        data() {
-            return {
-                isInternetExplorer: false,
-                title: process.env.VUE_APP_TITLE,
-                publicPath: process.env.BASE_URL, // this is need for the data files in the public folder
-                mobileView: isMobile
-            }
-        },
-        computed: {
-          checkTypeOfEnv() {
-              return process.env.VUE_APP_TIER
-          }
-        },
-        created() {
-            // We are ending support for Internet Explorer, so let's test to see if the browser used is IE.
-            this.$browserDetect.isIE ? this.isInternetExplorer = true : this.isInternetExplorer = false;
-            // Add window size tracking by adding a listener and a way to store the values in the Vuex state
-            window.addEventListener('resize', this.handleResize);
-            this.handleResize();
-        },
-        destroyed() {
-            window.removeEventListener('resize', this.handleResize);
-        },
-        methods:{
-          handleResize() {
-                this.$store.commit('recordWindowWidth', window.innerWidth);
-                this.$store.commit('recordWindowHeight', window.innerHeight);
-            },
-        }
-    }
+<script setup>
+  import { onMounted } from "vue";
+  import { RouterView } from 'vue-router'
+  import WindowSize from "@/components/WindowSize.vue";
+  import HeaderUSWDSBanner from "@/components/HeaderUSWDSBanner.vue";
+  import HeaderUSGS from '@/components/HeaderUSGS.vue';
+  import WorkInProgressWarning from "@/components/WorkInProgressWarning.vue";
+  import PreFooterCodeLinks from "@/components/PreFooterCodeLinks.vue";
+  import FooterUSGS from '@/components/FooterUSGS.vue';
+  import { useWindowSizeStore } from '@/stores/WindowSizeStore';
+
+  const windowSizeStore = useWindowSizeStore();
+  const typeOfEnv = import.meta.env.VITE_APP_TIER;
+
+  // Declare behavior on mounted
+  // functions called here
+  onMounted(() => {
+    // Add window size tracking by adding a listener
+    window.addEventListener('resize', handleResize);
+    handleResize();
+  });
+
+  // Functions
+  function handleResize() {
+    // store the window size values in the Pinia state
+    windowSizeStore.windowWidth = window.innerWidth;
+    windowSizeStore.windowHeight = window.innerHeight;
+  }
 </script>
 
-<style lang="scss">
-// Fonts
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;500;600;700;800&display=swap');
-$Cairo: 'Cairo', sans-serif;
-$Assistant: 'Assistant', sans-serif;
-
-// Type
-html,
-body {
-      height:100%;
-      background-color: white;
-      margin: 0;
-      padding: 0;
-      line-height: 1.2;
-      font-size: 16px;
-      font-weight: 400;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      width: 100%;
-      @media screen and (max-width: 600px) {
-        font-size: 16px;
-      }
-  }
-h1{
-  font-size: 2.8em;
-  font-weight: 300;
-  font-family: $Assistant;
-  line-height: 1;
-  text-align: left;
-  padding-bottom: .25em;
-  @media screen and (max-width: 600px) {
-    font-size: 1.5em;
-  }
-}
-h2{
-  font-weight: 300;
-  text-align: left;
-  font-family:$Assistant;
-  font-size: 2em;
-  margin-top: 5px;
-  line-height: 1.2;
-  @media screen and (max-width: 600px) {
-    font-size: 1.1em;
-  }
-}
-h3{
-  font-size: 1.2em;
-  padding-top: .25em;
-  font-family: $Assistant;
-  font-weight: 300;
-  @media screen and (max-height: 770px) {
-    font-size: 1.2em;
-  }
-  @media screen and (max-width: 600px) {
-    font-size: 1em;
-  }  
-}
-.emph {
-  font-weight: 700;
-}
-p {
-  font-size: 1.1em;
-  padding: 0.5em 0 0 0; 
-  font-family: $Assistant;
-  @media screen and (max-width: 600px) {
-    font-size: 1em;
-  }
-}
-text {
-  font-size: 1.1em;
-  padding: 0.5em 0 0 0; 
-  font-family: $Assistant;
-  @media screen and (max-width: 600px) {
-    font-size: 0.9em;
-  }
-}
-p a {
-  color: black;
-}
-form {
-  padding: 0.1em 0 0 0; 
-  font-family: $Assistant;
-  font-size: 1.1em;
-  @media screen and (max-width: 600px) {
-    font-size: 0.9em;
-  }
-}
-// .button {
-//   padding: 0.2em 0 0.2em 0; 
-//   font-family: $Assistant;
-//   font-size: 1.1em;
-//   @media screen and (max-width: 600px) {
-//     font-size: 0.9em;
-//   }
-// }
+<style scoped>
 </style>

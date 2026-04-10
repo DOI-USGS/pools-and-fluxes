@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;500;600;700;800&display=swap');
+
+/* semantic color variables for this project */
+/* Define colors */
+:root {
+  --white: #ffffff;
+  --white-soft: #F0F0F0;
+
+  --black-soft: #151515;
+  --dodger-blue: #1e90ff;
+  --medium-grey: #B5B5B5;
+  --medium-purple: #8F00DB;
+  --medium-blue: #4365A8;
+  --medium-orange: #E48951;
+  --usgs-blue: #00264c;
+  --usgs-green: #006F41;
+
+  font-size: 62.5%;
+
+  --title-font: Assistant;
+  --default-font: Source Sans Pro;
+}
+
+/* Declare color variables */
+:root {
+  --color-background: var(--white);
+  --color-text: var(--black-soft);
+  --color-title-text: var(--dodger-blue);
+  --color-overlay: var(--black-soft);
+  --color-overlay-text: var(--white-soft);
+  --color-code-links-background: var(--medium-grey);
+  --color-link: var(--medium-blue);
+  --color-bar-focal: var(--medium-blue);
+  --color-bar-default: var(--medium-grey);
+  --color-map-focal: var(--medium-orange);
+  --color-map-default: var(--white);
+  --color-USGS-header-footer: var(--usgs-blue);
+  --color-prefooter-highlight: var(--medium-blue);
+}
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: var(--black-soft);
+    --color-text: var(--white-soft);
+  }
+} */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  /* font-weight: normal; */
+}
+
+html,
+body {
+      height:100%;
+      background-color: white;
+      margin: 0;
+      padding: 0;
+      line-height: 1.3;
+      font-size: 20px;
+      font-weight: 400;
+      font-family: var(--default-font);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      width: 100%;
+      @media screen and (max-width: 600px) {
+        font-size: 16px;
+      }
+  }
+h1{
+  font-size: 2.8em;
+  font-weight: 300;
+  font-family: var(--title-font);
+  line-height: 1;
+  text-align: left;
+  padding-bottom: .25em;
+  @media screen and (max-width: 600px) {
+    font-size: 1.5em;
+  }
+}
+h2{
+  font-weight: 300;
+  text-align: left;
+  font-family: var(--title-font);
+  font-size: 2em;
+  margin-top: 5px;
+  line-height: 1.2;
+  @media screen and (max-width: 600px) {
+    font-size: 1.1em;
+  }
+}
+h3{
+  font-size: 1.2em;
+  padding-top: .25em;
+  font-family: var(--title-font);
+  font-weight: 300;
+  @media screen and (max-height: 770px) {
+    font-size: 1.2em;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 1em;
+  }  
+}
+p, text, li {
+  padding: 0 0 1rem 0;
+}
+.emph {
+  font-weight: 700;
+}
+#related-resources {
+  padding: 0 1.5rem 0.5rem;
+  margin-top: 0.35rem;
+}
+
+#quick-controls {
+    padding: 0 1rem;
+    margin-top: 0.25rem;
+  }
+  #related-resources {
+    padding: 0 1rem 0.35rem;
+    margin-top: 0.2rem;
+  }
+  #content-container > #related-resources {
+    margin-top: auto;
+  }
+  #related-resources .control-list {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+  #related-resources .control-item {
+    width: 100%;
+  }
+  #quick-controls .button,
+  #related-resources .button {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+  .button {
+    border: 1px solid #949494;
+  }
+  .button:hover {
+    background-color: white;
+    color: black;
+  }
+

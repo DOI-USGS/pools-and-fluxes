@@ -1,46 +1,38 @@
 export default {
+    // Do not update title w/o checking with Cee/Hayley - we want this to be consistent across sites
+    title: "USGS Vizlab",
+    // Do not update author text w/o checking with Cee/Hayley - we want this to be consistent across sites
+    authorText: "This site was created by the {projectTeam}. {leadAuthors} led the project with contributions from {additionalAuthors}, and {lastAuthor}.",
     // do not delete section. delete individuals as needed. modify content as needed
     // currently only 'fullName', 'firstName', 'initials', 'profile_link', and 'contribution' are used
-    primaryAuthors: [
+    projectTeam: [
       {
-        firstName: 'Hayley',
-        lastName: 'Corson-Dosch',
-        fullName: 'Hayley Corson-Dosch',
-        initials: 'HCD',
-        profile_link: 'https://www.usgs.gov/staff-profiles/hayley-corson-dosch',
-        role: 'developer',
-        contribution: 'designed the D3 chart and interactions and led the development of the site'
-      },
+        name: 'USGS Vizlab',
+        link: 'https://labs.waterdata.usgs.gov/visualizations/'
+      }
+    ],
+    leadAuthors: [
       {
-        firstName: 'Cee',
-        lastName: 'Nell',
-        fullName: 'Cee Nell',
-        initials: 'CN',
-        profile_link: 'https://www.usgs.gov/staff-profiles/cee-nell',
-        role: 'developer',
-        contribution: 'contributed to site development and reviewed code'
+        name: 'Hayley Corson-Dosch',
+        link: 'https://www.usgs.gov/staff-profiles/hayley-corson-dosch'
       }
     ],
     // do not delete section. delete any or all individuals as needed. modify content as needed
-    // currently only 'fullName', 'firstName', 'initials', 'profile_link', and 'contribution' are used
     additionalAuthors: [
       {
-        firstName: 'Elmera',
-        lastName: 'Azadpour',
-        fullName: 'Elmera Azadpour',
-        initials: 'EA',
-        profile_link: 'https://www.usgs.gov/staff-profiles/elmera-azadpour',
-        role: 'contributor',
-        contribution: 'sourced images and wrote alt text for item dialogs'
+        name: 'Elmera Azadpour',
+        link: 'https://www.usgs.gov/staff-profiles/elmera-azadpour'
       },
       {
-        firstName: 'Rebekah',
-        lastName: 'Redwine',
-        fullName: 'Rebekah Redwine',
-        initials: 'RR',
-        profile_link: null,
-        role: 'contributor',
-        contribution: 'sourced images for item dialogs'
+        name: 'Rebekah Redwine',
+        link: null
       }
-      ]
+    ],
+    lastAuthor: [
+      {
+        name: 'Cee Nell',
+        link: 'https://www.usgs.gov/staff-profiles/cee-nell'
+      }
+    ]
+
 };

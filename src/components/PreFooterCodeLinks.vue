@@ -1,44 +1,86 @@
 <template>
-  <div id="code-repository-link-container">
-    <a
-      :href="gitHubRepositoryLink"
-      target="_blank"
-      aria-label="github link"
-    >See the code behind this visualization
-      <font-awesome-icon :icon="{ prefix: 'fab', iconName: 'github' }" />
-    </a>
+  <div class="pre-footer-links">
+    <div class="pre-footer-links__divider section-divider" />
+    <div class="pre-footer-links__content">
+      <a
+        class="pre-footer-links__item"
+        href="https://water.usgs.gov/vizlab/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        See more <span v-if="!mobileView">visualizations</span> from the USGS Vizlab
+      </a>
+      <a
+        class="pre-footer-links__item"
+        :href="gitHubRepositoryLink"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Get the code behind this page
+        <font-awesome-icon
+          :icon="{ prefix: 'fab', iconName: 'github' }"
+          aria-hidden="true"
+        />
+      </a>
+    </div>
   </div>
 </template>
 
-<script>
-  export default {
-      name: 'PreFooterCodeLinks',
-      data() {
-          return {
-              gitHubRepositoryLink: process.env.VUE_APP_GITHUB_REPOSITORY_LINK,
-              projectTitle: process.env.VUE_APP_TITLE
-          }
-      }
-  }
+<script setup>
+  import { isMobileOnly } from 'mobile-device-detect';
 
+  // global variables
+  const mobileView = isMobileOnly;
+
+  const gitHubRepositoryLink = import.meta.env.VITE_APP_GITHUB_REPOSITORY_LINK;
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
+.pre-footer-links {
+  background-color: white;
+  padding: 1.5rem 1rem 2rem;
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 1.5rem;
+  color: #1e1e1e;
 
-  #code-repository-link-container {
+  &__content {
     display: flex;
-    justify-content: right;
-    width: 100%;
-    background-color: #c2c4c5;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    width: 95%;
     margin: 0 auto;
-    padding: 0.4rem;
-    border-bottom: 2px solid black;
-    a {
-      color: #090211;
-      margin-left: 10px;
-      font-family: 'Source Sans Pro',sans-serif;
-      text-decoration: none
-    }
   }
 
+  &__item {
+    color: inherit;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background-image: linear-gradient(var(--color-prefooter-highlight), var(--color-prefooter-highlight));
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 0.2rem;
+    padding-bottom: 0.1rem;
+    transition: color 0.2s ease-in-out;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--color-prefooter-highlight);
+    }
+  }
+}
+
+@media (min-width: 640px) {
+  .pre-footer-links {
+    &__content {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}
 </style>

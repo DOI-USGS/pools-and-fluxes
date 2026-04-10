@@ -22,8 +22,6 @@
         />
       </header>
 
-      <hr class="dialog__break">
-
       <section class="dialog__content">
         <h2
           id="dialogTitle"
@@ -60,11 +58,6 @@
         <section class="dialog__def_content">
           <picture>
             <source
-              :srcset="sourceWebp"
-              type="image/webp"
-              role="none presentation"
-            >
-            <source
               :srcset="source"
               type="image/png"
               role="none presentation"
@@ -77,7 +70,7 @@
               <img
                 class="dialog__image"
                 role="image"
-                :src="sourceWebp"
+                :src="source"
                 width="200px"
                 height="200px"
                 :alt="altText"
@@ -103,7 +96,7 @@
           class="button dialog__close"
           @click="close"
         >
-          <p>Close</p>
+          Close
         </button>
       </footer>
     </div>
@@ -112,7 +105,7 @@
 
 <script>
 export default {
-    props: ['show', 'title', 'type', 'color', 'sizePrefix', 'size', 'range', 'dataSource', 'source', 'sourceWebp', 'imageSite', 'definitionPrefix', 'definition', 'close', 'altText']
+    props: ['show', 'title', 'type', 'color', 'sizePrefix', 'size', 'range', 'dataSource', 'source', 'imageSite', 'definitionPrefix', 'definition', 'close', 'altText']
 }
 </script>
 <style>
@@ -138,9 +131,11 @@ export default {
   margin-left: auto;
   margin-right: auto;
   margin-top: 2.5rem;
-  width: 35rem;
-  max-width: 90%;
+  width: 56rem;
+  max-width: 96%;
   max-height: 90%;
+  font-size: 16px;
+  line-height: 1.4;
 }
 .dialog__break {
   border: 0.5px solid white;
@@ -151,41 +146,40 @@ export default {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
   padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
+  padding-bottom: 0.5rem;
 }
 .dialog__content {
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
 .dialog__title {
+  font-size: 2em;
   font-weight: 700;
-  line-height: 1.75rem;
-  margin-bottom: 0.5rem;
+  line-height: 1.25;
+  margin-top: 0.5rem;
+  margin-bottom: 0.65rem;
+  padding-top: 0;
 }
 .dialog__type {
+  font-size: 1.5em;
   font-weight: 500;
-  line-height: 1.75rem;
+  line-height: 1.25;
   margin-bottom: 0.5rem;
 }
 .dialog__size_prefix {
   font-weight: 700;
 }
 .dialog__size {
-  line-height: 1rem;
+  line-height: 1.4;
   font-weight: 500;
-  padding: 0.25em 0 0 0;
+  padding: 0;
 }
 .dialog__range {
-  line-height: 1rem;
+  line-height: 1.2;
   margin-bottom: 1rem;
-  padding: 0.25em 0 0 0;
-  color: #6E6E6E;
-}
-.dialog__range {
-  line-height: 1rem;
-  margin-bottom: 1rem;
+  padding: 0;
   color: #6E6E6E;
 }
 .dialog__image {
@@ -199,19 +193,22 @@ export default {
   min-height: 200px;
 }
 .dialog__definition {
-  line-height: 1.25rem;
+  line-height: 1.45;
   margin-bottom: 0.1rem;
 }
 .dialog__footer {
   display: flex;
   justify-content: flex-end;
-  padding-top: 0.05rem;
-  padding-bottom: 0.05rem;
+  padding: 0.75rem 1rem;
 }
 .dialog__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
   border-radius: 0.75rem;
   font-weight: 400;
-  margin-right: 1rem;
+  margin: 0;
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   padding-left: 1rem;
