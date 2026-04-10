@@ -648,18 +648,27 @@ const publicPath = import.meta.env.BASE_URL;
       }
     }
 
+    function shouldUseMobileLayout(containerWidth) {
+      const matchesMobileBreakpoint =
+        typeof window.matchMedia === 'function'
+          ? window.matchMedia(`(max-width: ${mobileBreakpoint}px)`).matches
+          : false;
+
+      return matchesMobileBreakpoint || (containerWidth > 0 && containerWidth <= mobileBreakpoint);
+    }
+
     function updateChartDimensions() {
       if (!chartContainerElement) {
         return false;
       }
 
-      mobileView = window.innerWidth <= mobileBreakpoint;
+      const nextWidth = chartContainerElement.offsetWidth;
+      const nextHeight = chartContainerElement.offsetHeight;
+
+      mobileView = shouldUseMobileLayout(nextWidth);
       margin = mobileView
         ? { top: 50, right: 15, bottom: 20, left: 15 }
         : { top: 45, right: 15, bottom: 20, left: 300 };
-
-      const nextWidth = chartContainerElement.offsetWidth;
-      const nextHeight = chartContainerElement.offsetHeight;
       const nextChartWidth = nextWidth - margin.left - margin.right;
       const nextChartHeight = nextHeight - margin.top - margin.bottom;
 
